@@ -17,7 +17,7 @@ export default function Home() {
   const categories = [
     { name: 'Educational', icon: '🧠', color: '#FFEAA7', slug: 'educational' },
     { name: 'Outdoor Fun', icon: '⚽', color: '#74B9FF', slug: 'outdoor' },
-    { name: 'Soft & Plush', icon: '🧸', color: '#FF7675', slug: 'plush' },
+    { name: 'Soft & Plush', icon: '🧸', color: '#FF7675', slug: 'softtoys' },
     { name: 'Arts & Crafts', icon: '🎨', color: '#A29BFE', slug: 'arts' },
   ];
 

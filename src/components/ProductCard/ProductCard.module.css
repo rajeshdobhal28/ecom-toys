@@ -6,6 +6,8 @@
     transition: transform var(--transition-medium), box-shadow var(--transition-medium);
     position: relative;
     border: 1px solid var(--border);
+    width: 100%;
+    max-width: 100%;
 }
 
 .card:hover {
@@ -78,6 +80,7 @@
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
 }
 

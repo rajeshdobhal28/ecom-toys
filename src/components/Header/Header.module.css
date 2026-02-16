@@ -107,8 +107,67 @@
         font-size: 1.5rem;
     }
 
+
     .container {
         padding: 0 1rem;
-        /* Ensure safe edges */
+        width: 100%;
     }
+}
+
+.userContainer {
+    position: relative;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.5rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow-md);
+    min-width: 200px;
+    padding: 0.5rem 0;
+    border: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+}
+
+.userProfile {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border-light);
+    margin-bottom: 0.5rem;
+}
+
+.userName {
+    font-weight: 700;
+    color: var(--text-main);
+    display: block;
+}
+
+.userEmail {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.dropdownLink {
+    padding: 0.5rem 1rem;
+    color: var(--text-main);
+    text-decoration: none;
+    transition: background var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.dropdownLink:hover {
+    background-color: var(--bg-light);
+    color: var(--primary);
 }

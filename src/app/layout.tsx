@@ -3,6 +3,8 @@ import { Inter, Nunito } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 import CartDrawer from "@/components/CartDrawer/CartDrawer";
+import GoogleAuthProvider from "@/components/providers/GoogleAuthProvider";
+import { AuthProvider } from "@/context/AuthContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,7 +32,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${nunito.variable}`} suppressHydrationWarning={true}>
         <CartProvider>
-          {children}
+          <GoogleAuthProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </GoogleAuthProvider>
           <CartDrawer />
         </CartProvider>
       </body>

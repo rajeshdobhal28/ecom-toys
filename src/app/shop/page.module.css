@@ -77,9 +77,19 @@
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  /* Centers items if they don't fill the row */
+}
+
+/* Ensure flex items (ProductCards) behave nicely */
+.grid>* {
+  flex: 1 1 240px;
+  /* Grow, shrink, base width */
+  max-width: 350px;
+  /* Don't get too wide on large screens */
 }
 
 /* Mobile Responsive */
@@ -97,7 +107,8 @@
 
   .filterGroup ul {
     display: flex;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    /* overflow-x: auto; */
     gap: 0.5rem;
     padding-bottom: 0.5rem;
   }
@@ -113,15 +124,21 @@
   .filterLink.active {
     border-color: var(--primary);
   }
-
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
 }
 
-@media (max-width: 370px) {
+@media (max-width: 480px) {
   .grid {
-    grid-template-columns: 1fr;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  /* On very small screens, let cards be full width if needed, or constrained */
+  .grid>* {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  .container {
+    padding: 0 1rem;
   }
 }

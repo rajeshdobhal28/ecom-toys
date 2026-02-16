@@ -74,7 +74,7 @@
 
 .placeholderImage {
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 2;
     background: white;
     border-radius: 50px;
     box-shadow: var(--shadow-lg);

@@ -11,7 +11,7 @@ export interface Product {
 export const CATEGORIES = [
     { name: 'Educational', slug: 'educational' },
     { name: 'Outdoor Fun', slug: 'outdoor' },
-    { name: 'Soft & Plush', slug: 'plush' },
+    { name: 'Soft & Plush', slug: 'softtoys' },
     { name: 'Arts & Crafts', slug: 'arts' },
 ];
 

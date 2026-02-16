@@ -16,7 +16,7 @@ export default function Footer() {
                     <h4 className={styles.heading}>Shop</h4>
                     <Link href="/shop/educational" className={styles.link}>Educational</Link>
                     <Link href="/shop/outdoor" className={styles.link}>Outdoor</Link>
-                    <Link href="/shop/plush" className={styles.link}>Plush Toys</Link>
+                    <Link href="/shop/softtoys" className={styles.link}>Plush Toys</Link>
                     <Link href="/shop" className={styles.link}>All Toys</Link>
                 </div>
 
