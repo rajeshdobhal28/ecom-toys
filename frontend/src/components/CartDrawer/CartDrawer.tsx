@@ -50,7 +50,7 @@ export default function CartDrawer() {
                                 </div>
                                 <div className={styles.itemDetails}>
                                     <h3>{item.title}</h3>
-                                    <p className={styles.price}>${item.price.toFixed(2)}</p>
+                                    <p className={styles.price}>₹{item.price.toFixed(2)}</p>
                                     <div className={styles.controls}>
                                         <div className={styles.quantity}>
                                             <button onClick={() => updateQuantity(item.id, -1)} aria-label="Decrease quantity">

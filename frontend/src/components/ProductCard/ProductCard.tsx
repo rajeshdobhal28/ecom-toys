@@ -45,7 +45,7 @@ export default function ProductCard({ id, title, price, rating = 5, imageColor =
             </div>
 
             <div className={styles.details}>
-                <div className={styles.rating}>
+                {rating ? <div className={styles.rating}>
                     {[...Array(5)].map((_, i) => (
                         <Star
                             key={i}
@@ -55,12 +55,12 @@ export default function ProductCard({ id, title, price, rating = 5, imageColor =
                         />
                     ))}
                     <span className={styles.reviewCount}>(42)</span>
-                </div>
+                </div> : null}
 
                 <h3 className={styles.title}>{title}</h3>
 
                 <div className={styles.footer}>
-                    <span className={styles.price}>${Number(price).toFixed(2)}</span>
+                    <span className={styles.price}>₹{Number(price).toFixed(2)}</span>
                     <button className={styles.addBtn} aria-label="Add to Cart" onClick={handleAddToCart}>
                         <ShoppingCart size={18} />
                     </button>
