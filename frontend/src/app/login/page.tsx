@@ -3,7 +3,7 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
 // import { useSearchParams } from "next/navigation";
-import { API, makeApiRequest } from "../api/api";
+import { API, makeApiRequest } from "../../api/api";
 import styles from "./login.module.css";
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";

@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import config from './config';
 import authRoutes from './routes/authRoutes';
+import productRoutes from './routes/productRoutes';
 import logger from './utils/logger';
 
 const app = express();
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

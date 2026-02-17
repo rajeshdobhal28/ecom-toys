@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { API, makeApiRequest } from '@/app/api/api';
+import { API, makeApiRequest } from '../api/api';
 
 interface User {
     email: string;

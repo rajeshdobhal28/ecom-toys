@@ -80,19 +80,27 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  justify-content: center;
+  justify-content: flex-start;
   /* Centers items if they don't fill the row */
 }
 
 /* Ensure flex items (ProductCards) behave nicely */
 .grid>* {
-  flex: 1 1 240px;
-  /* Grow, shrink, base width */
+  /* Use flex-basis to ensure consistent width, but allow shrinking */
+  flex: 0 1 calc(33.333% - 1.5rem);
+  /* 3 items per row with gap accounting */
   max-width: 350px;
   /* Don't get too wide on large screens */
 }
 
 /* Mobile Responsive */
+@media (max-width: 1024px) {
+  .grid>* {
+    flex: 0 1 calc(50% - 1.5rem);
+    /* 2 per row */
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     grid-template-columns: 1fr;
@@ -108,7 +116,6 @@
   .filterGroup ul {
     display: flex;
     flex-wrap: wrap;
-    /* overflow-x: auto; */
     gap: 0.5rem;
     padding-bottom: 0.5rem;
   }
@@ -126,16 +133,13 @@
   }
 }
 
-@media (max-width: 480px) {
-  .grid {
-    gap: 1rem;
-    justify-content: center;
-  }
-
-  /* On very small screens, let cards be full width if needed, or constrained */
+@media (max-width: 600px) {
   .grid>* {
-    flex: 1 1 100%;
-    max-width: 100%;
+    flex: 0 1 100%;
+    /* 1 per row */
+    max-width: 400px;
+    /* Limit width */
+    margin: 0 auto;
   }
 
   .container {

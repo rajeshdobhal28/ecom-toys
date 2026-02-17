@@ -5,25 +5,27 @@ import styles from './ProductCard.module.css';
 import { useCart } from '@/context/CartContext';
 
 interface ProductCardProps {
-    id: number;
+    id: string | number;
     title: string;
-    price: number;
-    rating: number;
+    price: number | string;
+    rating?: number;
     imageColor?: string; // For placeholder
+    imageUrl?: string;
     category?: string;
 }
 
-export default function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', category = 'General' }: ProductCardProps) {
+export default function ProductCard({ id, title, price, rating = 5, imageColor = '#FF6B6B', imageUrl, category = 'General' }: ProductCardProps) {
     const { addToCart } = useCart();
 
     const handleAddToCart = () => {
         addToCart({
             id,
             title,
-            price,
+            price: Number(price), // Ensure price is number
             rating,
             category,
             color: imageColor,
+            imageUrl, // Pass image URL to cart
             slug: '' // Slug not strictly needed for cart logic but part of Product interface
         });
     };
@@ -35,8 +37,11 @@ export default function ProductCard({ id, title, price, rating, imageColor = '#F
             </button>
 
             <div className={styles.imageContainer} style={{ backgroundColor: imageColor }}>
-                {/* Placeholder for product image */}
-                <div className={styles.placeholderIcon}>🧸</div>
+                {imageUrl ? (
+                    <img src={imageUrl} alt={title} className={styles.productImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                    <div className={styles.placeholderIcon}>🧸</div>
+                )}
             </div>
 
             <div className={styles.details}>
@@ -55,7 +60,7 @@ export default function ProductCard({ id, title, price, rating, imageColor = '#F
                 <h3 className={styles.title}>{title}</h3>
 
                 <div className={styles.footer}>
-                    <span className={styles.price}>${price.toFixed(2)}</span>
+                    <span className={styles.price}>${Number(price).toFixed(2)}</span>
                     <button className={styles.addBtn} aria-label="Add to Cart" onClick={handleAddToCart}>
                         <ShoppingCart size={18} />
                     </button>

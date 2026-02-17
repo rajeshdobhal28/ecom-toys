@@ -1,4 +1,8 @@
-import { APIConfig, ApiEndpoint } from "../types"
+export type ApiEndpoint = { url: string; method: string };
+
+export type APIConfig = {
+    [key: string]: ApiEndpoint
+}
 
 export const makeApiRequest = async (api: ApiEndpoint, data: Record<string, any>) => {
     const options: RequestInit = {
@@ -21,4 +25,5 @@ export const API: APIConfig = {
     GOOGLE_LOGIN: { url: '/api/auth/google', method: 'POST' },
     ME: { url: '/api/auth/me', method: 'GET' },
     LOGOUT: { url: '/api/auth/logout', method: 'POST' },
+    GET_PRODUCTS: { url: '/api/products', method: 'GET' },
 }
