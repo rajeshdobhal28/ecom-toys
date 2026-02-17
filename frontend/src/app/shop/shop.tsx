@@ -3,7 +3,7 @@ import Footer from '@/components/Footer/Footer';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import styles from './page.module.css'; // Reuse parent styles
 import Link from 'next/link';
-import { CATEGORIES, getCategoryName } from '@/lib/data';
+import { CATEGORIES, getCategoryName } from '@/utils/utils';
 
 async function getProducts(category: string = '') {
 	try {

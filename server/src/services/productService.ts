@@ -1,7 +1,7 @@
 import * as db from '../db';
 import logger from '../utils/logger';
 
-export const getProducts = async (filters: { category?: string }) => {
+export const getProducts = async (filters: { category?: string; name?: string }) => {
     try {
         console.error("🔍 [DEBUG] getProducts FILTERS:", filters);
         let queryText = 'SELECT * FROM products';
@@ -11,6 +11,11 @@ export const getProducts = async (filters: { category?: string }) => {
         if (filters.category) {
             whereClauses.push(`category = $${queryParams.length + 1}`);
             queryParams.push(filters.category);
+        }
+
+        if (filters.name) {
+            whereClauses.push(`name = $${queryParams.length + 1}`);
+            queryParams.push(filters.name);
         }
 
         if (whereClauses.length > 0) {

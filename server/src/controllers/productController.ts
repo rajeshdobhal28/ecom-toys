@@ -5,8 +5,9 @@ import logger from '../utils/logger';
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
     try {
         const category = req.query.category as string | undefined;
+        const name = req.query.name as string | undefined;
 
-        const products = await productService.getProducts({ category });
+        const products = await productService.getProducts({ category, name });
 
         res.send({ status: 'success', data: products });
     } catch (err: any) {
