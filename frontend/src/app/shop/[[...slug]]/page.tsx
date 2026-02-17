@@ -1,5 +1,5 @@
 import Shop from '@/app/shop/shop';
 
-export default async function ShopPage({ params }: { params: Promise<{ category: string }> }) {
+export default async function ShopPage({ params }: { params: Promise<{ slug?: string[] }> }) {
     return <Shop params={params} />
 }

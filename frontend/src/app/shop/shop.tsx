@@ -27,14 +27,14 @@ async function getProducts(category: string = '') {
 // SEO: Generate static paths for all categories
 export async function generateStaticParams() {
 	return CATEGORIES.map((category) => ({
-		category: category.slug,
+		slug: [category.slug],
 	}));
 }
 
 // SEO: Dynamic Metadata
-// SEO: Dynamic Metadata
-export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
-	const { category } = await params;
+export async function generateMetadata({ params }: { params: Promise<{ slug?: string[] }> }) {
+	const { slug } = await params;
+	const category = slug?.[0] || '';
 	const categoryName = getCategoryName(category);
 	return {
 		title: `${categoryName} | WonderToys Shop`,
@@ -42,15 +42,12 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
 	};
 }
 
-const Shop = async ({ params }: { params: Promise<{ category: string }> }) => {
-	const { category } = await params;
+const Shop = async ({ params }: { params: Promise<{ slug?: string[] }> }) => {
+	const { slug } = await params;
+	const category = slug?.[0] || '';
 	const categoryName = getCategoryName(category);
 
 	const products = await getProducts(category);
-
-	if (!products.length && category !== 'all') {
-		// In a real app we might 404
-	}
 
 	return (
 		<>
