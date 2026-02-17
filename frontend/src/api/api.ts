@@ -26,4 +26,5 @@ export const API: APIConfig = {
     ME: { url: '/api/auth/me', method: 'GET' },
     LOGOUT: { url: '/api/auth/logout', method: 'POST' },
     GET_PRODUCTS: { url: '/api/products', method: 'GET' },
+    GET_ORDERS: { url: '/api/orders', method: 'GET' },
 }

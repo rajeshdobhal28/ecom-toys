@@ -50,9 +50,9 @@ export default function Header() {
                 </nav>
 
                 <div className={styles.actions}>
-                    <button className={styles.iconBtn} aria-label="Search">
+                    {/* <button className={styles.iconBtn} aria-label="Search">
                         <Search size={24} />
-                    </button>
+                    </button> */}
 
                     <div className={styles.userContainer} ref={dropdownRef}>
                         <button

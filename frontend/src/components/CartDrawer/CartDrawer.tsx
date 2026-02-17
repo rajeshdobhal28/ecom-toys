@@ -79,7 +79,7 @@ export default function CartDrawer() {
                     <div className={styles.footer}>
                         <div className={styles.total}>
                             <span>Subtotal</span>
-                            <span className={styles.totalAmount}>${total.toFixed(2)}</span>
+                            <span className={styles.totalAmount}>₹{total.toFixed(2)}</span>
                         </div>
                         <p className={styles.shippingNote}>Shipping & taxes calculated at checkout</p>
                         <button className={`${styles.checkoutBtn} btn btn-primary`}>

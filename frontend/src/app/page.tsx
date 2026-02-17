@@ -15,10 +15,10 @@ export default function Home() {
   ];
 
   const categories = [
-    { name: 'Educational', icon: '🧠', color: '#FFEAA7', slug: 'educational' },
-    { name: 'Outdoor Fun', icon: '⚽', color: '#74B9FF', slug: 'outdoor' },
-    { name: 'Soft & Plush', icon: '🧸', color: '#FF7675', slug: 'softtoys' },
-    { name: 'Arts & Crafts', icon: '🎨', color: '#A29BFE', slug: 'arts' },
+    { name: 'Educational Toys', icon: '🧠', color: '#FFEAA7', slug: 'educational' },
+    { name: 'Outdoor Fun Toys', icon: '⚽', color: '#74B9FF', slug: 'outdoor' },
+    { name: 'Soft & Plush Toys', icon: '🧸', color: '#FF7675', slug: 'softtoys' },
+    { name: 'Arts & Crafts Toys', icon: '🎨', color: '#A29BFE', slug: 'arts' },
   ];
 
   return (
@@ -33,7 +33,7 @@ export default function Home() {
             <div className={styles.feature}>
               <div className={styles.featureIcon}><Truck size={32} /></div>
               <h3>Fast Shipping</h3>
-              <p>Free delivery on orders over $50</p>
+              <p>Free delivery on orders over ₹50</p>
             </div>
             <div className={styles.feature}>
               <div className={styles.featureIcon}><ShieldCheck size={32} /></div>

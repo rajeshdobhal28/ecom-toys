@@ -61,13 +61,13 @@
 .topBar {
   margin-bottom: 2rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 4px;
 }
 
-.topBar h1 {
+.topBar span {
   font-size: 2rem;
   color: var(--text-main);
 }

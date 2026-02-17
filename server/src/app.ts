@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import config from './config';
 import authRoutes from './routes/authRoutes';
 import productRoutes from './routes/productRoutes';
+import orderRoutes from './routes/orderRoutes';
 import logger from './utils/logger';
 
 const app = express();
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

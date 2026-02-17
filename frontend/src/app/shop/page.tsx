@@ -3,7 +3,7 @@ import Footer from '@/components/Footer/Footer';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import styles from './page.module.css'; // Reuse parent styles
 import Link from 'next/link';
-import { CATEGORIES, getCategoryName } from '@/utils/utils';
+import { CATEGORIES, getCategoryName, getCategoryDescription } from '@/utils/utils';
 
 async function getProducts(category: string = '') {
 	try {
@@ -78,7 +78,8 @@ const Shop = async ({ params }: { params: Promise<{ slug?: string[] }> }) => {
 
 					<section className={styles.content}>
 						<div className={styles.topBar}>
-							<h1>{categoryName}</h1>
+							<span>{categoryName}</span>
+							<p className={styles.categoryDescription}>{getCategoryDescription(category)}</p>
 						</div>
 
 						<div className={styles.grid}>
