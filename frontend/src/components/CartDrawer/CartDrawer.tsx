@@ -4,10 +4,11 @@ import { useCart } from '@/context/CartContext';
 import styles from './CartDrawer.module.css';
 import { X, Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { API, makeApiRequest } from '@/api/api';
 
 export default function CartDrawer() {
-    const { items, isOpen, closeCart, removeFromCart, updateQuantity, total } = useCart();
+    const { items, isOpen, closeCart, removeFromCart, updateQuantity, clearCart, total } = useCart();
 
     // Prevent background scrolling when cart is open
     useEffect(() => {
@@ -20,6 +21,37 @@ export default function CartDrawer() {
             document.body.style.overflow = 'unset';
         };
     }, [isOpen]);
+
+    const [isCheckingOut, setIsCheckingOut] = useState(false);
+
+    const handleCheckout = async () => {
+        if (items.length === 0) return;
+
+        setIsCheckingOut(true);
+        try {
+            const products = items.map(item => ({
+                productId: item.id,
+                quantity: item.quantity
+            }));
+
+            // Assuming API and makeApiRequest are imported. We need them.
+            // Oh right, I need to add those imports to CartDrawer.tsx.
+            // Let me update the whole file to include imports.
+            const response = await makeApiRequest(API.CREATE_ORDER, { products });
+            if (response.status === 'success') {
+                alert('Order placed successfully!');
+                clearCart();
+                closeCart();
+            } else {
+                alert(response.message || 'Failed to place order');
+            }
+        } catch (error) {
+            console.error('Checkout error:', error);
+            alert('An error occurred during checkout');
+        } finally {
+            setIsCheckingOut(false);
+        }
+    };
 
     if (!isOpen) return null;
 
@@ -82,12 +114,17 @@ export default function CartDrawer() {
                             <span className={styles.totalAmount}>₹{total.toFixed(2)}</span>
                         </div>
                         <p className={styles.shippingNote}>Shipping & taxes calculated at checkout</p>
-                        <button className={`${styles.checkoutBtn} btn btn-primary`}>
-                            Proceed to Checkout
+                        <button
+                            className={`${styles.checkoutBtn} btn btn-primary`}
+                            onClick={handleCheckout}
+                            disabled={isCheckingOut}
+                        >
+                            {isCheckingOut ? 'Processing...' : 'Proceed to Checkout'}
                         </button>
                     </div>
                 )}
             </div>
         </div>
     );
+
 }

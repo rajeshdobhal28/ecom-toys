@@ -2,63 +2,83 @@ import { query } from '../db';
 import * as productService from './productService';
 import logger from '../utils/logger';
 
-interface CreateOrderParams {
-    userId: number;
-    userEmail: string;
+interface OrderProduct {
     productId: string;
     quantity: number;
 }
 
+interface CreateOrderParams {
+    userId: number;
+    userEmail: string;
+    products: OrderProduct[];
+}
+
 export const createOrder = async (params: CreateOrderParams) => {
-    const { userId, userEmail, productId, quantity } = params;
+    const { userId, userEmail, products } = params;
 
     try {
-        // 1. Fetch product details
-        const products = await productService.getProducts({}); // We need a way to get a single product efficiently, but for now this works if we filter in memory or add getProductById
-        // Ideally productService should have getProductById. Let's assume we can fetch it via DB directly for now to be safe and atomic, or better, add getProductById to productService.
-        // For this MVP, let's query DB directly for the product to ensure we get the latest stock/price.
+        await query('BEGIN'); // Start transaction
 
-        const productRes = await query('SELECT * FROM products WHERE id = $1', [productId]);
-        if (productRes.rows.length === 0) {
-            throw new Error('Product not found');
+        const createdOrders = [];
+        const orderProducts = [];
+        for (const item of products) {
+            const { productId, quantity } = item;
+
+            // 1. Fetch product details
+            const productRes = await query('SELECT * FROM products WHERE id = $1 FOR UPDATE', [productId]);
+            if (productRes.rows.length === 0) {
+                throw new Error(`Product not found: ${productId}`);
+            }
+            const product = productRes.rows[0];
+
+            // 2. Check stock availability
+            if (product.quantity < quantity) {
+                throw new Error(`Insufficient stock for product: ${product.name}`);
+            }
+
+            orderProducts.push(product);
         }
-        const product = productRes.rows[0];
 
-        // 2. Check stock availability
-        if (product.quantity < quantity) {
-            throw new Error('Insufficient stock');
+        for (const product of orderProducts) {
+
+            const quantity = products.find((p) => p.productId === product.id)?.quantity;
+            if (!quantity) {
+                throw new Error(`Quantity not found for product: ${product.id}`);
+            }
+            // 3. Calculate totals
+            const priceAtPurchase = product.discounted_price || product.price;
+            const totalPrice = priceAtPurchase * quantity;
+
+            // 4. Create order record
+            const insertOrderQuery = `
+                INSERT INTO orders (user_id, user_email, product_id, quantity, price_at_purchase, total_price, status)
+                VALUES ($1, $2, $3, $4, $5, $6, 'processing')
+                RETURNING *;
+            `;
+
+            const orderRes = await query(insertOrderQuery, [
+                userId,
+                userEmail,
+                product.id,
+                quantity,
+                priceAtPurchase,
+                totalPrice
+            ]);
+
+            createdOrders.push(orderRes.rows[0]);
+
+            // 5. Update product stock (Optional but recommended)
+            await query('UPDATE products SET quantity = quantity - $1 WHERE id = $2', [quantity, product.id]);
         }
 
-        // 3. Calculate totals
-        const priceAtPurchase = product.discounted_price || product.price;
-        const totalPrice = priceAtPurchase * quantity;
+        await query('COMMIT'); // Commit transaction
 
-        // 4. Create order record
-        const insertOrderQuery = `
-            INSERT INTO orders (user_id, user_email, product_id, quantity, price_at_purchase, total_price, status)
-            VALUES ($1, $2, $3, $4, $5, $6, 'processing')
-            RETURNING *;
-        `;
-
-        const orderRes = await query(insertOrderQuery, [
-            userId,
-            userEmail,
-            productId,
-            quantity,
-            priceAtPurchase,
-            totalPrice
-        ]);
-
-        const order = orderRes.rows[0];
-
-        // 5. Update product stock (Optional but recommended)
-        // await query('UPDATE products SET quantity = quantity - $1 WHERE id = $2', [quantity, productId]);
-
-        logger.info(`Order created: ${order.id} for user ${userEmail}`);
-        return order;
+        logger.info(`Orders created for user ${userEmail}, items: ${products.length}`);
+        return createdOrders;
 
     } catch (err) {
-        logger.error('Error creating order', err);
+        await query('ROLLBACK'); // Rollback transaction on error
+        logger.error('Error creating orders', err);
         throw err;
     }
 };

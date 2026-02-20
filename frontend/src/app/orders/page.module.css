@@ -1,8 +1,17 @@
-.container {
+.containerWrapper {
     padding: 2rem 1rem;
-    max-width: 800px;
-    margin: 0 auto;
-    min-height: 80vh;
+    height: 80vh;
+    overflow-y: scroll;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 800px;
+    padding: 2rem 1rem;
+    height: 80vh;
+    overflow-y: scroll;
 }
 
 .title {
