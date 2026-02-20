@@ -1,12 +1,12 @@
 import { query } from './index';
 
 const logger = {
-    info: (msg: string) => console.log(`[INFO] ${msg}`),
-    error: (msg: string, err: any) => console.error(`[ERROR] ${msg}`, err)
+  info: (msg: string) => console.log(`[INFO] ${msg}`),
+  error: (msg: string, err: any) => console.error(`[ERROR] ${msg}`, err),
 };
 
 const createUserAddressesTable = async () => {
-    const createTableQuery = `
+  const createTableQuery = `
         CREATE TABLE IF NOT EXISTS user_addresses (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -20,14 +20,14 @@ const createUserAddressesTable = async () => {
         );
     `;
 
-    try {
-        await query(createTableQuery);
-        logger.info('✅ User addresses table created successfully');
-        process.exit(0);
-    } catch (err) {
-        logger.error('❌ Error creating user_addresses table', err);
-        process.exit(1);
-    }
+  try {
+    await query(createTableQuery);
+    logger.info('✅ User addresses table created successfully');
+    process.exit(0);
+  } catch (err) {
+    logger.error('❌ Error creating user_addresses table', err);
+    process.exit(1);
+  }
 };
 
 createUserAddressesTable();

@@ -1,22 +1,22 @@
 :root {
   /* Color Palette - Playful yet Trustworthy */
-  --primary: #FF6B6B;
+  --primary: #ff6b6b;
   /* Coral Red - Energetic, warm */
-  --primary-hover: #EE5253;
-  --secondary: #4ECDC4;
+  --primary-hover: #ee5253;
+  --secondary: #4ecdc4;
   /* Turquoise - Calm, friendly */
-  --secondary-hover: #36B9B0;
-  --accent: #FFD93D;
+  --secondary-hover: #36b9b0;
+  --accent: #ffd93d;
   /* Sunny Yellow - Happiness */
-  --background: #FFFDF5;
+  --background: #fffdf5;
   /* Warm Cream - Easy on eyes */
-  --surface: #FFFFFF;
+  --surface: #ffffff;
   /* Pure White - Cards/Sections */
-  --text-main: #2D3436;
+  --text-main: #2d3436;
   /* Dark Grey - Readable, softer than black */
-  --text-muted: #636E72;
+  --text-muted: #636e72;
   /* Muted Grey */
-  --border: #E0E0E0;
+  --border: #e0e0e0;
 
   /* Spacing */
   --radius: 12px;

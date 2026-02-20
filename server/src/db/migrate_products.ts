@@ -1,15 +1,15 @@
 import { query } from './index';
 
 const logger = {
-    info: (msg: string) => console.log(`[INFO] ${msg}`),
-    error: (msg: string, err: any) => console.error(`[ERROR] ${msg}`, err)
+  info: (msg: string) => console.log(`[INFO] ${msg}`),
+  error: (msg: string, err: any) => console.error(`[ERROR] ${msg}`, err),
 };
 
 const createProductsTable = async () => {
-    // Enable pgcrypto for gen_random_uuid() if not available
-    const extensionQuery = `CREATE EXTENSION IF NOT EXISTS "pgcrypto";`;
+  // Enable pgcrypto for gen_random_uuid() if not available
+  const extensionQuery = `CREATE EXTENSION IF NOT EXISTS "pgcrypto";`;
 
-    const createTableQuery = `
+  const createTableQuery = `
         CREATE TABLE IF NOT EXISTS products (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             name VARCHAR(255) NOT NULL,
@@ -28,15 +28,15 @@ const createProductsTable = async () => {
         );
     `;
 
-    try {
-        await query(extensionQuery);
-        await query(createTableQuery);
-        logger.info('✅ Products table created successfully');
-        process.exit(0);
-    } catch (err) {
-        logger.error('❌ Error creating products table', err);
-        process.exit(1);
-    }
+  try {
+    await query(extensionQuery);
+    await query(createTableQuery);
+    logger.info('✅ Products table created successfully');
+    process.exit(0);
+  } catch (err) {
+    logger.error('❌ Error creating products table', err);
+    process.exit(1);
+  }
 };
 
 createProductsTable();

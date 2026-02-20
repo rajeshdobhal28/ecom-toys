@@ -1,193 +1,191 @@
 .hero {
-    background: radial-gradient(circle at top right, #FFF4E6 0%, #E6F7FF 100%);
-    padding: 4rem 0 6rem;
-    position: relative;
-    overflow: hidden;
+  background: radial-gradient(circle at top right, #fff4e6 0%, #e6f7ff 100%);
+  padding: 4rem 0 6rem;
+  position: relative;
+  overflow: hidden;
 }
 
 .container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    gap: 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 4rem;
 }
 
 .content {
-    z-index: 10;
+  z-index: 10;
 }
 
 .badge {
-    display: inline-block;
-    background-color: rgba(255, 217, 61, 0.3);
-    color: #B7950B;
-    font-weight: 800;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    margin-bottom: 1.5rem;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
+  display: inline-block;
+  background-color: rgba(255, 217, 61, 0.3);
+  color: #b7950b;
+  font-weight: 800;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
 }
 
 .title {
-    font-size: 3.5rem;
-    line-height: 1.1;
-    color: var(--text-main);
-    margin-bottom: 1.5rem;
+  font-size: 3.5rem;
+  line-height: 1.1;
+  color: var(--text-main);
+  margin-bottom: 1.5rem;
 }
 
 .highlight {
-    color: var(--primary);
-    position: relative;
-    display: inline-block;
+  color: var(--primary);
+  position: relative;
+  display: inline-block;
 }
 
 .highlight::after {
-    content: '';
-    position: absolute;
-    bottom: 5px;
-    left: 0;
-    width: 100%;
-    height: 15px;
-    background-color: rgba(78, 205, 196, 0.3);
-    z-index: -1;
-    border-radius: 10px;
-    transform: rotate(-1deg);
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 100%;
+  height: 15px;
+  background-color: rgba(78, 205, 196, 0.3);
+  z-index: -1;
+  border-radius: 10px;
+  transform: rotate(-1deg);
 }
 
 .description {
-    font-size: 1.25rem;
-    color: var(--text-muted);
-    margin-bottom: 2.5rem;
-    max-width: 90%;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+  max-width: 90%;
 }
 
 .actions {
-    display: flex;
-    gap: 1rem;
+  display: flex;
+  gap: 1rem;
 }
 
 .imageWrapper {
-    position: relative;
-    display: flex;
-    justify-content: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .placeholderImage {
-    width: 100%;
-    aspect-ratio: 2;
-    background: white;
-    border-radius: 50px;
-    box-shadow: var(--shadow-lg);
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 5rem;
-    border: 4px solid white;
+  width: 100%;
+  aspect-ratio: 2;
+  background: white;
+  border-radius: 50px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  border: 4px solid white;
 }
 
 .circle1,
 .circle2 {
-    position: absolute;
-    border-radius: 50%;
-    z-index: -1;
+  position: absolute;
+  border-radius: 50%;
+  z-index: -1;
 }
 
 .circle1 {
-    width: 150px;
-    height: 150px;
-    background-color: var(--secondary);
-    top: -20px;
-    right: -20px;
-    opacity: 0.5;
-    animation: float 6s ease-in-out infinite;
+  width: 150px;
+  height: 150px;
+  background-color: var(--secondary);
+  top: -20px;
+  right: -20px;
+  opacity: 0.5;
+  animation: float 6s ease-in-out infinite;
 }
 
 .circle2 {
-    width: 80px;
-    height: 80px;
-    background-color: var(--accent);
-    bottom: 20px;
-    left: -40px;
-    opacity: 0.6;
-    animation: float 8s ease-in-out infinite reverse;
+  width: 80px;
+  height: 80px;
+  background-color: var(--accent);
+  bottom: 20px;
+  left: -40px;
+  opacity: 0.6;
+  animation: float 8s ease-in-out infinite reverse;
 }
 
 .heroGraphic {
-    animation: bounce 2s infinite ease-in-out;
+  animation: bounce 2s infinite ease-in-out;
 }
 
 .wave {
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    line-height: 0;
-    transform: rotate(180deg);
-    /* Wait, svg shows fill #FFFDF5 which is background. 
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  line-height: 0;
+  transform: rotate(180deg);
+  /* Wait, svg shows fill #FFFDF5 which is background. 
      If hero background is gradient, wave helps blend to next section?
      Let's color the wave same as page background i.e., #FFFDF5.
   */
 }
 
 .wave path {
-    fill: var(--background);
+  fill: var(--background);
 }
 
 @keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
 
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-20px);
-    }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 @keyframes bounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
 
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.1);
-    }
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 @media (max-width: 768px) {
-    .hero {
-        padding: 2rem 0 4rem;
-    }
+  .hero {
+    padding: 2rem 0 4rem;
+  }
 
-    .container {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 2rem;
-    }
+  .container {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2rem;
+  }
 
-    .title {
-        font-size: 2.2rem;
-        /* Slightly smaller for better fit */
-    }
+  .title {
+    font-size: 2.2rem;
+    /* Slightly smaller for better fit */
+  }
 
-    .description {
-        font-size: 1.1rem;
-        margin: 0 auto 2rem;
-    }
+  .description {
+    font-size: 1.1rem;
+    margin: 0 auto 2rem;
+  }
 
-    .imageWrapper {
-        order: -1;
-        /* Show image first on mobile for engagement */
-        margin-bottom: 2rem;
-    }
+  .imageWrapper {
+    order: -1;
+    /* Show image first on mobile for engagement */
+    margin-bottom: 2rem;
+  }
 
-    .placeholderImage {
-        max-width: 300px;
-        /* Constrain size */
-        margin: 0 auto;
-    }
+  .placeholderImage {
+    max-width: 300px;
+    /* Constrain size */
+    margin: 0 auto;
+  }
 }

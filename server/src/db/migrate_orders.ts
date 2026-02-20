@@ -1,12 +1,12 @@
 import { query } from './index';
 
 const logger = {
-    info: (msg: string) => console.log(`[INFO] ${msg}`),
-    error: (msg: string, err: any) => console.error(`[ERROR] ${msg}`, err)
+  info: (msg: string) => console.log(`[INFO] ${msg}`),
+  error: (msg: string, err: any) => console.error(`[ERROR] ${msg}`, err),
 };
 
 const createOrdersTable = async () => {
-    const createTableQuery = `
+  const createTableQuery = `
         CREATE TABLE IF NOT EXISTS orders (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             user_id INTEGER NOT NULL REFERENCES users(id),
@@ -21,14 +21,14 @@ const createOrdersTable = async () => {
         );
     `;
 
-    try {
-        await query(createTableQuery);
-        logger.info('✅ Orders table created successfully');
-        process.exit(0);
-    } catch (err) {
-        logger.error('❌ Error creating orders table', err);
-        process.exit(1);
-    }
+  try {
+    await query(createTableQuery);
+    logger.info('✅ Orders table created successfully');
+    process.exit(0);
+  } catch (err) {
+    logger.error('❌ Error creating orders table', err);
+    process.exit(1);
+  }
 };
 
 createOrdersTable();

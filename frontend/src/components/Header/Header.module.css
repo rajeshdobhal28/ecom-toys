@@ -1,173 +1,172 @@
 .header {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    border-bottom: 2px solid var(--primary);
-    box-shadow: var(--shadow-sm);
-    padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--primary);
+  box-shadow: var(--shadow-sm);
+  padding: 1rem 0;
 }
 
 .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .logoText {
-    font-family: var(--font-nunito);
-    font-weight: 800;
-    font-size: 1.8rem;
-    color: var(--secondary);
-    text-decoration: none;
+  font-family: var(--font-nunito);
+  font-weight: 800;
+  font-size: 1.8rem;
+  color: var(--secondary);
+  text-decoration: none;
 }
 
 .logoHighlight {
-    color: var(--primary);
+  color: var(--primary);
 }
 
 .nav {
-    display: flex;
-    gap: 2rem;
+  display: flex;
+  gap: 2rem;
 }
 
 .link {
-    font-family: var(--font-nunito);
-    font-weight: 700;
-    color: var(--text-muted);
-    font-size: 1.1rem;
-    transition: color var(--transition-fast);
+  font-family: var(--font-nunito);
+  font-weight: 700;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  transition: color var(--transition-fast);
 }
 
 .link:hover {
-    color: var(--primary);
+  color: var(--primary);
 }
 
 .actions {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .iconBtn {
-    background: none;
-    color: var(--text-main);
-    padding: 0.5rem;
-    border-radius: 50%;
-    transition: background var(--transition-fast);
+  background: none;
+  color: var(--text-main);
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background var(--transition-fast);
 }
 
 .iconBtn:hover {
-    background-color: #F1F2F6;
-    color: var(--primary);
+  background-color: #f1f2f6;
+  color: var(--primary);
 }
 
 .cartBtn {
-    composes: iconBtn;
-    position: relative;
-    color: var(--primary);
+  composes: iconBtn;
+  position: relative;
+  color: var(--primary);
 }
 
 .cartCount {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    background-color: var(--accent);
-    color: var(--text-main);
-    font-size: 0.75rem;
-    font-weight: 800;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background-color: var(--accent);
+  color: var(--text-main);
+  font-size: 0.75rem;
+  font-weight: 800;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .mobileMenu {
-    display: none;
-    background: none;
-    color: var(--text-main);
+  display: none;
+  background: none;
+  color: var(--text-main);
 }
 
 @media (max-width: 768px) {
-    .nav {
-        display: none;
-    }
+  .nav {
+    display: none;
+  }
 
-    .mobileMenu {
-        display: block;
-        padding: 0.5rem;
-        /* Larger touch target */
-    }
+  .mobileMenu {
+    display: block;
+    padding: 0.5rem;
+    /* Larger touch target */
+  }
 
-    .logoText {
-        font-size: 1.5rem;
-    }
+  .logoText {
+    font-size: 1.5rem;
+  }
 
-
-    .container {
-        padding: 0 1rem;
-        width: 100%;
-    }
+  .container {
+    padding: 0 1rem;
+    width: 100%;
+  }
 }
 
 .userContainer {
-    position: relative;
+  position: relative;
 }
 
 .dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    margin-top: 0.5rem;
-    background: white;
-    border-radius: 0.5rem;
-    box-shadow: var(--shadow-md);
-    min-width: 200px;
-    padding: 0.5rem 0;
-    border: 1px solid var(--border-light);
-    display: flex;
-    flex-direction: column;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-md);
+  min-width: 200px;
+  padding: 0.5rem 0;
+  border: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
 }
 
 .userProfile {
-    padding: 0.5rem 1rem;
-    border-bottom: 1px solid var(--border-light);
-    margin-bottom: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 0.5rem;
 }
 
 .userName {
-    font-weight: 700;
-    color: var(--text-main);
-    display: block;
+  font-weight: 700;
+  color: var(--text-main);
+  display: block;
 }
 
 .userEmail {
-    font-size: 0.8rem;
-    color: var(--text-muted);
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
 .dropdownLink {
-    padding: 0.5rem 1rem;
-    color: var(--text-main);
-    text-decoration: none;
-    transition: background var(--transition-fast);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    background: none;
-    border: none;
-    width: 100%;
-    text-align: left;
-    font-family: inherit;
-    font-size: 1rem;
+  padding: 0.5rem 1rem;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: background var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  font-size: 1rem;
 }
 
 .dropdownLink:hover {
-    background-color: var(--bg-light);
-    color: var(--primary);
+  background-color: var(--bg-light);
+  color: var(--primary);
 }

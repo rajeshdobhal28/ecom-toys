@@ -1,26 +1,26 @@
-import type { Metadata } from "next";
-import { Inter, Nunito } from "next/font/google";
-import "./globals.css";
-import { CartProvider } from "@/context/CartContext";
-import CartDrawer from "@/components/CartDrawer/CartDrawer";
-import GoogleAuthProvider from "@/components/providers/GoogleAuthProvider";
-import { AuthProvider } from "@/context/AuthContext";
+import type { Metadata } from 'next';
+import { Inter, Nunito } from 'next/font/google';
+import './globals.css';
+import { CartProvider } from '@/context/CartContext';
+import CartDrawer from '@/components/CartDrawer/CartDrawer';
+import GoogleAuthProvider from '@/components/providers/GoogleAuthProvider';
+import { AuthProvider } from '@/context/AuthContext';
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
 });
 
 const nunito = Nunito({
-  subsets: ["latin"],
-  variable: "--font-nunito",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-nunito',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "WonderToys - Kids Toy Store",
-  description: "The best toys for happy kids. Educational, fun, and safe.",
+  title: 'WonderToys - Kids Toy Store',
+  description: 'The best toys for happy kids. Educational, fun, and safe.',
 };
 
 export default function RootLayout({
@@ -30,12 +30,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${nunito.variable}`} suppressHydrationWarning={true}>
+      <body
+        className={`${inter.variable} ${nunito.variable}`}
+        suppressHydrationWarning={true}
+      >
         <CartProvider>
           <GoogleAuthProvider>
-            <AuthProvider>
-              {children}
-            </AuthProvider>
+            <AuthProvider>{children}</AuthProvider>
           </GoogleAuthProvider>
           <CartDrawer />
         </CartProvider>
