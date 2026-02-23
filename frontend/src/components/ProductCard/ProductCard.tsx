@@ -59,7 +59,7 @@ export default function ProductCard({
 
         <div
           className={styles.imageContainer}
-          style={{ backgroundColor: imageColor }}
+          style={{ backgroundColor: '#f8f9fa' }}
         >
           {imageUrl ? (
             <img

@@ -7,6 +7,8 @@ export interface Product {
   slug: string;
   color?: string; // keeping for backward compatibility
   imageUrl?: string; // added for new DB products
+  brand?: string;
+  cost_price?: number;
 }
 
 export const CATEGORIES = [

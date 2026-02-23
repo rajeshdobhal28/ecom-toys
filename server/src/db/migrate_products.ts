@@ -21,6 +21,8 @@ const createProductsTable = async () => {
             quantity INTEGER DEFAULT 0,
             price DECIMAL(10, 2) NOT NULL,
             discounted_price DECIMAL(10, 2),
+            cost_price DECIMAL(10, 2),
+            brand VARCHAR(255),
             is_active BOOLEAN DEFAULT true,
             images TEXT[],
             created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
