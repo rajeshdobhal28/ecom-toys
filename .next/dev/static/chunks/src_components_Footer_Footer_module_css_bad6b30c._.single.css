@@ -1,0 +1,87 @@
+/* [project]/src/components/Footer/Footer.module.css [app-client] (css) */
+.Footer-module__Grjkva__footer {
+  color: #fff;
+  background-color: #2d3436;
+  margin-top: 4rem;
+  padding: 4rem 0 0;
+}
+
+.Footer-module__Grjkva__container {
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 2rem;
+  padding-bottom: 3rem;
+  display: grid;
+}
+
+.Footer-module__Grjkva__logo {
+  font-family: var(--font-nunito);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.Footer-module__Grjkva__highlight {
+  color: var(--primary);
+}
+
+.Footer-module__Grjkva__text {
+  color: #b2bec3;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.Footer-module__Grjkva__heading {
+  color: #fff;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.Footer-module__Grjkva__link {
+  color: #b2bec3;
+  transition: color var(--transition-fast);
+  margin-bottom: .75rem;
+  font-size: .95rem;
+  display: block;
+}
+
+.Footer-module__Grjkva__link:hover {
+  color: var(--primary);
+}
+
+.Footer-module__Grjkva__socials {
+  gap: 1rem;
+  display: flex;
+}
+
+.Footer-module__Grjkva__socialIcon {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  transition: background var(--transition-fast);
+  background-color: #ffffff1a;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.Footer-module__Grjkva__socialIcon:hover {
+  background-color: var(--primary);
+}
+
+.Footer-module__Grjkva__bottom {
+  background-color: #222526;
+  padding: 1.5rem 0;
+}
+
+@media (max-width: 768px) {
+  .Footer-module__Grjkva__container {
+    text-align: center;
+    grid-template-columns: 1fr;
+  }
+
+  .Footer-module__Grjkva__socials {
+    justify-content: center;
+  }
+}
+
+/*# sourceMappingURL=src_components_Footer_Footer_module_css_bad6b30c._.single.css.map*/

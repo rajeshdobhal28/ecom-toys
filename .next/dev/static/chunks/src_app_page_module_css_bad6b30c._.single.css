@@ -1,0 +1,214 @@
+/* [project]/src/app/page.module.css [app-client] (css) */
+.page-module___8aEwW__section {
+  padding: 5rem 0;
+}
+
+.page-module___8aEwW__sectionTitle {
+  text-align: center;
+  color: var(--text-main);
+  margin-bottom: 3rem;
+  font-size: 2.5rem;
+  display: inline-block;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.page-module___8aEwW__sectionTitle:after {
+  content: "";
+  background-color: var(--accent);
+  border-radius: 2px;
+  width: 60px;
+  height: 4px;
+  margin: 10px auto 0;
+  display: block;
+}
+
+.page-module___8aEwW__sectionHeader {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  display: flex;
+}
+
+.page-module___8aEwW__sectionHeader .page-module___8aEwW__sectionTitle {
+  margin-bottom: 0;
+  left: auto;
+  transform: none;
+}
+
+.page-module___8aEwW__features {
+  border-bottom: 1px solid var(--border);
+  background-color: #fff;
+  padding: 3rem 0;
+}
+
+.page-module___8aEwW__featuresGrid {
+  text-align: center;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  display: grid;
+}
+
+.page-module___8aEwW__feature {
+  padding: 1rem;
+}
+
+.page-module___8aEwW__featureIcon {
+  color: var(--primary);
+  background-color: #fff0f0;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+}
+
+.page-module___8aEwW__feature h3 {
+  margin-bottom: .5rem;
+  font-size: 1.1rem;
+}
+
+.page-module___8aEwW__feature p {
+  color: var(--text-muted);
+  font-size: .9rem;
+}
+
+.page-module___8aEwW__categoryGrid {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  display: grid;
+}
+
+.page-module___8aEwW__categoryCard {
+  border-radius: var(--radius);
+  text-align: center;
+  transition: transform var(--transition-medium);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  padding: 2rem;
+  display: flex;
+}
+
+.page-module___8aEwW__categoryCard:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-10px);
+}
+
+.page-module___8aEwW__catIcon {
+  margin-bottom: 1rem;
+  font-size: 3rem;
+  display: block;
+}
+
+.page-module___8aEwW__catName {
+  font-family: var(--font-nunito);
+  color: #000000b3;
+  background-color: #ffffff80;
+  border-radius: 20px;
+  padding: .25rem 1rem;
+  display: inline-block;
+}
+
+.page-module___8aEwW__productGrid {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  display: grid;
+}
+
+@media (max-width: 600px) {
+  .page-module___8aEwW__section {
+    padding: 3rem 0;
+  }
+
+  .page-module___8aEwW__sectionTitle {
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+  }
+
+  .page-module___8aEwW__productGrid, .page-module___8aEwW__categoryGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .page-module___8aEwW__featuresGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .page-module___8aEwW__ctaCard {
+    padding: 2rem 1rem;
+  }
+
+  .page-module___8aEwW__ctaCard h2 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 370px) {
+  .page-module___8aEwW__productGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.page-module___8aEwW__ctaSection {
+  padding: 6rem 0;
+}
+
+.page-module___8aEwW__ctaCard {
+  text-align: center;
+  color: #fff;
+  box-shadow: var(--shadow-lg);
+  background: radial-gradient(circle, #6c5ce7 0%, #a29bfe 100%);
+  border-radius: 30px;
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-module___8aEwW__ctaCard h2 {
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+}
+
+.page-module___8aEwW__ctaCard p {
+  opacity: .9;
+  margin-bottom: 2.5rem;
+  font-size: 1.2rem;
+}
+
+.page-module___8aEwW__inputGroup {
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+}
+
+.page-module___8aEwW__inputGroup input {
+  border: none;
+  border-radius: 50px;
+  outline: none;
+  flex: 1;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .page-module___8aEwW__categoryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .page-module___8aEwW__inputGroup {
+    flex-direction: column;
+  }
+}
+
+/*# sourceMappingURL=src_app_page_module_css_bad6b30c._.single.css.map*/

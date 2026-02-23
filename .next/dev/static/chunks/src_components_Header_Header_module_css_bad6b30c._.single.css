@@ -1,0 +1,174 @@
+/* [project]/src/components/Header/Header.module.css [app-client] (css) */
+.Header-module__ldgnoG__header {
+  z-index: 1000;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--primary);
+  box-shadow: var(--shadow-sm);
+  background-color: #ffffffe6;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+}
+
+.Header-module__ldgnoG__container {
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
+.Header-module__ldgnoG__logoText {
+  font-family: var(--font-nunito);
+  color: var(--secondary);
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.Header-module__ldgnoG__logoHighlight {
+  color: var(--primary);
+}
+
+.Header-module__ldgnoG__nav {
+  gap: 2rem;
+  display: flex;
+}
+
+.Header-module__ldgnoG__link {
+  font-family: var(--font-nunito);
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.Header-module__ldgnoG__link:hover {
+  color: var(--primary);
+}
+
+.Header-module__ldgnoG__actions {
+  align-items: center;
+  gap: 1rem;
+  display: flex;
+}
+
+.Header-module__ldgnoG__iconBtn {
+  color: var(--text-main);
+  transition: background var(--transition-fast);
+  background: none;
+  border-radius: 50%;
+  padding: .5rem;
+}
+
+.Header-module__ldgnoG__iconBtn:hover {
+  color: var(--primary);
+  background-color: #f1f2f6;
+}
+
+.Header-module__ldgnoG__cartBtn {
+  color: var(--primary);
+  position: relative;
+}
+
+.Header-module__ldgnoG__cartCount {
+  background-color: var(--accent);
+  color: var(--text-main);
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 18px;
+  height: 18px;
+  font-size: .75rem;
+  font-weight: 800;
+  display: flex;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  box-shadow: 0 2px 5px #0000001a;
+}
+
+.Header-module__ldgnoG__mobileMenu {
+  color: var(--text-main);
+  background: none;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .Header-module__ldgnoG__nav {
+    display: none;
+  }
+
+  .Header-module__ldgnoG__mobileMenu {
+    padding: .5rem;
+    display: block;
+  }
+
+  .Header-module__ldgnoG__logoText {
+    font-size: 1.5rem;
+  }
+
+  .Header-module__ldgnoG__container {
+    width: 100%;
+    padding: 0 1rem;
+  }
+}
+
+.Header-module__ldgnoG__userContainer {
+  position: relative;
+}
+
+.Header-module__ldgnoG__dropdown {
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  background: #fff;
+  border-radius: .5rem;
+  flex-direction: column;
+  min-width: 200px;
+  margin-top: .5rem;
+  padding: .5rem 0;
+  display: flex;
+  position: absolute;
+  top: 100%;
+  right: 0;
+}
+
+.Header-module__ldgnoG__userProfile {
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: .5rem;
+  padding: .5rem 1rem;
+}
+
+.Header-module__ldgnoG__userName {
+  color: var(--text-main);
+  font-weight: 700;
+  display: block;
+}
+
+.Header-module__ldgnoG__userEmail {
+  color: var(--text-muted);
+  font-size: .8rem;
+}
+
+.Header-module__ldgnoG__dropdownLink {
+  color: var(--text-main);
+  transition: background var(--transition-fast);
+  cursor: pointer;
+  text-align: left;
+  background: none;
+  border: none;
+  align-items: center;
+  gap: .5rem;
+  width: 100%;
+  padding: .5rem 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  text-decoration: none;
+  display: flex;
+}
+
+.Header-module__ldgnoG__dropdownLink:hover {
+  background-color: var(--bg-light);
+  color: var(--primary);
+}
+
+/*# sourceMappingURL=src_components_Header_Header_module_css_bad6b30c._.single.css.map*/
