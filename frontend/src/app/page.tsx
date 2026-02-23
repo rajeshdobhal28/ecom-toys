@@ -31,7 +31,7 @@ export default function Home() {
         <Hero />
 
         {/* Features / Trust Badges */}
-        <section className={styles.features}>
+        {/* <section className={styles.features}>
           <div className={`container ${styles.featuresGrid}`}>
             <div className={styles.feature}>
               <div className={styles.featureIcon}>
@@ -62,7 +62,7 @@ export default function Home() {
               <p>Perfect for birthdays & holidays</p>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Categories */}
         <section className={styles.section}>
@@ -98,7 +98,7 @@ export default function Home() {
         </section>
 
         {/* Newsletter / CTA */}
-        <section className={styles.ctaSection}>
+        {/* <section className={styles.ctaSection}>
           <div className="container">
             <div className={styles.ctaCard}>
               <h2>Join the WonderToys Family!</h2>
@@ -112,7 +112,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
       <Footer />
     </>

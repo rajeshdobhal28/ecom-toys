@@ -1,0 +1,254 @@
+.main {
+    min-height: 100vh;
+    background-color: #fafbfc;
+}
+
+/* Hero Section */
+.heroSection {
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    padding: 6rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+}
+
+.heroContainer {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #2d3436;
+    margin-bottom: 1rem;
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: #636e72;
+    line-height: 1.6;
+}
+
+/* Decorative Blobs */
+.blob1,
+.blob2 {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 1;
+    opacity: 0.6;
+}
+
+.blob1 {
+    width: 400px;
+    height: 400px;
+    background: rgba(116, 185, 255, 0.4);
+    top: -100px;
+    left: -200px;
+    animation: float1 10s ease-in-out infinite;
+}
+
+.blob2 {
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 234, 167, 0.4);
+    bottom: -50px;
+    right: -100px;
+    animation: float2 8s ease-in-out infinite alternate;
+}
+
+@keyframes float1 {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(20px) scale(1.05);
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes float2 {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(-30px, 30px) scale(1.1);
+    }
+}
+
+/* Content Section */
+.contentSection {
+    padding: 5rem 0;
+    background-color: transparent;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Reusable Card Style */
+.card {
+    background: white;
+    padding: 2.5rem 1.5rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+.iconWrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.card h3 {
+    font-size: 1.25rem;
+    color: #2d3436;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+
+.card p {
+    color: #636e72;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Highlighted Warning Card */
+.highlightCard {
+    margin-top: -8rem;
+    /* Pull up to overlap hero slightly */
+    position: relative;
+    z-index: 10;
+    border: 2px solid #ff7675;
+    background: #fffdfd;
+}
+
+.highlightCard h2 {
+    font-size: 1.8rem;
+    color: #d63031;
+    margin-bottom: 1rem;
+    font-weight: 800;
+}
+
+.highlightText {
+    font-size: 1.1rem !important;
+    color: #2d3436 !important;
+}
+
+.highlightText strong {
+    color: #d63031;
+    font-weight: 700;
+}
+
+/* Rules Grid */
+.rulesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+/* Steps List */
+.stepsContainer {
+    background: white;
+    padding: 3.5rem;
+    border-radius: 24px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    margin-top: 1rem;
+}
+
+.stepsContainer h2 {
+    font-size: 2rem;
+    color: #2d3436;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 800;
+}
+
+.stepsList {
+    list-style: none;
+    counter-reset: my-counter;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-left: 0;
+}
+
+.stepsList li {
+    position: relative;
+    padding-left: 3.5rem;
+    font-size: 1.05rem;
+    color: #636e72;
+    line-height: 1.6;
+}
+
+.stepsList li::before {
+    counter-increment: my-counter;
+    content: counter(my-counter);
+    position: absolute;
+    left: 0;
+    top: -2px;
+    width: 32px;
+    height: 32px;
+    background: #a29bfe;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.stepsList li strong {
+    color: #2d3436;
+}
+
+.stepsList code {
+    background: #f1f2f6;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    color: #0984e3;
+    font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.5rem;
+    }
+
+    .highlightCard {
+        margin-top: -3rem;
+    }
+
+    .stepsContainer {
+        padding: 2rem;
+    }
+}

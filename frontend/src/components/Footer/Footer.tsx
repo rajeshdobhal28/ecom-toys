@@ -36,15 +36,15 @@ export default function Footer() {
           <Link href="/help" className={styles.link}>
             Help Center
           </Link>
-          <Link href="/shipping" className={styles.link}>
+          <Link href="/return-policy" className={styles.link}>
             Shipping & Returns
           </Link>
           <Link href="/contact" className={styles.link}>
             Contact Us
           </Link>
-          <Link href="/safety" className={styles.link}>
+          {/* <Link href="/safety" className={styles.link}>
             Toy Safety
-          </Link>
+          </Link> */}
         </div>
 
         <div className={styles.column}>
