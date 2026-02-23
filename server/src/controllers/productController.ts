@@ -1,16 +1,18 @@
 import { Request, Response } from 'express';
 import * as productService from '../services/productService';
 import logger from '../utils/logger';
+import { AuthRequest } from '../middlewares/auth';
 
 export const getProducts = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
     const category = req.query.category as string | undefined;
     const name = req.query.name as string | undefined;
+    const isAdmin = req.user?.isAdmin || false;
 
-    const products = await productService.getProducts({ category, name });
+    const products = await productService.getProducts({ category, name, isAdmin });
 
     res.send({ status: 'success', data: products });
   } catch (err: any) {
@@ -20,11 +22,12 @@ export const getProducts = async (
 };
 
 export const getTrendingProducts = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
-    const trendingProducts = await productService.getTrendingProducts();
+    const isAdmin = req.user?.isAdmin || false;
+    const trendingProducts = await productService.getTrendingProducts(isAdmin);
     res.send({ status: 'success', data: trendingProducts });
   } catch (err: any) {
     logger.error('Get trending products error', err.message);

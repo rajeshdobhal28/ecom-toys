@@ -113,6 +113,7 @@ const Shop = async ({ params }: { params: Promise<{ slug?: string[] }> }) => {
                       : undefined
                   }
                   category={product.category}
+                  quantity={product.quantity}
                 />
               ))}
               {products.length === 0 && (

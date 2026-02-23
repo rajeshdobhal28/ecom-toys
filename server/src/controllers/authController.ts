@@ -35,6 +35,7 @@ export const googleLogin = async (
       email: user.email,
       name: user.name,
       picture: user.picture,
+      isAdmin: user.is_admin,
     });
 
     res.cookie('secureToken', jwtToken, {

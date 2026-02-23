@@ -9,6 +9,7 @@ interface User {
   name: string;
   picture: string;
   sub: string;
+  isAdmin?: boolean;
 }
 
 interface AuthContextType {

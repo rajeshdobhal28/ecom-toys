@@ -4,6 +4,7 @@ import logger from '../utils/logger';
 export const getProducts = async (filters: {
   category?: string;
   name?: string;
+  isAdmin?: boolean;
 }) => {
   try {
     console.error('🔍 [DEBUG] getProducts FILTERS:', filters);
@@ -32,14 +33,23 @@ export const getProducts = async (filters: {
 
     const res = await db.query(queryText, queryParams);
     console.error(`🔍 [DEBUG] Found ${res.rows.length} products`);
-    return res.rows;
+
+    let products = res.rows;
+    if (!filters.isAdmin) {
+      products = products.map(p => {
+        const { cost_price, ...rest } = p;
+        return rest;
+      });
+    }
+
+    return products;
   } catch (err: any) {
     logger.error('Error fetching products', err);
     throw err;
   }
 };
 
-export const getTrendingProducts = async () => {
+export const getTrendingProducts = async (isAdmin: boolean = false) => {
   try {
     const queryText = `
             SELECT p.*
@@ -54,7 +64,16 @@ export const getTrendingProducts = async () => {
             ) top_selling ON p.id = top_selling.product_id;
         `;
     const res = await db.query(queryText);
-    return res.rows;
+
+    let products = res.rows;
+    if (!isAdmin) {
+      products = products.map(p => {
+        const { cost_price, ...rest } = p;
+        return rest;
+      });
+    }
+
+    return products;
   } catch (err: any) {
     logger.error('Error fetching trending products', err);
     throw err;

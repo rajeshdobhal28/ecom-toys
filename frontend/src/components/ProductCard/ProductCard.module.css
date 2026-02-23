@@ -118,3 +118,37 @@
 .addBtn:hover {
   background-color: #ff5252;
 }
+
+.disabledAddBtn {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.disabledAddBtn:hover {
+  background-color: #e0e0e0;
+}
+
+.soldOutBadge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(214, 48, 49, 0.9);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  font-weight: 800;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  border-radius: 8px;
+  letter-spacing: 2px;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(214, 48, 49, 0.4);
+  pointer-events: none;
+}
+
+.soldOutImage {
+  opacity: 0.5;
+  filter: grayscale(80%);
+}

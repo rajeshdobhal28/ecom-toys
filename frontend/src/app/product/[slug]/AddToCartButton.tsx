@@ -6,15 +6,20 @@ import styles from '../product.module.css';
 
 export default function AddToCartButton({ product }: { product: any }) {
   const { addToCart } = useCart();
+  const isSoldOut = product.quantity === 0;
 
   const handleAddToCart = () => {
-    addToCart(product);
+    if (!isSoldOut) addToCart(product);
   };
 
   return (
-    <button className={styles.addToCartBtn} onClick={handleAddToCart}>
+    <button
+      className={isSoldOut ? styles.addToCartBtnDisabled : styles.addToCartBtn}
+      onClick={handleAddToCart}
+      disabled={isSoldOut}
+    >
       <ShoppingCart size={24} />
-      Add to Cart
+      {isSoldOut ? "Sold Out" : "Add to Cart"}
     </button>
   );
 }

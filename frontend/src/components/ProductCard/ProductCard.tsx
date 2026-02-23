@@ -14,6 +14,7 @@ interface ProductCardProps {
   imageUrl?: string;
   category?: string;
   slug?: string;
+  quantity?: number;
 }
 
 export default function ProductCard({
@@ -25,12 +26,16 @@ export default function ProductCard({
   imageUrl,
   category = 'General',
   slug,
+  quantity = 1, // default to 1 so it assumes available if not passed
 }: ProductCardProps) {
   const { addToCart } = useCart();
+  const isSoldOut = quantity === 0;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation when clicking add to cart
     e.stopPropagation();
+    if (isSoldOut) return;
+
     addToCart({
       id,
       title,
@@ -59,13 +64,14 @@ export default function ProductCard({
 
         <div
           className={styles.imageContainer}
-          style={{ backgroundColor: '#f8f9fa' }}
+          style={{ backgroundColor: '#f8f9fa', position: 'relative' }}
         >
+          {isSoldOut && <div className={styles.soldOutBadge}>Sold Out</div>}
           {imageUrl ? (
             <img
               src={imageUrl}
               alt={title}
-              className={styles.productImage}
+              className={`${styles.productImage} ${isSoldOut ? styles.soldOutImage : ''}`}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           ) : (
@@ -93,9 +99,10 @@ export default function ProductCard({
           <div className={styles.footer}>
             <span className={styles.price}>₹{Number(price).toFixed(2)}</span>
             <button
-              className={styles.addBtn}
-              aria-label="Add to Cart"
+              className={`${styles.addBtn} ${isSoldOut ? styles.disabledAddBtn : ''}`}
+              aria-label={isSoldOut ? "Sold Out" : "Add to Cart"}
               onClick={handleAddToCart}
+              disabled={isSoldOut}
             >
               <ShoppingCart size={18} />
             </button>

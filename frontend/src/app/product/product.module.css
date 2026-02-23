@@ -108,6 +108,24 @@
   background-color: #ff5252;
 }
 
+.addToCartBtnDisabled {
+  flex: 1;
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  border: none;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s;
+  pointer-events: none;
+}
+
 @media (max-width: 768px) {
   .productWrapper {
     grid-template-columns: 1fr;

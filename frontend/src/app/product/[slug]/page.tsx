@@ -83,6 +83,27 @@ export default async function ProductPage({
 
         <div className={styles.productWrapper}>
           <div className={styles.imageSection}>
+            {product.quantity === 0 && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '20px',
+                  right: '20px',
+                  backgroundColor: 'rgba(214, 48, 49, 0.9)',
+                  color: 'white',
+                  padding: '0.5rem 1.5rem',
+                  fontWeight: 800,
+                  fontSize: '1.2rem',
+                  textTransform: 'uppercase',
+                  borderRadius: '8px',
+                  letterSpacing: '2px',
+                  zIndex: 10,
+                  boxShadow: '0 4px 15px rgba(214, 48, 49, 0.4)',
+                }}
+              >
+                Sold Out
+              </div>
+            )}
             <ImageCarousel
               images={
                 product.images || (product.imageUrl ? [product.imageUrl] : [])

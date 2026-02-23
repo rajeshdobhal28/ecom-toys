@@ -9,6 +9,7 @@ export interface Product {
   imageUrl?: string; // added for new DB products
   brand?: string;
   cost_price?: number;
+  quantity?: number;
 }
 
 export const CATEGORIES = [

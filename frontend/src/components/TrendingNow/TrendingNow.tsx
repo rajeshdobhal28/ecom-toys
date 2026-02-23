@@ -79,6 +79,7 @@ export default function TrendingNow() {
               rating={5}
               imageUrl={product.images?.[0]}
               slug={product.slug}
+              quantity={product.quantity}
             />
           ))
         ) : (

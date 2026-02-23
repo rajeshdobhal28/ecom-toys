@@ -12,6 +12,7 @@ const createTable = async () => {
             email VARCHAR(255) UNIQUE NOT NULL,
             name VARCHAR(255),
             picture VARCHAR(255),
+            is_admin BOOLEAN DEFAULT FALSE,
             created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
         );
     `;
