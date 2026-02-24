@@ -24,6 +24,13 @@ export const makeApiRequest = async (
     `${process.env.NEXT_PUBLIC_BASE_URL}${api.url}`,
     options
   );
+
+  if (response.status === 401) {
+    if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
+      window.location.href = '/login';
+    }
+  }
+
   return response.json();
 };
 
@@ -40,4 +47,9 @@ export const API: APIConfig = {
   GET_PRODUCT_REVIEWS: { url: '/api/reviews/product', method: 'GET' }, // Append ID manually
   GET_USER_REVIEWS: { url: '/api/reviews/user', method: 'GET' },
   UPSERT_REVIEW: { url: '/api/reviews', method: 'POST' },
+  GET_ADDRESSES: { url: '/api/addresses', method: 'GET' },
+  ADD_ADDRESS: { url: '/api/addresses', method: 'POST' },
+  UPDATE_ADDRESS: { url: '/api/addresses', method: 'PUT' },
+  DELETE_ADDRESS: { url: '/api/addresses', method: 'DELETE' },
+  SET_DEFAULT_ADDRESS: { url: '/api/addresses', method: 'PUT' }, // append id/default
 };

@@ -69,6 +69,24 @@
   color: var(--primary);
 }
 
+.bump {
+  animation: bump 0.3s ease-out;
+}
+
+@keyframes bump {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
 .cartCount {
   position: absolute;
   top: -2px;

@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { API, makeApiRequest } from '@/api/api';
 
+import { useAuth } from '@/context/AuthContext';
+
 export default function CartDrawer() {
   const {
     items,
@@ -17,23 +19,59 @@ export default function CartDrawer() {
     clearCart,
     total,
   } = useCart();
+  const { user } = useAuth();
+
+  const [addresses, setAddresses] = useState<any[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
+  const [loadingAddresses, setLoadingAddresses] = useState(false);
 
   // Prevent background scrolling when cart is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      if (user) {
+        fetchAddresses();
+      }
     } else {
       document.body.style.overflow = 'unset';
     }
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isOpen, user]);
+
+  const fetchAddresses = async () => {
+    setLoadingAddresses(true);
+    try {
+      const response = await makeApiRequest(API.GET_ADDRESSES, {});
+      if (response.status === 'success') {
+        setAddresses(response.data);
+        const defaultAddr = response.data.find((a: any) => a.is_default);
+        if (defaultAddr) {
+          setSelectedAddressId(defaultAddr.id);
+        } else if (response.data.length > 0) {
+          setSelectedAddressId(response.data[0].id);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch addresses', err);
+    } finally {
+      setLoadingAddresses(false);
+    }
+  };
 
   const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const handleCheckout = async () => {
     if (items.length === 0) return;
+    if (!user) {
+      alert('Please log in to checkout');
+      return;
+    }
+    if (!selectedAddressId) {
+      alert('Please select a delivery address');
+      return;
+    }
 
     setIsCheckingOut(true);
     try {
@@ -42,10 +80,10 @@ export default function CartDrawer() {
         quantity: item.quantity,
       }));
 
-      // Assuming API and makeApiRequest are imported. We need them.
-      // Oh right, I need to add those imports to CartDrawer.tsx.
-      // Let me update the whole file to include imports.
-      const response = await makeApiRequest(API.CREATE_ORDER, { products });
+      const response = await makeApiRequest(API.CREATE_ORDER, {
+        products,
+        addressId: selectedAddressId
+      });
       if (response.status === 'success') {
         alert('Order placed successfully!');
         clearCart();
@@ -130,6 +168,38 @@ export default function CartDrawer() {
 
         {items.length > 0 && (
           <div className={styles.footer}>
+            {user ? (
+              <div className={styles.addressSection}>
+                <h4>Delivery Address</h4>
+                {loadingAddresses ? (
+                  <p className={styles.loadingText}>Loading addresses...</p>
+                ) : addresses.length === 0 ? (
+                  <div className={styles.noAddress}>
+                    <p>No address found.</p>
+                    <Link href="/profile" onClick={closeCart} className={styles.addAddressLink}>
+                      Add Address in Profile
+                    </Link>
+                  </div>
+                ) : (
+                  <select
+                    className={styles.addressSelect}
+                    value={selectedAddressId || ''}
+                    onChange={(e) => setSelectedAddressId(e.target.value)}
+                  >
+                    {addresses.map(addr => (
+                      <option key={addr.id} value={addr.id}>
+                        {addr.address}, {addr.city} - {addr.pincode}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            ) : (
+              <div className={styles.addressSection}>
+                <p className={styles.loginPrompt}>Please log in to place an order.</p>
+              </div>
+            )}
+
             <div className={styles.total}>
               <span>Subtotal</span>
               <span className={styles.totalAmount}>₹{total.toFixed(2)}</span>
@@ -140,7 +210,7 @@ export default function CartDrawer() {
             <button
               className={`${styles.checkoutBtn} btn btn-primary`}
               onClick={handleCheckout}
-              disabled={isCheckingOut}
+              disabled={isCheckingOut || !user || !selectedAddressId}
             >
               {isCheckingOut ? 'Processing...' : 'Proceed to Checkout'}
             </button>

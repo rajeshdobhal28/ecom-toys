@@ -10,6 +10,7 @@ interface OrderProduct {
 interface CreateOrderParams {
   userId: number;
   userEmail: string;
+  addressId: string;
   products: OrderProduct[];
 }
 
@@ -55,14 +56,15 @@ export const createOrder = async (params: CreateOrderParams) => {
 
       // 4. Create order record
       const insertOrderQuery = `
-                INSERT INTO orders (user_id, user_email, product_id, quantity, price_at_purchase, total_price, status)
-                VALUES ($1, $2, $3, $4, $5, $6, 'processing')
+                INSERT INTO orders (user_id, user_email, address_id, product_id, quantity, price_at_purchase, total_price, status)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, 'processing')
                 RETURNING *;
             `;
 
       const orderRes = await query(insertOrderQuery, [
         userId,
         userEmail,
+        params.addressId,
         product.id,
         quantity,
         priceAtPurchase,

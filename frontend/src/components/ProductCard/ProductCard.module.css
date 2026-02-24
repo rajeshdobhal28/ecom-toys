@@ -152,3 +152,43 @@
   opacity: 0.5;
   filter: grayscale(80%);
 }
+
+.quantityControlsWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.quantityControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f8f9fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 20px;
+  padding: 0.2rem 0.5rem;
+  z-index: 2;
+}
+
+.quantityControls button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem;
+  color: #2c3e50;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.quantityControls button:hover {
+  background-color: #e1e4e8;
+}
+
+.quantityControls span {
+  font-weight: 700;
+  min-width: 1.5rem;
+  text-align: center;
+  color: #2c3e50;
+}

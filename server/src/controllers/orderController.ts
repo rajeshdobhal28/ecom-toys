@@ -12,7 +12,7 @@ export const createOrder = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { products } = req.body;
+    const { products, addressId } = req.body;
 
     if (!req.user) {
       res
@@ -27,6 +27,16 @@ export const createOrder = async (
         .send({
           status: 'error',
           message: 'Products array is required and must not be empty',
+        });
+      return;
+    }
+
+    if (!addressId) {
+      res
+        .status(400)
+        .send({
+          status: 'error',
+          message: 'Delivery address is required',
         });
       return;
     }
@@ -47,6 +57,7 @@ export const createOrder = async (
     const orders = await orderService.createOrder({
       userId: req.user.id,
       userEmail: req.user.email,
+      addressId,
       products: products.map((p) => ({
         productId: p.productId,
         quantity: Number(p.quantity),

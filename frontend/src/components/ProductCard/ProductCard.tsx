@@ -1,6 +1,6 @@
 'use client';
 
-import { Star, ShoppingCart, Heart } from 'lucide-react';
+import { Star, ShoppingCart, Heart, Plus, Minus } from 'lucide-react';
 import styles from './ProductCard.module.css';
 import { useCart } from '@/context/CartContext';
 import Link from 'next/link';
@@ -30,8 +30,10 @@ export default function ProductCard({
   quantity = 1, // default to 1 so it assumes available if not passed
   review_count = 0,
 }: ProductCardProps) {
-  const { addToCart } = useCart();
+  const { items, addToCart, updateQuantity, removeFromCart } = useCart();
   const isSoldOut = quantity === 0;
+
+  const cartItem = items.find((item) => item.id === id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation when clicking add to cart
@@ -48,6 +50,23 @@ export default function ProductCard({
       imageUrl, // Pass image URL to cart
       slug: slug || '',
     });
+  };
+
+  const handleIncrement = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (cartItem) updateQuantity(id, 1);
+  };
+
+  const handleDecrement = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!cartItem) return;
+    if (cartItem.quantity <= 1) {
+      removeFromCart(id);
+    } else {
+      updateQuantity(id, -1);
+    }
   };
 
   return (
@@ -100,14 +119,28 @@ export default function ProductCard({
 
           <div className={styles.footer}>
             <span className={styles.price}>₹{Number(price).toFixed(2)}</span>
-            <button
-              className={`${styles.addBtn} ${isSoldOut ? styles.disabledAddBtn : ''}`}
-              aria-label={isSoldOut ? "Sold Out" : "Add to Cart"}
-              onClick={handleAddToCart}
-              disabled={isSoldOut}
-            >
-              <ShoppingCart size={18} />
-            </button>
+            {cartItem ? (
+              <div className={styles.quantityControlsWrapper} onClick={e => e.preventDefault()}>
+                <div className={styles.quantityControls}>
+                  <button onClick={handleDecrement} aria-label="Decrease quantity">
+                    <Minus size={14} />
+                  </button>
+                  <span>{cartItem.quantity}</span>
+                  <button onClick={handleIncrement} aria-label="Increase quantity">
+                    <Plus size={14} />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                className={`${styles.addBtn} ${isSoldOut ? styles.disabledAddBtn : ''}`}
+                aria-label={isSoldOut ? "Sold Out" : "Add to Cart"}
+                onClick={handleAddToCart}
+                disabled={isSoldOut}
+              >
+                <ShoppingCart size={18} />
+              </button>
+            )}
           </div>
         </div>
       </div>

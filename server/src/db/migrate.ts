@@ -44,6 +44,7 @@ const createTable = async () => {
     logger.info('✅ Carts table created successfully');
     await query(createProductReviewsTable);
     logger.info('✅ Product reviews table created successfully');
+
     process.exit(0);
   } catch (err) {
     logger.error('❌ Error creating users table', err);
