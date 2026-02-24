@@ -152,4 +152,44 @@
   filter: grayscale(80%);
 }
 
+.ProductCard-module__g-pugq__quantityControlsWrapper {
+  align-items: center;
+  display: flex;
+}
+
+.ProductCard-module__g-pugq__quantityControls {
+  z-index: 2;
+  background-color: #f8f9fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 20px;
+  align-items: center;
+  gap: .5rem;
+  padding: .2rem .5rem;
+  display: flex;
+}
+
+.ProductCard-module__g-pugq__quantityControls button {
+  cursor: pointer;
+  color: #2c3e50;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  padding: .2rem;
+  transition: background-color .2s;
+  display: flex;
+}
+
+.ProductCard-module__g-pugq__quantityControls button:hover {
+  background-color: #e1e4e8;
+}
+
+.ProductCard-module__g-pugq__quantityControls span {
+  text-align: center;
+  color: #2c3e50;
+  min-width: 1.5rem;
+  font-weight: 700;
+}
+
 /*# sourceMappingURL=src_components_ProductCard_ProductCard_module_css_bad6b30c._.single.css.map*/

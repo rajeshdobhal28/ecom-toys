@@ -5,7 +5,6 @@ import styles from './CartDrawer.module.css';
 import { X, Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { API, makeApiRequest } from '@/api/api';
 
 import { useAuth } from '@/context/AuthContext';
 
@@ -20,82 +19,31 @@ export default function CartDrawer() {
     total,
   } = useCart();
   const { user } = useAuth();
-
-  const [addresses, setAddresses] = useState<any[]>([]);
-  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
-  const [loadingAddresses, setLoadingAddresses] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   // Prevent background scrolling when cart is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      if (user) {
-        fetchAddresses();
-      }
     } else {
       document.body.style.overflow = 'unset';
     }
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, user]);
+  }, [isOpen]);
 
-  const fetchAddresses = async () => {
-    setLoadingAddresses(true);
-    try {
-      const response = await makeApiRequest(API.GET_ADDRESSES, {});
-      if (response.status === 'success') {
-        setAddresses(response.data);
-        const defaultAddr = response.data.find((a: any) => a.is_default);
-        if (defaultAddr) {
-          setSelectedAddressId(defaultAddr.id);
-        } else if (response.data.length > 0) {
-          setSelectedAddressId(response.data[0].id);
-        }
-      }
-    } catch (err) {
-      console.error('Failed to fetch addresses', err);
-    } finally {
-      setLoadingAddresses(false);
-    }
-  };
-
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
-
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (items.length === 0) return;
     if (!user) {
       alert('Please log in to checkout');
       return;
     }
-    if (!selectedAddressId) {
-      alert('Please select a delivery address');
-      return;
-    }
-
     setIsCheckingOut(true);
-    try {
-      const products = items.map((item) => ({
-        productId: item.id,
-        quantity: item.quantity,
-      }));
-
-      const response = await makeApiRequest(API.CREATE_ORDER, {
-        products,
-        addressId: selectedAddressId
-      });
-      if (response.status === 'success') {
-        alert('Order placed successfully!');
-        clearCart();
-        closeCart();
-      } else {
-        alert(response.message || 'Failed to place order');
-      }
-    } catch (error) {
-      console.error('Checkout error:', error);
-      alert('An error occurred during checkout');
-    } finally {
-      setIsCheckingOut(false);
+    closeCart();
+    // Use window.location or next/navigation useRouter to redirect
+    if (typeof window !== 'undefined') {
+      window.location.href = '/checkout';
     }
   };
 
@@ -168,38 +116,6 @@ export default function CartDrawer() {
 
         {items.length > 0 && (
           <div className={styles.footer}>
-            {user ? (
-              <div className={styles.addressSection}>
-                <h4>Delivery Address</h4>
-                {loadingAddresses ? (
-                  <p className={styles.loadingText}>Loading addresses...</p>
-                ) : addresses.length === 0 ? (
-                  <div className={styles.noAddress}>
-                    <p>No address found.</p>
-                    <Link href="/profile" onClick={closeCart} className={styles.addAddressLink}>
-                      Add Address in Profile
-                    </Link>
-                  </div>
-                ) : (
-                  <select
-                    className={styles.addressSelect}
-                    value={selectedAddressId || ''}
-                    onChange={(e) => setSelectedAddressId(e.target.value)}
-                  >
-                    {addresses.map(addr => (
-                      <option key={addr.id} value={addr.id}>
-                        {addr.address}, {addr.city} - {addr.pincode}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </div>
-            ) : (
-              <div className={styles.addressSection}>
-                <p className={styles.loginPrompt}>Please log in to place an order.</p>
-              </div>
-            )}
-
             <div className={styles.total}>
               <span>Subtotal</span>
               <span className={styles.totalAmount}>₹{total.toFixed(2)}</span>
@@ -210,9 +126,9 @@ export default function CartDrawer() {
             <button
               className={`${styles.checkoutBtn} btn btn-primary`}
               onClick={handleCheckout}
-              disabled={isCheckingOut || !user || !selectedAddressId}
+              disabled={isCheckingOut || !user}
             >
-              {isCheckingOut ? 'Processing...' : 'Proceed to Checkout'}
+              {isCheckingOut ? 'Redirecting...' : 'Proceed to Checkout'}
             </button>
           </div>
         )}

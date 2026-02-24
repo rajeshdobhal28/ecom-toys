@@ -70,6 +70,24 @@
   position: relative;
 }
 
+.Header-module__ldgnoG__bump {
+  animation: .3s ease-out Header-module__ldgnoG__bump;
+}
+
+@keyframes Header-module__ldgnoG__bump {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
 .Header-module__ldgnoG__cartCount {
   background-color: var(--accent);
   color: var(--text-main);

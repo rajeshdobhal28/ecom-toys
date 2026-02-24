@@ -3,6 +3,7 @@
 
 __turbopack_context__.v({
   "actions": "Header-module__ldgnoG__actions",
+  "bump": "Header-module__ldgnoG__bump",
   "cartBtn": "Header-module__ldgnoG__cartBtn" + " " + "Header-module__ldgnoG__iconBtn",
   "cartCount": "Header-module__ldgnoG__cartCount",
   "container": "Header-module__ldgnoG__container",
@@ -51,7 +52,10 @@ function Header() {
     const { items, openCart } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$CartContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCart"])();
     const { user, loading, login, logout } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
     const [isDropdownOpen, setIsDropdownOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isAnimating, setIsAnimating] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const dropdownRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const prevItemsCount = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(0);
+    const totalQuantity = items.reduce((sum, item)=>sum + item.quantity, 0);
     // Close dropdown when clicking outside
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "Header.useEffect": ()=>{
@@ -68,6 +72,23 @@ function Header() {
             })["Header.useEffect"];
         }
     }["Header.useEffect"], []);
+    // Animate cart on item add
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "Header.useEffect": ()=>{
+            if (totalQuantity > prevItemsCount.current) {
+                setIsAnimating(true);
+                const timer = setTimeout({
+                    "Header.useEffect.timer": ()=>setIsAnimating(false)
+                }["Header.useEffect.timer"], 300);
+                return ({
+                    "Header.useEffect": ()=>clearTimeout(timer)
+                })["Header.useEffect"];
+            }
+            prevItemsCount.current = totalQuantity;
+        }
+    }["Header.useEffect"], [
+        totalQuantity
+    ]);
     const toggleDropdown = ()=>setIsDropdownOpen(!isDropdownOpen);
     const handleLogout = async ()=>{
         await logout();
@@ -91,23 +112,23 @@ function Header() {
                                     children: "Toys"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Header/Header.tsx",
-                                    lineNumber: 45,
+                                    lineNumber: 59,
                                     columnNumber: 21
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/Header/Header.tsx",
-                            lineNumber: 44,
+                            lineNumber: 58,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/Header/Header.tsx",
-                        lineNumber: 43,
+                        lineNumber: 57,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/Header/Header.tsx",
-                    lineNumber: 42,
+                    lineNumber: 56,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -119,7 +140,7 @@ function Header() {
                             children: "Educational"
                         }, void 0, false, {
                             fileName: "[project]/src/components/Header/Header.tsx",
-                            lineNumber: 51,
+                            lineNumber: 65,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -128,7 +149,7 @@ function Header() {
                             children: "Outdoor"
                         }, void 0, false, {
                             fileName: "[project]/src/components/Header/Header.tsx",
-                            lineNumber: 54,
+                            lineNumber: 68,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -137,7 +158,7 @@ function Header() {
                             children: "Soft Toys"
                         }, void 0, false, {
                             fileName: "[project]/src/components/Header/Header.tsx",
-                            lineNumber: 57,
+                            lineNumber: 71,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -146,7 +167,7 @@ function Header() {
                             children: "Arts & Crafts"
                         }, void 0, false, {
                             fileName: "[project]/src/components/Header/Header.tsx",
-                            lineNumber: 60,
+                            lineNumber: 74,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -155,13 +176,13 @@ function Header() {
                             children: "Contact Us"
                         }, void 0, false, {
                             fileName: "[project]/src/components/Header/Header.tsx",
-                            lineNumber: 63,
+                            lineNumber: 77,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/Header/Header.tsx",
-                    lineNumber: 50,
+                    lineNumber: 64,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -179,12 +200,12 @@ function Header() {
                                         size: 24
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Header/Header.tsx",
-                                        lineNumber: 79,
+                                        lineNumber: 93,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Header/Header.tsx",
-                                    lineNumber: 74,
+                                    lineNumber: 88,
                                     columnNumber: 13
                                 }, this),
                                 isDropdownOpen && user && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -198,7 +219,7 @@ function Header() {
                                                     children: user.name
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/Header/Header.tsx",
-                                                    lineNumber: 85,
+                                                    lineNumber: 99,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -206,13 +227,23 @@ function Header() {
                                                     children: user.email
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/Header/Header.tsx",
-                                                    lineNumber: 86,
+                                                    lineNumber: 100,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/Header/Header.tsx",
-                                            lineNumber: 84,
+                                            lineNumber: 98,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                            href: "/profile",
+                                            className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Header$2f$Header$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].dropdownLink,
+                                            onClick: ()=>setIsDropdownOpen(false),
+                                            children: "My Profile"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/Header/Header.tsx",
+                                            lineNumber: 102,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -222,7 +253,7 @@ function Header() {
                                             children: "My Orders"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/Header/Header.tsx",
-                                            lineNumber: 88,
+                                            lineNumber: 109,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -231,23 +262,23 @@ function Header() {
                                             children: "Sign Out"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/Header/Header.tsx",
-                                            lineNumber: 95,
+                                            lineNumber: 116,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/Header/Header.tsx",
-                                    lineNumber: 83,
+                                    lineNumber: 97,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/Header/Header.tsx",
-                            lineNumber: 73,
+                            lineNumber: 87,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Header$2f$Header$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].cartBtn,
+                            className: `${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Header$2f$Header$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].cartBtn} ${isAnimating ? __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Header$2f$Header$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].bump : ''}`,
                             "aria-label": "Cart",
                             onClick: openCart,
                             children: [
@@ -255,21 +286,21 @@ function Header() {
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Header/Header.tsx",
-                                    lineNumber: 107,
+                                    lineNumber: 128,
                                     columnNumber: 13
                                 }, this),
-                                items.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                totalQuantity > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Header$2f$Header$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].cartCount,
-                                    children: items.length
+                                    children: totalQuantity
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Header/Header.tsx",
-                                    lineNumber: 109,
+                                    lineNumber: 130,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/Header/Header.tsx",
-                            lineNumber: 102,
+                            lineNumber: 123,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -279,33 +310,33 @@ function Header() {
                                 size: 24
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Header/Header.tsx",
-                                lineNumber: 113,
+                                lineNumber: 134,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/Header/Header.tsx",
-                            lineNumber: 112,
+                            lineNumber: 133,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/Header/Header.tsx",
-                    lineNumber: 68,
+                    lineNumber: 82,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/Header/Header.tsx",
-            lineNumber: 41,
+            lineNumber: 55,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/components/Header/Header.tsx",
-        lineNumber: 40,
+        lineNumber: 54,
         columnNumber: 5
     }, this);
 }
-_s(Header, "x0uhxHkHX7Cc1zpQ+5xKc5LKJ0c=", false, function() {
+_s(Header, "pm21p/78hEGuRJlhbyjOb9PBKP0=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$CartContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCart"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
@@ -330,6 +361,8 @@ __turbopack_context__.v({
   "imageContainer": "ProductCard-module__g-pugq__imageContainer",
   "placeholderIcon": "ProductCard-module__g-pugq__placeholderIcon",
   "price": "ProductCard-module__g-pugq__price",
+  "quantityControls": "ProductCard-module__g-pugq__quantityControls",
+  "quantityControlsWrapper": "ProductCard-module__g-pugq__quantityControlsWrapper",
   "rating": "ProductCard-module__g-pugq__rating",
   "reviewCount": "ProductCard-module__g-pugq__reviewCount",
   "soldOutBadge": "ProductCard-module__g-pugq__soldOutBadge",
@@ -349,6 +382,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$star$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Star$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/star.js [app-client] (ecmascript) <export default as Star>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shopping$2d$cart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ShoppingCart$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/shopping-cart.js [app-client] (ecmascript) <export default as ShoppingCart>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$heart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Heart$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/heart.js [app-client] (ecmascript) <export default as Heart>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/plus.js [app-client] (ecmascript) <export default as Plus>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$minus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Minus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/minus.js [app-client] (ecmascript) <export default as Minus>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ProductCard$2f$ProductCard$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__ = __turbopack_context__.i("[project]/src/components/ProductCard/ProductCard.module.css [app-client] (css module)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$CartContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/context/CartContext.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/client/app-dir/link.js [app-client] (ecmascript)");
@@ -361,8 +396,9 @@ var _s = __turbopack_context__.k.signature();
 ;
 function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUrl, category = 'General', slug, quantity = 1, review_count = 0 }) {
     _s();
-    const { addToCart } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$CartContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCart"])();
+    const { items, addToCart, updateQuantity, removeFromCart } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$CartContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCart"])();
     const isSoldOut = quantity === 0;
+    const cartItem = items.find((item)=>item.id === id);
     const handleAddToCart = (e)=>{
         e.preventDefault(); // Prevent navigation when clicking add to cart
         e.stopPropagation();
@@ -377,6 +413,21 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
             imageUrl,
             slug: slug || ''
         });
+    };
+    const handleIncrement = (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        if (cartItem) updateQuantity(id, 1);
+    };
+    const handleDecrement = (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        if (!cartItem) return;
+        if (cartItem.quantity <= 1) {
+            removeFromCart(id);
+        } else {
+            updateQuantity(id, -1);
+        }
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
         href: `/product/${title}`,
@@ -395,12 +446,12 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                         size: 20
                     }, void 0, false, {
                         fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                        lineNumber: 64,
+                        lineNumber: 83,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                    lineNumber: 56,
+                    lineNumber: 75,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -415,7 +466,7 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                             children: "Sold Out"
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                            lineNumber: 71,
+                            lineNumber: 90,
                             columnNumber: 25
                         }, this),
                         imageUrl ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
@@ -429,20 +480,20 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                             }
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                            lineNumber: 73,
+                            lineNumber: 92,
                             columnNumber: 13
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ProductCard$2f$ProductCard$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].placeholderIcon,
                             children: "🧸"
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                            lineNumber: 80,
+                            lineNumber: 99,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                    lineNumber: 67,
+                    lineNumber: 86,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -459,7 +510,7 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                                         fill: i < Math.round(Number(rating)) ? 'currentColor' : 'none'
                                     }, i, false, {
                                         fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                        lineNumber: 88,
+                                        lineNumber: 107,
                                         columnNumber: 17
                                     }, this)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -471,13 +522,13 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                    lineNumber: 95,
+                                    lineNumber: 114,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                            lineNumber: 86,
+                            lineNumber: 105,
                             columnNumber: 13
                         }, this) : null,
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -485,7 +536,7 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                             children: title
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                            lineNumber: 99,
+                            lineNumber: 118,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -499,10 +550,63 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                    lineNumber: 102,
+                                    lineNumber: 121,
                                     columnNumber: 13
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                cartItem ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ProductCard$2f$ProductCard$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].quantityControlsWrapper,
+                                    onClick: (e)=>e.preventDefault(),
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ProductCard$2f$ProductCard$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].quantityControls,
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                onClick: handleDecrement,
+                                                "aria-label": "Decrease quantity",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$minus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Minus$3e$__["Minus"], {
+                                                    size: 14
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
+                                                    lineNumber: 126,
+                                                    columnNumber: 21
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
+                                                lineNumber: 125,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                children: cartItem.quantity
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
+                                                lineNumber: 128,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                onClick: handleIncrement,
+                                                "aria-label": "Increase quantity",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
+                                                    size: 14
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
+                                                    lineNumber: 130,
+                                                    columnNumber: 21
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
+                                                lineNumber: 129,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
+                                        lineNumber: 124,
+                                        columnNumber: 17
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
+                                    lineNumber: 123,
+                                    columnNumber: 15
+                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     className: `${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ProductCard$2f$ProductCard$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].addBtn} ${isSoldOut ? __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ProductCard$2f$ProductCard$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].disabledAddBtn : ''}`,
                                     "aria-label": isSoldOut ? "Sold Out" : "Add to Cart",
                                     onClick: handleAddToCart,
@@ -511,39 +615,39 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                                         size: 18
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                        lineNumber: 109,
-                                        columnNumber: 15
+                                        lineNumber: 141,
+                                        columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                    lineNumber: 103,
-                                    columnNumber: 13
+                                    lineNumber: 135,
+                                    columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                            lineNumber: 101,
+                            lineNumber: 120,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                    lineNumber: 84,
+                    lineNumber: 103,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-            lineNumber: 55,
+            lineNumber: 74,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-        lineNumber: 54,
+        lineNumber: 73,
         columnNumber: 5
     }, this);
 }
-_s(ProductCard, "YPx5musMedcmtt2OkzMtHcKllYw=", false, function() {
+_s(ProductCard, "gfdlXn4VWEAF5Wn5QIthoqvzMfA=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$CartContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCart"]
     ];
