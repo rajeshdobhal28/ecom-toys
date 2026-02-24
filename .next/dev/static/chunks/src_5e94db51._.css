@@ -474,6 +474,40 @@
   background-color: #ff5252;
 }
 
+.ProductCard-module__g-pugq__disabledAddBtn {
+  color: #a0a0a0;
+  cursor: not-allowed;
+  opacity: .7;
+  background-color: #e0e0e0;
+}
+
+.ProductCard-module__g-pugq__disabledAddBtn:hover {
+  background-color: #e0e0e0;
+}
+
+.ProductCard-module__g-pugq__soldOutBadge {
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  z-index: 10;
+  pointer-events: none;
+  background-color: #d63031e6;
+  border-radius: 8px;
+  padding: .5rem 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4px 15px #d6303166;
+}
+
+.ProductCard-module__g-pugq__soldOutImage {
+  opacity: .5;
+  filter: grayscale(80%);
+}
+
 /* [project]/src/app/page.module.css [app-client] (css) */
 .page-module___8aEwW__section {
   padding: 5rem 0;
