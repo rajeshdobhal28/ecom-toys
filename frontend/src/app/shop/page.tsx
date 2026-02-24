@@ -106,7 +106,8 @@ const Shop = async ({ params }: { params: Promise<{ slug?: string[] }> }) => {
                   id={product.id}
                   title={product.name}
                   price={product.price}
-                  rating={5}
+                  rating={product.average_rating}
+                  review_count={product.review_count}
                   imageUrl={
                     product.images && product.images.length > 0
                       ? product.images[0]

@@ -25,11 +25,25 @@ const createTable = async () => {
         );
     `;
 
+  const createProductReviewsTable = `
+        CREATE TABLE IF NOT EXISTS product_reviews (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+            rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+            comment TEXT,
+            created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(user_id, product_id)
+        );
+    `;
+
   try {
     await query(createUsersTable);
     logger.info('✅ Users table created successfully');
     await query(createCartsTable);
     logger.info('✅ Carts table created successfully');
+    await query(createProductReviewsTable);
+    logger.info('✅ Product reviews table created successfully');
     process.exit(0);
   } catch (err) {
     logger.error('❌ Error creating users table', err);

@@ -371,7 +371,7 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
             id,
             title,
             price: Number(price),
-            rating,
+            rating: rating || 0,
             category,
             color: imageColor,
             imageUrl,

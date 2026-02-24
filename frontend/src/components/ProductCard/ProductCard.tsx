@@ -15,18 +15,20 @@ interface ProductCardProps {
   category?: string;
   slug?: string;
   quantity?: number;
+  review_count?: number;
 }
 
 export default function ProductCard({
   id,
   title,
   price,
-  rating = 5,
+  rating, // usually comes from average_rating on backend
   imageColor = '#FF6B6B',
   imageUrl,
   category = 'General',
   slug,
   quantity = 1, // default to 1 so it assumes available if not passed
+  review_count = 0,
 }: ProductCardProps) {
   const { addToCart } = useCart();
   const isSoldOut = quantity === 0;
@@ -40,7 +42,7 @@ export default function ProductCard({
       id,
       title,
       price: Number(price), // Ensure price is number
-      rating,
+      rating: rating || 0,
       category,
       color: imageColor,
       imageUrl, // Pass image URL to cart
@@ -86,11 +88,11 @@ export default function ProductCard({
                 <Star
                   key={i}
                   size={14}
-                  className={i < rating ? styles.starFilled : styles.starEmpty}
-                  fill={i < rating ? 'currentColor' : 'none'}
+                  className={i < Math.round(Number(rating)) ? styles.starFilled : styles.starEmpty}
+                  fill={i < Math.round(Number(rating)) ? 'currentColor' : 'none'}
                 />
               ))}
-              <span className={styles.reviewCount}>(42)</span>
+              <span className={styles.reviewCount}>({review_count})</span>
             </div>
           ) : null}
 

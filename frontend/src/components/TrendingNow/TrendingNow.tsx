@@ -76,7 +76,8 @@ export default function TrendingNow() {
               id={product.id}
               title={product.name}
               price={product.price}
-              rating={5}
+              rating={product.average_rating}
+              review_count={product.review_count}
               imageUrl={product.images?.[0]}
               slug={product.slug}
               quantity={product.quantity}

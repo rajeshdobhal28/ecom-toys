@@ -6,6 +6,7 @@ import styles from '../product.module.css';
 import Link from 'next/link';
 import AddToCartButton from './AddToCartButton';
 import ImageCarousel from '../../../components/ImageCarousel/ImageCarousel';
+import ProductReviews from '@/components/ProductReviews/ProductReviews';
 import { Metadata } from 'next';
 
 // This is a Server Component
@@ -117,17 +118,6 @@ export default async function ProductPage({
             <div>
               <span className={styles.sku}>SKU: TOY-{product.id}</span>
               <h1 className={styles.title}>{product.name}</h1>
-              <div className={styles.rating}>
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={20}
-                    fill={i < (product.rating || 5) ? '#f1c40f' : 'none'}
-                    color={i < (product.rating || 5) ? '#f1c40f' : '#ddd'}
-                  />
-                ))}
-                <span>(42 reviews)</span>
-              </div>
             </div>
 
             <div className={styles.price}>₹{Number(product?.price)}</div>
@@ -144,6 +134,8 @@ export default async function ProductPage({
             </div>
           </div>
         </div>
+
+        <ProductReviews productId={product.id} />
       </main>
       <Footer />
     </>

@@ -7,6 +7,7 @@ import { API, makeApiRequest } from '@/api/api';
 import { useAuth } from '@/context/AuthContext';
 import styles from './page.module.css';
 import Header from '@/components/Header/Header';
+import ReviewModal from '@/components/ReviewModal/ReviewModal';
 
 interface Order {
   id: string;
@@ -22,7 +23,11 @@ interface Order {
 
 export default function MyOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [reviews, setReviews] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<{ id: string, name: string } | null>(null);
+
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
 
@@ -34,21 +39,47 @@ export default function MyOrdersPage() {
 
   useEffect(() => {
     if (user) {
-      fetchOrders();
+      fetchData();
     }
   }, [user]);
 
-  const fetchOrders = async () => {
+  const fetchData = async () => {
+    setLoading(true);
     try {
-      const res = await makeApiRequest(API.GET_ORDERS, {});
-      if (res.status === 'success') {
-        setOrders(res.data);
+      // Fetch both orders and existing user reviews in parallel
+      const [ordersRes, reviewsRes] = await Promise.all([
+        makeApiRequest(API.GET_ORDERS, {}),
+        makeApiRequest(API.GET_USER_REVIEWS, {})
+      ]);
+
+      if (ordersRes.status === 'success') {
+        setOrders(ordersRes.data);
+      }
+
+      if (reviewsRes.status === 'success') {
+        // Index reviews by product_id for quick lookup
+        const reviewMap: Record<string, any> = {};
+        reviewsRes.data.forEach((r: any) => {
+          reviewMap[r.product_id] = r;
+        });
+        setReviews(reviewMap);
       }
     } catch (error) {
-      console.error('Failed to fetch orders', error);
+      console.error('Failed to fetch data', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const openReviewModal = (productId: string, productName: string) => {
+    setSelectedProduct({ id: productId, name: productName });
+    setReviewModalOpen(true);
+  };
+
+  const handleReviewSuccess = () => {
+    setReviewModalOpen(false);
+    setSelectedProduct(null);
+    fetchData(); // Refresh to get the updated review
   };
 
   if (authLoading || loading) {
@@ -68,64 +99,82 @@ export default function MyOrdersPage() {
       <Header />
       <div className={styles.containerWrapper}>
         <div className={styles.container}>
-          {/* <h1 className={styles.title}>My Orders</h1> */}
-
           {orders.length === 0 ? (
             <div className={styles.emptyState}>
               <p>You haven't placed any orders yet.</p>
             </div>
           ) : (
             <div className={styles.ordersList}>
-              {orders.map((order) => (
-                <div key={order.id} className={styles.orderCard}>
-                  <div className={styles.orderHeader}>
-                    <div className={styles.orderInfo}>
-                      <span className={styles.orderDate}>
-                        {new Date(order.created_at).toLocaleDateString()}
+              {orders.map((order) => {
+                const existingReview = reviews[order.product_id];
+
+                return (
+                  <div key={order.id} className={styles.orderCard}>
+                    <div className={styles.orderHeader}>
+                      <div className={styles.orderInfo}>
+                        <span className={styles.orderDate}>
+                          {new Date(order.created_at).toLocaleDateString()}
+                        </span>
+                        <span className={styles.orderId}>ID: {order.id}</span>
+                      </div>
+                      <span
+                        className={`${styles.status} ${styles[order.status.toLowerCase()]}`}
+                      >
+                        {order.status}
                       </span>
-                      <span className={styles.orderId}>ID: {order.id}</span>
                     </div>
-                    <span
-                      className={`${styles.status} ${styles[order.status.toLowerCase()]}`}
-                    >
-                      {order.status}
-                    </span>
+
+                    <div className={styles.orderContent}>
+                      <div className={styles.imageContainer}>
+                        {order.product_images && order.product_images[0] ? (
+                          <Image
+                            src={order.product_images[0]}
+                            alt={order.product_name}
+                            width={80}
+                            height={80}
+                            className={styles.productImage}
+                          />
+                        ) : (
+                          <div className={styles.placeholderImage}></div>
+                        )}
+                      </div>
+
+                      <div className={styles.productDetails}>
+                        <h3 className={styles.productName}>
+                          {order.product_name}
+                        </h3>
+                        <p className={styles.quantity}>Qty: {order.quantity}</p>
+                      </div>
+
+                      <div className={styles.priceDetails}>
+                        <p className={styles.totalPrice}>
+                          ₹{Number(order.total_price).toFixed(2)}
+                        </p>
+                        <button
+                          className={styles.reviewBtn}
+                          onClick={() => openReviewModal(order.product_id, order.product_name)}
+                        >
+                          {existingReview ? 'Update Review' : 'Leave a Review'}
+                        </button>
+                      </div>
+                    </div>
                   </div>
-
-                  <div className={styles.orderContent}>
-                    <div className={styles.imageContainer}>
-                      {order.product_images && order.product_images[0] ? (
-                        <Image
-                          src={order.product_images[0]}
-                          alt={order.product_name}
-                          width={80}
-                          height={80}
-                          className={styles.productImage}
-                        />
-                      ) : (
-                        <div className={styles.placeholderImage}></div>
-                      )}
-                    </div>
-
-                    <div className={styles.productDetails}>
-                      <h3 className={styles.productName}>
-                        {order.product_name}
-                      </h3>
-                      <p className={styles.quantity}>Qty: {order.quantity}</p>
-                    </div>
-
-                    <div className={styles.priceDetails}>
-                      <p className={styles.totalPrice}>
-                        ₹{Number(order.total_price).toFixed(2)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
       </div>
+
+      {reviewModalOpen && selectedProduct && (
+        <ReviewModal
+          productId={selectedProduct.id}
+          productName={selectedProduct.name}
+          existingReview={reviews[selectedProduct.id] || null}
+          onClose={() => setReviewModalOpen(false)}
+          onSuccess={handleReviewSuccess}
+        />
+      )}
     </>
   );
 }
