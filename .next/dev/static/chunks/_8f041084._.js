@@ -59,6 +59,18 @@ const API = {
     UPDATE_CART: {
         url: '/api/cart',
         method: 'PUT'
+    },
+    GET_PRODUCT_REVIEWS: {
+        url: '/api/reviews/product',
+        method: 'GET'
+    },
+    GET_USER_REVIEWS: {
+        url: '/api/reviews/user',
+        method: 'GET'
+    },
+    UPSERT_REVIEW: {
+        url: '/api/reviews',
+        method: 'POST'
     }
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
