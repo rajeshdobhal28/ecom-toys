@@ -17,9 +17,19 @@ const createTable = async () => {
         );
     `;
 
+  const createCartsTable = `
+        CREATE TABLE IF NOT EXISTS carts (
+            user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+            items JSONB NOT NULL DEFAULT '[]',
+            updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+        );
+    `;
+
   try {
     await query(createUsersTable);
     logger.info('✅ Users table created successfully');
+    await query(createCartsTable);
+    logger.info('✅ Carts table created successfully');
     process.exit(0);
   } catch (err) {
     logger.error('❌ Error creating users table', err);

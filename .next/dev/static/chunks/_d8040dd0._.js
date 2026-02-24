@@ -199,6 +199,14 @@ const API = {
     CREATE_ORDER: {
         url: '/api/orders',
         method: 'POST'
+    },
+    GET_CART: {
+        url: '/api/cart',
+        method: 'GET'
+    },
+    UPDATE_CART: {
+        url: '/api/cart',
+        method: 'PUT'
     }
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {

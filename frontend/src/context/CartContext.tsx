@@ -1,7 +1,9 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { Product } from '@/utils/utils';
+import { useAuth } from './AuthContext';
+import { API, makeApiRequest } from '@/api/api';
 
 interface CartItem extends Product {
   quantity: number;
@@ -25,26 +27,82 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const { user, loading: authLoading } = useAuth();
+  const syncing = useRef(false);
 
-  // Load from LocalStorage
+  // Load Initial Cart Data
   useEffect(() => {
-    const savedCart = localStorage.getItem('wondertoys-cart');
-    if (savedCart) {
+    if (authLoading) return;
+
+    const fetchCartDb = async () => {
       try {
-        setItems(JSON.parse(savedCart));
-      } catch (e) {
-        console.error('Failed to parse cart', e);
+        const response = await makeApiRequest(API.GET_CART, {});
+        if (response.status === 'success') {
+          return response.data;
+        }
+      } catch (err) {
+        console.error('Failed to fetch DB cart', err);
       }
-    }
-    setIsInitialized(true);
-  }, []);
+      return [];
+    };
 
-  // Save to LocalStorage
+    const initialize = async () => {
+      let localCart: CartItem[] = [];
+      const savedCart = localStorage.getItem('wondertoys-cart');
+      if (savedCart) {
+        try {
+          localCart = JSON.parse(savedCart);
+        } catch (e) {
+          console.error('Failed to parse cart', e);
+        }
+      }
+
+      if (user) {
+        // Logged In: Wipe local, fetch DB, optionally merge (here we just use DB or Push Local to DB)
+        const dbCart = await fetchCartDb();
+
+        // Basic merge: if we just logged in and had a local cart, we push the local cart to DB
+        if (localCart.length > 0 && dbCart.length === 0) {
+          setItems(localCart);
+          localStorage.removeItem('wondertoys-cart');
+        } else {
+          setItems(dbCart);
+          localStorage.removeItem('wondertoys-cart');
+        }
+      } else {
+        // Guest: Use local cart
+        setItems(localCart);
+      }
+
+      setIsInitialized(true);
+    };
+
+    initialize();
+  }, [user, authLoading]);
+
+  // Save Cart Data Whenever Items Change
   useEffect(() => {
-    if (isInitialized) {
+    if (!isInitialized || authLoading || syncing.current) return;
+
+    if (user) {
+      // Sync to Database
+      const saveToDb = async () => {
+        syncing.current = true;
+        try {
+          await makeApiRequest(API.UPDATE_CART, { items });
+        } catch (err) {
+          console.error('Failed to sync cart to DB', err);
+        } finally {
+          syncing.current = false;
+        }
+      };
+      // Debounce slightly by just running it
+      saveToDb();
+    } else {
+      // Save to LocalStorage
       localStorage.setItem('wondertoys-cart', JSON.stringify(items));
     }
-  }, [items, isInitialized]);
+  }, [items, isInitialized, user, authLoading]);
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
