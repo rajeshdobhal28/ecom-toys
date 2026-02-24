@@ -34,12 +34,14 @@ export default function RootLayout({
         className={`${inter.variable} ${nunito.variable}`}
         suppressHydrationWarning={true}
       >
-        <CartProvider>
-          <GoogleAuthProvider>
-            <AuthProvider>{children}</AuthProvider>
-          </GoogleAuthProvider>
-          <CartDrawer />
-        </CartProvider>
+        <GoogleAuthProvider>
+          <AuthProvider>
+            <CartProvider>
+              {children}
+              <CartDrawer />
+            </CartProvider>
+          </AuthProvider>
+        </GoogleAuthProvider>
       </body>
     </html>
   );
