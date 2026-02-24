@@ -93,7 +93,7 @@ export default function CartDrawer() {
                   className={styles.imagePlaceholder}
                   style={{ backgroundColor: item.color }}
                 >
-                  🧸
+                  <img src={item.imageUrl} alt={item.title} width={120} height={120} />
                 </div>
                 <div className={styles.itemDetails}>
                   <h3>{item.title}</h3>
