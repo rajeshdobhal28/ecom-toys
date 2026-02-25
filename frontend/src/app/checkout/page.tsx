@@ -67,6 +67,15 @@ export default function CheckoutPage() {
             return;
         }
 
+        const selectedAddress = addresses.find(a => a.id === selectedAddressId);
+        if (selectedAddress) {
+            const pin = parseInt(selectedAddress.pincode, 10);
+            if (isNaN(pin) || pin < 110001 || pin > 110096) {
+                alert('Sorry, we currently only delivering in Delhi only.');
+                return;
+            }
+        }
+
         setIsPlacingOrder(true);
         try {
             const products = items.map((item) => ({
@@ -113,7 +122,7 @@ export default function CheckoutPage() {
         <div className={styles.checkoutPage}>
             <div className={`container ${styles.container}`}>
                 <div className={styles.breadcrumb}>
-                    <Link href="/cart">Cart</Link>
+                    <Link href="/shop">Shop</Link>
                     <ChevronRight size={16} />
                     <span>Checkout</span>
                 </div>

@@ -71,6 +71,8 @@ export const createOrder = async (
       res.status(404).send({ status: 'error', message: err.message });
     } else if (err.message && err.message.startsWith('Insufficient stock')) {
       res.status(400).send({ status: 'error', message: err.message });
+    } else if (err.message && err.message.startsWith('Sorry, we currently only deliver to pincodes')) {
+      res.status(400).send({ status: 'error', message: err.message });
     } else {
       res
         .status(500)

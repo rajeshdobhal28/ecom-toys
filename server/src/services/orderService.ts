@@ -18,6 +18,16 @@ export const createOrder = async (params: CreateOrderParams) => {
   const { userId, userEmail, products } = params;
 
   try {
+    // Validate delivery pincode
+    const addressRes = await query('SELECT pincode FROM user_addresses WHERE id = $1', [params.addressId]);
+    if (addressRes.rows.length === 0) {
+      throw new Error(`Address not found: ${params.addressId}`);
+    }
+    const pin = parseInt(addressRes.rows[0].pincode, 10);
+    if (isNaN(pin) || pin < 110001 || pin > 110096) {
+      throw new Error('Sorry, we currently only deliver to pincodes between 110001 and 110096.');
+    }
+
     await query('BEGIN'); // Start transaction
 
     const createdOrders = [];
