@@ -48,11 +48,14 @@
 }
 
 .imageContainer {
-  height: 200px;
+  height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  background-color: #f3f4f6 !important;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 1rem;
 }
 
 .placeholderIcon {
@@ -64,6 +67,7 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  /* background-color: lavender; */
 }
 
 .rating {
@@ -71,7 +75,7 @@
   align-items: center;
   margin-bottom: 0.5rem;
   font-size: 0.8rem;
-  color: #f1c40f;
+  color: var(--accent);
 }
 
 .reviewCount {
@@ -89,34 +93,41 @@
 
 .footer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.8rem;
   margin-top: auto;
 }
 
 .price {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  color: #e74c3c;
+  color: #111827;
+  /* Dark and readable */
 }
 
 .addBtn {
-  background-color: #ff6b6b;
+  background-color: var(--primary);
   color: white;
   border: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 100%;
+  height: 44px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   z-index: 2;
+  box-shadow: 0 4px 6px rgba(249, 115, 22, 0.2);
 }
 
 .addBtn:hover {
-  background-color: #ff5252;
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(249, 115, 22, 0.3);
 }
 
 .disabledAddBtn {
@@ -156,16 +167,19 @@
 .quantityControlsWrapper {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .quantityControls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  background-color: #f8f9fa;
-  border: 1px solid #e1e4e8;
-  border-radius: 20px;
-  padding: 0.2rem 0.5rem;
+  justify-content: space-between;
+  width: 100%;
+  height: 44px;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0 0.5rem;
   z-index: 2;
 }
 

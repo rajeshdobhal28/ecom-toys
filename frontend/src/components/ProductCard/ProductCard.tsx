@@ -18,12 +18,19 @@ interface ProductCardProps {
   review_count?: number;
 }
 
+// Helper to reliably map an ID string to a soft pastel category color
+const getDeterministicColor = (id: string | number) => {
+  const colors = ['#ffeaa7', '#74b9ff', '#ff7675', '#a29bfe', '#81ecec', '#fab1a0'];
+  const num = String(id).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return colors[num % colors.length];
+};
+
 export default function ProductCard({
   id,
   title,
   price,
   rating, // usually comes from average_rating on backend
-  imageColor = '#FF6B6B',
+  imageColor = '#fff',
   imageUrl,
   category = 'General',
   slug,
@@ -85,7 +92,11 @@ export default function ProductCard({
 
         <div
           className={styles.imageContainer}
-          style={{ backgroundColor: '#f8f9fa', position: 'relative' }}
+          style={{
+            backgroundColor: imageColor || getDeterministicColor(id),
+            position: 'relative',
+            background: `radial-gradient(circle, #ffffff 0%, ${imageColor || getDeterministicColor(id)} 100%)`
+          }}
         >
           {isSoldOut && <div className={styles.soldOutBadge}>Sold Out</div>}
           {imageUrl ? (
@@ -93,7 +104,7 @@ export default function ProductCard({
               src={imageUrl}
               alt={title}
               className={`${styles.productImage} ${isSoldOut ? styles.soldOutImage : ''}`}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1rem' }}
             />
           ) : (
             <div className={styles.placeholderIcon}>🧸</div>
@@ -139,6 +150,7 @@ export default function ProductCard({
                 disabled={isSoldOut}
               >
                 <ShoppingCart size={18} />
+                {isSoldOut ? "Sold Out" : "Add to Cart"}
               </button>
             )}
           </div>

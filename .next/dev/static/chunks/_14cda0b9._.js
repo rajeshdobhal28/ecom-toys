@@ -403,7 +403,20 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUrl, category = 'General', slug, quantity = 1, review_count = 0 }) {
+// Helper to reliably map an ID string to a soft pastel category color
+const getDeterministicColor = (id)=>{
+    const colors = [
+        '#ffeaa7',
+        '#74b9ff',
+        '#ff7675',
+        '#a29bfe',
+        '#81ecec',
+        '#fab1a0'
+    ];
+    const num = String(id).split('').reduce((acc, char)=>acc + char.charCodeAt(0), 0);
+    return colors[num % colors.length];
+};
+function ProductCard({ id, title, price, rating, imageColor = '#fff', imageUrl, category = 'General', slug, quantity = 1, review_count = 0 }) {
     _s();
     const { items, addToCart, updateQuantity, removeFromCart } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$CartContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCart"])();
     const isSoldOut = quantity === 0;
@@ -455,19 +468,20 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                         size: 20
                     }, void 0, false, {
                         fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                        lineNumber: 83,
+                        lineNumber: 90,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                    lineNumber: 75,
+                    lineNumber: 82,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ProductCard$2f$ProductCard$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].imageContainer,
                     style: {
-                        backgroundColor: '#f8f9fa',
-                        position: 'relative'
+                        backgroundColor: imageColor || getDeterministicColor(id),
+                        position: 'relative',
+                        background: `radial-gradient(circle, #ffffff 0%, ${imageColor || getDeterministicColor(id)} 100%)`
                     },
                     children: [
                         isSoldOut && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -475,7 +489,7 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                             children: "Sold Out"
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                            lineNumber: 90,
+                            lineNumber: 101,
                             columnNumber: 25
                         }, this),
                         imageUrl ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
@@ -485,24 +499,25 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                             style: {
                                 width: '100%',
                                 height: '100%',
-                                objectFit: 'cover'
+                                objectFit: 'contain',
+                                padding: '1rem'
                             }
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                            lineNumber: 92,
+                            lineNumber: 103,
                             columnNumber: 13
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ProductCard$2f$ProductCard$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].placeholderIcon,
                             children: "🧸"
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                            lineNumber: 99,
+                            lineNumber: 110,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                    lineNumber: 86,
+                    lineNumber: 93,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -519,7 +534,7 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                                         fill: i < Math.round(Number(rating)) ? 'currentColor' : 'none'
                                     }, i, false, {
                                         fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                        lineNumber: 107,
+                                        lineNumber: 118,
                                         columnNumber: 17
                                     }, this)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -531,13 +546,13 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                    lineNumber: 114,
+                                    lineNumber: 125,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                            lineNumber: 105,
+                            lineNumber: 116,
                             columnNumber: 13
                         }, this) : null,
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -545,7 +560,7 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                             children: title
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                            lineNumber: 118,
+                            lineNumber: 129,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -559,7 +574,7 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                    lineNumber: 121,
+                                    lineNumber: 132,
                                     columnNumber: 13
                                 }, this),
                                 cartItem ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -575,19 +590,19 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                                                     size: 14
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                                    lineNumber: 126,
+                                                    lineNumber: 137,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                                lineNumber: 125,
+                                                lineNumber: 136,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: cartItem.quantity
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                                lineNumber: 128,
+                                                lineNumber: 139,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -597,62 +612,65 @@ function ProductCard({ id, title, price, rating, imageColor = '#FF6B6B', imageUr
                                                     size: 14
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                                    lineNumber: 130,
+                                                    lineNumber: 141,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                                lineNumber: 129,
+                                                lineNumber: 140,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                        lineNumber: 124,
+                                        lineNumber: 135,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                    lineNumber: 123,
+                                    lineNumber: 134,
                                     columnNumber: 15
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     className: `${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ProductCard$2f$ProductCard$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].addBtn} ${isSoldOut ? __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ProductCard$2f$ProductCard$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].disabledAddBtn : ''}`,
                                     "aria-label": isSoldOut ? "Sold Out" : "Add to Cart",
                                     onClick: handleAddToCart,
                                     disabled: isSoldOut,
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shopping$2d$cart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ShoppingCart$3e$__["ShoppingCart"], {
-                                        size: 18
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                        lineNumber: 141,
-                                        columnNumber: 17
-                                    }, this)
-                                }, void 0, false, {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shopping$2d$cart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ShoppingCart$3e$__["ShoppingCart"], {
+                                            size: 18
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
+                                            lineNumber: 152,
+                                            columnNumber: 17
+                                        }, this),
+                                        isSoldOut ? "Sold Out" : "Add to Cart"
+                                    ]
+                                }, void 0, true, {
                                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                                    lineNumber: 135,
+                                    lineNumber: 146,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                            lineNumber: 120,
+                            lineNumber: 131,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-                    lineNumber: 103,
+                    lineNumber: 114,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-            lineNumber: 74,
+            lineNumber: 81,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/components/ProductCard/ProductCard.tsx",
-        lineNumber: 73,
+        lineNumber: 80,
         columnNumber: 5
     }, this);
 }

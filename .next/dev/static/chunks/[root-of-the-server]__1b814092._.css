@@ -146,12 +146,12 @@
 
 /* [project]/src/app/globals.css [app-client] (css) */
 :root {
-  --primary: #ff6b6b;
-  --primary-hover: #ee5253;
-  --secondary: #4ecdc4;
-  --secondary-hover: #36b9b0;
-  --accent: #ffd93d;
-  --background: #fffdf5;
+  --primary: #f97316;
+  --primary-hover: #ea580c;
+  --secondary: #0ea5e9;
+  --secondary-hover: #0284c7;
+  --accent: #f59e0b;
+  --background: #f9fafb;
   --surface: #fff;
   --text-main: #2d3436;
   --text-muted: #636e72;

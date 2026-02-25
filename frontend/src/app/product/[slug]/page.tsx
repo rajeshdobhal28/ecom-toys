@@ -9,6 +9,13 @@ import ImageCarousel from '../../../components/ImageCarousel/ImageCarousel';
 import ProductReviews from '@/components/ProductReviews/ProductReviews';
 import { Metadata } from 'next';
 
+// Helper to reliably map an ID string to a soft pastel category color
+const getDeterministicColor = (id: string | number) => {
+  const colors = ['#ffeaa7', '#74b9ff', '#ff7675', '#a29bfe', '#81ecec', '#fab1a0'];
+  const num = String(id).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return colors[num % colors.length];
+};
+
 // This is a Server Component
 async function getProduct(slug: string) {
   try {
@@ -83,7 +90,14 @@ export default async function ProductPage({
         </Link>
 
         <div className={styles.productWrapper}>
-          <div className={styles.imageSection}>
+          <div
+            className={styles.imageSection}
+            style={{
+              background: `radial-gradient(circle, #ffffff 0%, ${product.color || getDeterministicColor(product.id)} 100%)`,
+              borderRadius: '16px',
+              padding: '2rem'
+            }}
+          >
             {product.quantity === 0 && (
               <div
                 style={{

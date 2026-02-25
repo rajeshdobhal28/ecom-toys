@@ -1,15 +1,15 @@
 :root {
-  /* Color Palette - Playful yet Trustworthy */
-  --primary: #ff6b6b;
-  /* Coral Red - Energetic, warm */
-  --primary-hover: #ee5253;
-  --secondary: #4ecdc4;
-  /* Turquoise - Calm, friendly */
-  --secondary-hover: #36b9b0;
-  --accent: #ffd93d;
-  /* Sunny Yellow - Happiness */
-  --background: #fffdf5;
-  /* Warm Cream - Easy on eyes */
+  /* Color Palette - Conversion Optimized */
+  --primary: #f97316;
+  /* Vibrant Orange - High converting, urgent but friendly cta */
+  --primary-hover: #ea580c;
+  --secondary: #0ea5e9;
+  /* Bright Blue - Trust, security */
+  --secondary-hover: #0284c7;
+  --accent: #f59e0b;
+  /* Classic Gold - Ratings and Trust signals */
+  --background: #f9fafb;
+  /* Clean Cool Off-White - Makes product cards pop */
   --surface: #ffffff;
   /* Pure White - Cards/Sections */
   --text-main: #2d3436;

@@ -439,11 +439,14 @@
 }
 
 .ProductCard-module__g-pugq__imageContainer {
+  border-bottom: 1px solid #f3f4f6;
   justify-content: center;
   align-items: center;
-  height: 200px;
+  height: 220px;
+  padding: 1rem;
   display: flex;
   position: relative;
+  background-color: #f3f4f6 !important;
 }
 
 .ProductCard-module__g-pugq__placeholderIcon {
@@ -458,7 +461,7 @@
 }
 
 .ProductCard-module__g-pugq__rating {
-  color: #f1c40f;
+  color: var(--accent);
   align-items: center;
   margin-bottom: .5rem;
   font-size: .8rem;
@@ -479,35 +482,41 @@
 }
 
 .ProductCard-module__g-pugq__footer {
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: .8rem;
   margin-top: auto;
   display: flex;
 }
 
 .ProductCard-module__g-pugq__price {
-  color: #e74c3c;
-  font-size: 1.1rem;
+  color: #111827;
+  font-size: 1.25rem;
   font-weight: 800;
 }
 
 .ProductCard-module__g-pugq__addBtn {
+  background-color: var(--primary);
   color: #fff;
   cursor: pointer;
   z-index: 2;
-  background-color: #ff6b6b;
   border: none;
-  border-radius: 50%;
+  border-radius: 8px;
   justify-content: center;
   align-items: center;
-  width: 36px;
-  height: 36px;
-  transition: background-color .2s;
+  gap: .5rem;
+  width: 100%;
+  height: 44px;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: all .2s;
   display: flex;
+  box-shadow: 0 4px 6px #f9731633;
 }
 
 .ProductCard-module__g-pugq__addBtn:hover {
-  background-color: #ff5252;
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px #f973164d;
 }
 
 .ProductCard-module__g-pugq__disabledAddBtn {
@@ -546,17 +555,20 @@
 
 .ProductCard-module__g-pugq__quantityControlsWrapper {
   align-items: center;
+  width: 100%;
   display: flex;
 }
 
 .ProductCard-module__g-pugq__quantityControls {
   z-index: 2;
-  background-color: #f8f9fa;
-  border: 1px solid #e1e4e8;
-  border-radius: 20px;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  justify-content: space-between;
   align-items: center;
-  gap: .5rem;
-  padding: .2rem .5rem;
+  width: 100%;
+  height: 44px;
+  padding: 0 .5rem;
   display: flex;
 }
 
