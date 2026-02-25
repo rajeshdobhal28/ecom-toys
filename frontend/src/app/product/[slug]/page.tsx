@@ -93,39 +93,34 @@ export default async function ProductPage({
           <div
             className={styles.imageSection}
             style={{
-              background: `radial-gradient(circle, #ffffff 0%, ${product.color || getDeterministicColor(product.id)} 100%)`,
+              background: product.quantity === 0
+                ? 'radial-gradient(circle, #ffffff 0%, #e5e7eb 100%)'
+                : `radial-gradient(circle, #ffffff 0%, ${product.color || getDeterministicColor(product.id)} 100%)`,
               borderRadius: '16px',
               padding: '2rem'
             }}
           >
             {product.quantity === 0 && (
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '20px',
-                  right: '20px',
-                  backgroundColor: 'rgba(214, 48, 49, 0.9)',
-                  color: 'white',
-                  padding: '0.5rem 1.5rem',
-                  fontWeight: 800,
-                  fontSize: '1.2rem',
-                  textTransform: 'uppercase',
-                  borderRadius: '8px',
-                  letterSpacing: '2px',
-                  zIndex: 10,
-                  boxShadow: '0 4px 15px rgba(214, 48, 49, 0.4)',
-                }}
-              >
+              <div className={styles.soldOutBanner}>
                 Sold Out
               </div>
             )}
-            <ImageCarousel
-              images={
-                product.images || (product.imageUrl ? [product.imageUrl] : [])
-              }
-              alt={product.title}
-              placeholderColor={product.color}
-            />
+            <div
+              style={{
+                width: '100%',
+                opacity: product.quantity === 0 ? 0.6 : 1,
+                filter: product.quantity === 0 ? 'grayscale(100%)' : 'none',
+                transition: 'all 0.3s'
+              }}
+            >
+              <ImageCarousel
+                images={
+                  product.images || (product.imageUrl ? [product.imageUrl] : [])
+                }
+                alt={product.title}
+                placeholderColor={product.color}
+              />
+            </div>
           </div>
 
           <div className={styles.infoSection}>

@@ -93,9 +93,11 @@ export default function ProductCard({
         <div
           className={styles.imageContainer}
           style={{
-            backgroundColor: imageColor || getDeterministicColor(id),
+            backgroundColor: isSoldOut ? '#e5e7eb' : (imageColor || getDeterministicColor(id)),
             position: 'relative',
-            background: `radial-gradient(circle, #ffffff 0%, ${imageColor || getDeterministicColor(id)} 100%)`
+            background: isSoldOut
+              ? 'radial-gradient(circle, #ffffff 0%, #e5e7eb 100%)'
+              : `radial-gradient(circle, #ffffff 0%, ${imageColor || getDeterministicColor(id)} 100%)`
           }}
         >
           {isSoldOut && <div className={styles.soldOutBadge}>Sold Out</div>}

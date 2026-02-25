@@ -41,6 +41,25 @@
   font-size: 8rem;
 }
 
+.soldOutBanner {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(214, 48, 49, 0.9);
+  color: white;
+  padding: 1.5rem 0;
+  width: 100%;
+  text-align: center;
+  font-weight: 800;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(214, 48, 49, 0.4);
+  backdrop-filter: blur(4px);
+}
+
 .infoSection {
   display: flex;
   flex-direction: column;
@@ -101,7 +120,7 @@
 
 .addToCartBtn {
   flex: 1;
-  background-color: #ff6b6b;
+  background-color: var(--primary);
   color: white;
   border: none;
   padding: 1rem;
@@ -113,11 +132,14 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px rgba(249, 115, 22, 0.2);
 }
 
 .addToCartBtn:hover {
-  background-color: #ff5252;
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(249, 115, 22, 0.3);
 }
 
 .addToCartBtnDisabled {
