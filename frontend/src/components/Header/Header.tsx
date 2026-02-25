@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingBag, Search, Menu, User } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { ShoppingBag, Search, Menu, User, Package, LogOut, X, LogIn } from 'lucide-react';
+import { useState, useRef, useEffect, useState as useReactState } from 'react';
+import { createPortal } from 'react-dom';
 import styles from './Header.module.css';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
@@ -11,9 +12,15 @@ export default function Header() {
   const { items, openCart } = useCart();
   const { user, loading, login, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const prevItemsCount = useRef(0);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -44,10 +51,12 @@ export default function Header() {
   }, [totalQuantity]);
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   const handleLogout = async () => {
     await logout();
     setIsDropdownOpen(false);
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -139,11 +148,69 @@ export default function Header() {
               <span className={styles.cartCount}>{totalQuantity}</span>
             )}
           </button>
-          <button className={styles.mobileMenu} aria-label="Menu">
+          <button className={styles.mobileMenu} aria-label="Menu" onClick={toggleMobileMenu}>
             <Menu size={24} />
           </button>
         </div>
       </div>
+
+      {mounted && isMobileMenuOpen && createPortal(
+        <>
+          <div className={styles.mobileOverlay} onClick={toggleMobileMenu}></div>
+          <div className={styles.mobileDropdown}>
+            <div className={styles.mobileHeader}>
+              <button
+                className={styles.mobileHeaderClose}
+                onClick={toggleMobileMenu}
+                aria-label="Close Menu"
+              >
+                <X size={20} />
+              </button>
+              <h3 className={styles.mobileGreeting}>
+                {user ? `Hi, ${user.name.split(' ')[0]}!` : 'Welcome!'}
+              </h3>
+            </div>
+
+            <div className={styles.mobileContent}>
+              {user ? (
+                <>
+                  <Link href="/profile" className={styles.mobileLink} onClick={toggleMobileMenu}>
+                    <User size={20} className={styles.mobileLinkIcon} />
+                    My Profile
+                  </Link>
+                  <Link href="/orders" className={styles.mobileLink} onClick={toggleMobileMenu}>
+                    <Package size={20} className={styles.mobileLinkIcon} />
+                    My Orders
+                  </Link>
+                </>
+              ) : (
+                <button
+                  className={styles.mobileLink}
+                  style={{ background: 'white', color: 'var(--primary)', justifyContent: 'center', marginTop: '0.5rem', border: 'none' }}
+                  onClick={() => { login(); toggleMobileMenu(); }}
+                >
+                  <LogIn size={20} />
+                  Login to your account
+                </button>
+              )}
+            </div>
+
+            {user && (
+              <div className={styles.mobileLogout}>
+                <button
+                  className={styles.mobileLink}
+                  style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.3)', color: 'white', justifyContent: 'center' }}
+                  onClick={handleLogout}
+                >
+                  <LogOut size={20} />
+                  Sign Out
+                </button>
+              </div>
+            )}
+          </div>
+        </>,
+        document.body
+      )}
     </header>
   );
 }
