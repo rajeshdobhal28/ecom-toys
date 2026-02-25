@@ -83,9 +83,6 @@ export default function Header() {
           <Link href="/shop/arts" className={styles.link}>
             Arts & Crafts
           </Link>
-          <Link href="/contact" className={styles.link}>
-            Contact Us
-          </Link>
         </nav>
 
         <div className={styles.actions}>
