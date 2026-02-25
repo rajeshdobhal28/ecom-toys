@@ -144,8 +144,9 @@
   letter-spacing: 2px;
   z-index: 10;
   pointer-events: none;
+  text-align: center;
   background-color: #d63031e6;
-  border-radius: 8px;
+  width: 100%;
   padding: .5rem 1.5rem;
   font-size: 1.2rem;
   font-weight: 800;

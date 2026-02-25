@@ -84,7 +84,11 @@
 }
 
 .Header-module__ldgnoG__cartBtn {
+  transition: background var(--transition-fast);
   color: var(--primary);
+  background: none;
+  border-radius: 50%;
+  padding: .5rem;
   position: relative;
 }
 
@@ -139,6 +143,10 @@
     display: block;
   }
 
+  .Header-module__ldgnoG__userContainer {
+    display: none;
+  }
+
   .Header-module__ldgnoG__logoText {
     font-size: 1.5rem;
   }
@@ -151,6 +159,144 @@
 
 .Header-module__ldgnoG__userContainer {
   position: relative;
+}
+
+.Header-module__ldgnoG__mobileOverlay {
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  z-index: 1001;
+  background: #0009;
+  position: fixed;
+  inset: 0;
+}
+
+.Header-module__ldgnoG__mobileDropdown {
+  color: #fff;
+  z-index: 1002;
+  background: linear-gradient(135deg, #52a9ff 0%, #ff990a 100%);
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  flex-direction: column;
+  width: 90%;
+  max-width: 400px;
+  height: 100dvh;
+  animation: .4s cubic-bezier(.16, 1, .3, 1) forwards Header-module__ldgnoG__slideDrawer;
+  display: flex;
+  position: fixed;
+  top: 0;
+  right: 0;
+  overflow-y: auto;
+  transform: translateX(100%);
+  box-shadow: -10px 0 30px #0000004d;
+}
+
+@keyframes Header-module__ldgnoG__slideDrawer {
+  to {
+    transform: translateX(0);
+  }
+}
+
+.Header-module__ldgnoG__mobileHeader {
+  color: #fff;
+  background: none;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100px;
+  padding: 1.5rem;
+  display: flex;
+  position: relative;
+}
+
+.Header-module__ldgnoG__mobileHeaderClose {
+  color: #fff;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  background: #fff3;
+  border: none;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  transition: background .2s;
+  display: flex;
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+}
+
+.Header-module__ldgnoG__mobileHeaderClose:hover {
+  background: #ffffff4d;
+}
+
+.Header-module__ldgnoG__mobileGreeting {
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: var(--font-nunito);
+  margin: 0;
+}
+
+.Header-module__ldgnoG__mobileContent {
+  flex-direction: column;
+  flex: 1;
+  gap: .75rem;
+  padding: 1.5rem;
+  display: flex;
+}
+
+.Header-module__ldgnoG__mobileLink {
+  font-family: var(--font-nunito);
+  color: #fff;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  background: #ffffff1a;
+  border: 1px solid #fff3;
+  border-radius: 12px;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all .2s;
+  display: flex;
+}
+
+.Header-module__ldgnoG__mobileLink:hover {
+  color: #fff;
+  background: #fff3;
+  border-color: #ffffff4d;
+  transform: translateX(5px);
+  box-shadow: 0 4px 6px #0000001a;
+}
+
+.Header-module__ldgnoG__mobileLinkIcon {
+  color: #fffc;
+  transition: color .2s;
+}
+
+.Header-module__ldgnoG__mobileLink:hover .Header-module__ldgnoG__mobileLinkIcon {
+  color: #fff;
+}
+
+.Header-module__ldgnoG__mobileLogout {
+  background: none;
+  border-top: 1px solid #fff3;
+  padding: 1.5rem;
+}
+
+.Header-module__ldgnoG__mobileLoginBtn {
+  border-radius: 12px;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  display: flex;
 }
 
 .Header-module__ldgnoG__dropdown {
