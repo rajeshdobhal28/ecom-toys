@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as authService from '../services/authService';
 
 export interface UserPayload {
-  id: number;
+  id: string;
   email: string;
   name: string;
   picture: string;

@@ -1,7 +1,7 @@
 import * as db from '../db';
 import logger from '../utils/logger';
 
-export const getCart = async (userId: number) => {
+export const getCart = async (userId: string) => {
     try {
         const res = await db.query('SELECT items FROM carts WHERE user_id = $1', [userId]);
 
@@ -55,7 +55,7 @@ export const getCart = async (userId: number) => {
     }
 };
 
-export const updateCart = async (userId: number, items: any[]) => {
+export const updateCart = async (userId: string, items: any[]) => {
     try {
         // Basic validation: ensure items only have needed fields to save space
         const compactItems = items.map(item => ({

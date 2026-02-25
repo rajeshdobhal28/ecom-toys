@@ -2,8 +2,10 @@ import { Request, Response } from 'express';
 import * as addressService from '../services/addressService';
 import logger from '../utils/logger';
 
+import { UserPayload } from '../middlewares/auth';
+
 interface AuthRequest extends Request {
-    user?: any;
+    user?: UserPayload;
 }
 
 export const getAddresses = async (req: AuthRequest, res: Response): Promise<void> => {

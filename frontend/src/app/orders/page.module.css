@@ -55,46 +55,53 @@
 .ordersList {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
-.orderCard {
+.dateGroupCard {
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-  transition: transform 0.2s;
   border: 1px solid #eee;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.orderCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-}
-
-.orderHeader {
+.dateHeader {
   padding: 1rem 1.5rem;
   background: #f8f9fa;
   border-bottom: 1px solid #eee;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
-.orderInfo {
+.dateHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #2d3436;
+  margin: 0;
+  font-family: var(--font-nunito);
+}
+
+.dateOrdersList {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
 }
 
-.orderDate {
-  font-weight: 600;
-  color: #333;
+.orderItem {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s;
 }
 
-.orderId {
-  font-size: 0.85rem;
-  color: #888;
+.orderItem:last-child {
+  border-bottom: none;
+}
+
+.orderItem:hover {
+  background-color: #fcfcfc;
 }
 
 .status {
@@ -102,7 +109,7 @@
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
-  text-transform: capitalization;
+  text-transform: capitalize;
 }
 
 .status.processing {
@@ -125,17 +132,10 @@
   color: #f44336;
 }
 
-.orderContent {
-  padding: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
 .imageContainer {
   flex-shrink: 0;
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   background: #f0f0f0;
   border-radius: 8px;
   overflow: hidden;
@@ -143,8 +143,16 @@
   border: 1px solid #ddd;
 }
 
+.orderId {
+  color: #888;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
 .productImage {
   object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .placeholderImage {
@@ -180,7 +188,7 @@
 }
 
 @media (max-width: 600px) {
-  .orderContent {
+  .orderItem {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;

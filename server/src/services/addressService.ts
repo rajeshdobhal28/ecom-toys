@@ -3,7 +3,7 @@ import logger from '../utils/logger';
 
 export interface UserAddress {
     id?: string;
-    user_id: number;
+    user_id: string;
     full_name: string;
     phone_number: number;
     pincode: number;
@@ -13,12 +13,17 @@ export interface UserAddress {
     is_default?: boolean;
 }
 
-export const getAddresses = async (userId: number) => {
-    const res = await query(
-        'SELECT * FROM user_addresses WHERE user_id = $1 ORDER BY is_default DESC, created_at DESC',
-        [userId]
-    );
-    return res.rows;
+export const getAddresses = async (userId: string) => {
+    try {
+        const res = await query(
+            'SELECT * FROM user_addresses WHERE user_id = $1 ORDER BY is_default DESC, created_at DESC',
+            [userId]
+        );
+        return res.rows;
+    } catch (error) {
+        logger.error(`Error getting addresses for user ${userId}:`, error);
+        throw error;
+    }
 };
 
 export const addAddress = async (addressData: UserAddress) => {
@@ -48,7 +53,8 @@ export const addAddress = async (addressData: UserAddress) => {
     return res.rows[0];
 };
 
-export const updateAddress = async (id: string, userId: number, updates: Partial<UserAddress>) => {
+export const updateAddress = async (id: string, userId: string, updates: Partial<UserAddress>) => {
+    if (Object.keys(updates).length === 0) return;
     if (updates.is_default) {
         await query('UPDATE user_addresses SET is_default = false WHERE user_id = $1', [userId]);
     }
@@ -81,26 +87,30 @@ export const updateAddress = async (id: string, userId: number, updates: Partial
     return res.rows[0];
 };
 
-export const deleteAddress = async (id: string, userId: number) => {
-    // Check if it is the default before deleting
-    const addrRes = await query('SELECT is_default FROM user_addresses WHERE id = $1 AND user_id = $2', [id, userId]);
-    if (addrRes.rows.length === 0) return false;
+export const deleteAddress = async (id: string, userId: string) => {
+    try { // Check if it is the default before deleting
+        const addrRes = await query('SELECT is_default FROM user_addresses WHERE id = $1 AND user_id = $2', [id, userId]);
+        if (addrRes.rows.length === 0) return false;
 
-    const isDefault = addrRes.rows[0].is_default;
+        const isDefault = addrRes.rows[0].is_default;
 
-    await query('DELETE FROM user_addresses WHERE id = $1 AND user_id = $2', [id, userId]);
+        await query('DELETE FROM user_addresses WHERE id = $1 AND user_id = $2', [id, userId]);
 
-    if (isDefault) {
-        // Assign a new default if there are other addresses remaining
-        const remaining = await getAddresses(userId);
-        if (remaining.length > 0) {
-            await query('UPDATE user_addresses SET is_default = true WHERE id = $1', [remaining[0].id]);
+        if (isDefault) {
+            // Assign a new default if there are other addresses remaining
+            const remaining = await getAddresses(userId);
+            if (remaining.length > 0) {
+                await query('UPDATE user_addresses SET is_default = true WHERE id = $1', [remaining[0].id]);
+            }
         }
+        return true;
+    } catch (error) {
+        logger.error(`Error deleting address ${id} for user ${userId}:`, error);
+        throw error;
     }
-    return true;
 };
 
-export const setDefaultAddress = async (id: string, userId: number) => {
+export const setDefaultAddress = async (id: string, userId: string) => {
     await query('BEGIN');
     try {
         await query('UPDATE user_addresses SET is_default = false WHERE user_id = $1', [userId]);
@@ -109,6 +119,7 @@ export const setDefaultAddress = async (id: string, userId: number) => {
         return res.rows[0];
     } catch (error) {
         await query('ROLLBACK');
+        logger.error(`Error setting default address ${id} for user ${userId}:`, error);
         throw error;
     }
 };

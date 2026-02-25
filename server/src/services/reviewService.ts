@@ -2,7 +2,7 @@ import * as db from '../db';
 import logger from '../utils/logger';
 import { clearProductCache } from '../utils/redisClient';
 
-export const upsertReview = async (userId: number, productId: string, rating: number, comment: string, isApproved: boolean = false) => {
+export const upsertReview = async (userId: string, productId: string, rating: number, comment: string, isApproved: boolean = false) => {
     try {
         const queryText = `
       INSERT INTO product_reviews (user_id, product_id, rating, comment, is_approved, created_at)
@@ -42,7 +42,7 @@ export const getReviewsByProduct = async (productId: string) => {
     }
 };
 
-export const getReviewsByUser = async (userId: number) => {
+export const getReviewsByUser = async (userId: string) => {
     try {
         const queryText = `
       SELECT id, product_id, rating, comment, is_approved, created_at

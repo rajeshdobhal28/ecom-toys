@@ -2,9 +2,11 @@ import { Request, Response } from 'express';
 import * as orderService from '../services/orderService';
 import logger from '../utils/logger';
 
+import { UserPayload } from '../middlewares/auth';
+
 // Custom Request interface to include user from auth middleware
 interface AuthRequest extends Request {
-  user?: any;
+  user?: UserPayload;
 }
 
 export const createOrder = async (

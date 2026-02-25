@@ -9,7 +9,7 @@ interface OrderProduct {
 }
 
 interface CreateOrderParams {
-  userId: number;
+  userId: string;
   userEmail: string;
   addressId: string;
   products: OrderProduct[];
@@ -19,12 +19,13 @@ export const createOrder = async (params: CreateOrderParams) => {
   const { userId, userEmail, products } = params;
 
   try {
-    // Validate delivery pincode
-    const addressRes = await query('SELECT pincode FROM user_addresses WHERE id = $1', [params.addressId]);
+    // Validate delivery pincode and snapshot address
+    const addressRes = await query('SELECT * FROM user_addresses WHERE id = $1', [params.addressId]);
     if (addressRes.rows.length === 0) {
       throw new Error(`Address not found: ${params.addressId}`);
     }
-    const pin = parseInt(addressRes.rows[0].pincode, 10);
+    const deliveryAddress = addressRes.rows[0];
+    const pin = parseInt(deliveryAddress.pincode, 10);
     if (isNaN(pin) || pin < 110001 || pin > 110096) {
       throw new Error('Sorry, we currently only deliver to pincodes between 110001 and 110096.');
     }
@@ -67,8 +68,8 @@ export const createOrder = async (params: CreateOrderParams) => {
 
       // 4. Create order record
       const insertOrderQuery = `
-                INSERT INTO orders (user_id, user_email, address_id, product_id, quantity, price_at_purchase, total_price, status)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, 'processing')
+                INSERT INTO orders (user_id, user_email, address_id, delivery_address, product_id, quantity, price_at_purchase, total_price, status)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'processing')
                 RETURNING *;
             `;
 
@@ -76,6 +77,7 @@ export const createOrder = async (params: CreateOrderParams) => {
         userId,
         userEmail,
         params.addressId,
+        deliveryAddress,
         product.id,
         quantity,
         priceAtPurchase,
@@ -107,7 +109,7 @@ export const createOrder = async (params: CreateOrderParams) => {
   }
 };
 
-export const getOrders = async (userId: number) => {
+export const getOrders = async (userId: string) => {
   try {
     const queryText = `
             SELECT o.*, p.name as product_name, p.images as product_images

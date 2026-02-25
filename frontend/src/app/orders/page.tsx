@@ -94,6 +94,17 @@ export default function MyOrdersPage() {
     return null; // Will redirect in useEffect
   }
 
+  const groupedOrders: Record<string, Order[]> = {};
+  orders.forEach((order) => {
+    const dateStr = new Date(order.created_at).toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    if (!groupedOrders[dateStr]) groupedOrders[dateStr] = [];
+    groupedOrders[dateStr].push(order);
+  });
+
   return (
     <>
       <Header />
@@ -105,62 +116,63 @@ export default function MyOrdersPage() {
             </div>
           ) : (
             <div className={styles.ordersList}>
-              {orders.map((order) => {
-                const existingReview = reviews[order.product_id];
-
-                return (
-                  <div key={order.id} className={styles.orderCard}>
-                    <div className={styles.orderHeader}>
-                      <div className={styles.orderInfo}>
-                        <span className={styles.orderDate}>
-                          {new Date(order.created_at).toLocaleDateString()}
-                        </span>
-                        <span className={styles.orderId}>ID: {order.id}</span>
-                      </div>
-                      <span
-                        className={`${styles.status} ${styles[order.status.toLowerCase()]}`}
-                      >
-                        {order.status}
-                      </span>
-                    </div>
-
-                    <div className={styles.orderContent}>
-                      <div className={styles.imageContainer}>
-                        {order.product_images && order.product_images[0] ? (
-                          <Image
-                            src={order.product_images[0]}
-                            alt={order.product_name}
-                            width={80}
-                            height={80}
-                            className={styles.productImage}
-                          />
-                        ) : (
-                          <div className={styles.placeholderImage}></div>
-                        )}
-                      </div>
-
-                      <div className={styles.productDetails}>
-                        <h3 className={styles.productName}>
-                          {order.product_name}
-                        </h3>
-                        <p className={styles.quantity}>Qty: {order.quantity}</p>
-                      </div>
-
-                      <div className={styles.priceDetails}>
-                        <p className={styles.totalPrice}>
-                          ₹{Number(order.total_price).toFixed(2)}
-                        </p>
-                        <button
-                          className={styles.reviewBtn}
-                          onClick={() => openReviewModal(order.product_id, order.product_name)}
-                        >
-                          {existingReview ? 'Update Review' : 'Leave a Review'}
-                        </button>
-                      </div>
-                    </div>
+              {Object.entries(groupedOrders).map(([date, dateOrders]) => (
+                <div key={date} className={styles.dateGroupCard}>
+                  <div className={styles.dateHeader}>
+                    <h2>{date}</h2>
                   </div>
-                );
-              })}
+                  <div className={styles.dateOrdersList}>
+                    {dateOrders.map((order) => {
+                      const existingReview = reviews[order.product_id];
+
+                      return (
+                        <div key={order.id} className={styles.orderItem}>
+                          <div className={styles.imageContainer}>
+                            {order.product_images && order.product_images[0] ? (
+                              <Image
+                                src={order.product_images[0]}
+                                alt={order.product_name}
+                                fill
+                                style={{ objectFit: 'cover' }}
+                                className={styles.productImage}
+                              />
+                            ) : (
+                              <div className={styles.placeholderImage}></div>
+                            )}
+                          </div>
+
+                          <div className={styles.productDetails}>
+                            <h3 className={styles.productName}>
+                              {order.product_name}
+                            </h3>
+                            <p className={styles.quantity}>Qty: {order.quantity}</p>
+                            <p className={styles.orderId}>Order ID: {order.id}</p>
+                            <div style={{ marginTop: '0.5rem' }}>
+                              <span
+                                className={`${styles.status} ${styles[order.status.toLowerCase()]}`}
+                              >
+                                {order.status}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className={styles.priceDetails}>
+                            <p className={styles.totalPrice}>
+                              ₹{Number(order.total_price).toFixed(2)}
+                            </p>
+                            <button
+                              className={styles.reviewBtn}
+                              onClick={() => openReviewModal(order.product_id, order.product_name)}
+                            >
+                              {existingReview ? 'Update Review' : 'Leave a Review'}
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
