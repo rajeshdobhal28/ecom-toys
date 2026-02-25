@@ -9,6 +9,7 @@ interface AddressSelectionModalProps {
     currentSelectedId: string | null;
     onSelect: (addressId: string) => void;
     onAddNew: () => void;
+    onEdit: (address: any) => void;
     onClose: () => void;
 }
 
@@ -17,6 +18,7 @@ export default function AddressSelectionModal({
     currentSelectedId,
     onSelect,
     onAddNew,
+    onEdit,
     onClose
 }: AddressSelectionModalProps) {
     const [localSelectedId, setLocalSelectedId] = useState<string | null>(currentSelectedId);
@@ -60,8 +62,20 @@ export default function AddressSelectionModal({
                                     />
                                     <div className={styles.addressDetails}>
                                         <div className={styles.addressHeader}>
-                                            <strong>{addr.full_name}</strong>
-                                            {addr.is_default && <span className={styles.defaultBadge}>Default</span>}
+                                            <div className={styles.nameHeader}>
+                                                <strong>{addr.full_name}</strong>
+                                                {addr.is_default && <span className={styles.defaultBadge}>Default</span>}
+                                            </div>
+                                            <button
+                                                className={styles.editBtn}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    e.preventDefault();
+                                                    onEdit(addr);
+                                                }}
+                                            >
+                                                Edit
+                                            </button>
                                         </div>
                                         <p>{addr.address}</p>
                                         <p>{addr.city}, {addr.state} {addr.pincode}</p>

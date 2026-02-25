@@ -21,6 +21,7 @@ export default function CheckoutPage() {
     const [loadingAddresses, setLoadingAddresses] = useState(true);
     const [showAddressModal, setShowAddressModal] = useState(false);
     const [showAddressSelectionModal, setShowAddressSelectionModal] = useState(false);
+    const [editingAddress, setEditingAddress] = useState<any>(null);
     const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
     // Redirect if empty cart or not logged in (handled after auth loads)
@@ -146,7 +147,7 @@ export default function CheckoutPage() {
                                     <p>You don't have any saved addresses yet.</p>
                                     <button
                                         className="btn btn-primary"
-                                        onClick={() => setShowAddressModal(true)}
+                                        onClick={() => { setEditingAddress(null); setShowAddressModal(true); }}
                                     >
                                         Add New Address
                                     </button>
@@ -273,6 +274,12 @@ export default function CheckoutPage() {
                         setShowAddressSelectionModal(false);
                     }}
                     onAddNew={() => {
+                        setEditingAddress(null);
+                        setShowAddressSelectionModal(false);
+                        setShowAddressModal(true);
+                    }}
+                    onEdit={(addr) => {
+                        setEditingAddress(addr);
                         setShowAddressSelectionModal(false);
                         setShowAddressModal(true);
                     }}
@@ -282,7 +289,11 @@ export default function CheckoutPage() {
 
             {showAddressModal && (
                 <AddressModal
-                    onClose={() => setShowAddressModal(false)}
+                    address={editingAddress}
+                    onClose={() => {
+                        setShowAddressModal(false);
+                        setEditingAddress(null);
+                    }}
                     onSuccess={handleAddressAdded}
                 />
             )}

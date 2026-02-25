@@ -85,13 +85,22 @@ export default function Header() {
                     </button> */}
 
           <div className={styles.userContainer} ref={dropdownRef}>
-            <button
-              className={styles.iconBtn}
-              aria-label="Account"
-              onClick={user ? toggleDropdown : login}
-            >
-              <User size={24} />
-            </button>
+            {user ? (
+              <button
+                className={styles.iconBtn}
+                aria-label="Account"
+                onClick={toggleDropdown}
+              >
+                <User size={24} />
+              </button>
+            ) : (
+              <button
+                className={`btn btn-primary ${styles.loginBtn}`}
+                onClick={login}
+              >
+                Login
+              </button>
+            )}
 
             {isDropdownOpen && user && (
               <div className={styles.dropdown}>

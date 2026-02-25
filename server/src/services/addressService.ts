@@ -4,6 +4,7 @@ import logger from '../utils/logger';
 export interface UserAddress {
     id?: string;
     user_id: number;
+    full_name: string;
     phone_number: number;
     pincode: number;
     state: string;
@@ -30,12 +31,13 @@ export const addAddress = async (addressData: UserAddress) => {
     }
 
     const insertQuery = `
-    INSERT INTO user_addresses (user_id, phone_number, pincode, state, city, address, is_default)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO user_addresses (user_id, full_name, phone_number, pincode, state, city, address, is_default)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     RETURNING *;
   `;
     const res = await query(insertQuery, [
         addressData.user_id,
+        addressData.full_name,
         addressData.phone_number,
         addressData.pincode,
         addressData.state,
@@ -71,7 +73,7 @@ export const updateAddress = async (id: string, userId: number, updates: Partial
     const updateQuery = `
     UPDATE user_addresses
     SET ${setClause.join(', ')}
-    WHERE id = $${paramIdx - 1} AND user_id = $${paramIdx}
+    WHERE id = $${paramIdx} AND user_id = $${paramIdx + 1}
     RETURNING *;
   `;
 

@@ -5,20 +5,21 @@ import { useRouter } from 'next/navigation';
 // import { useSearchParams } from "next/navigation";
 import { API, makeApiRequest } from '../../api/api';
 import styles from './login.module.css';
-import { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useSearchParams } from 'next/navigation';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
-  const { user } = useAuth();
-  // const searchParams = useSearchParams();
-  // const error = searchParams.get("error"); // In case we want to handle errors from other flows later
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get('redirect') || '/shop';
+  const { user, checkUser } = useAuth();
 
   useEffect(() => {
     if (user?.email) {
-      router.push('/shop');
+      router.push(redirectUrl);
     }
-  }, [user]);
+  }, [user, router, redirectUrl]);
 
   const handleSuccess = async (credentialResponse: any) => {
     console.log('Login Success:', credentialResponse);
@@ -27,7 +28,8 @@ export default function LoginPage() {
     });
     console.log('Login Response:', resp);
     if (resp.status === 'success') {
-      router.push('/shop');
+      await checkUser();
+      router.push(redirectUrl);
     }
   };
 
@@ -83,5 +85,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className={styles.container} style={{ justifyContent: 'center' }}>Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

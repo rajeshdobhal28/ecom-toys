@@ -8,17 +8,18 @@ import styles from './AddressModal.module.css';
 interface AddressModalProps {
     onClose: () => void;
     onSuccess: () => void;
+    address?: any;
 }
 
-export default function AddressModal({ onClose, onSuccess }: AddressModalProps) {
+export default function AddressModal({ onClose, onSuccess, address }: AddressModalProps) {
     const [formData, setFormData] = useState({
-        name: '',
-        address: '',
-        city: '',
-        state: '',
-        pincode: '',
-        phone_number: '',
-        is_default: false,
+        full_name: address?.full_name || '',
+        address: address?.address || '',
+        city: address?.city || '',
+        state: address?.state || '',
+        pincode: address?.pincode || '',
+        phone_number: address?.phone_number || '',
+        is_default: address?.is_default || false,
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -34,14 +35,19 @@ export default function AddressModal({ onClose, onSuccess }: AddressModalProps) 
         setError('');
 
         try {
-            const response = await makeApiRequest(API.ADD_ADDRESS, formData);
+            const isEdit = !!address;
+            const apiEndpoint = isEdit
+                ? { ...API.UPDATE_ADDRESS, url: `${API.UPDATE_ADDRESS.url}/${address.id}` }
+                : API.ADD_ADDRESS;
+
+            const response = await makeApiRequest(apiEndpoint, formData);
             if (response.status === 'success') {
                 onSuccess();
             } else {
-                setError(response.message || 'Failed to add address');
+                setError(response.message || `Failed to ${isEdit ? 'update' : 'add'} address`);
             }
         } catch (err) {
-            setError('An error occurred while adding the address');
+            setError(`An error occurred while ${address ? 'updating' : 'adding'} the address`);
         } finally {
             setLoading(false);
         }
@@ -51,7 +57,7 @@ export default function AddressModal({ onClose, onSuccess }: AddressModalProps) 
         <div className={styles.overlay} onClick={onClose}>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.header}>
-                    <h3>Add New Address</h3>
+                    <h3>{address ? 'Edit Address' : 'Add New Address'}</h3>
                     <button className={styles.closeBtn} onClick={onClose} aria-label="Close modal">
                         <X size={24} />
                     </button>
@@ -60,6 +66,11 @@ export default function AddressModal({ onClose, onSuccess }: AddressModalProps) 
                 {error && <div className={styles.error}>{error}</div>}
 
                 <form onSubmit={handleSubmit} className={styles.form}>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="full_name">Full Name</label>
+                        <input type="text" id="full_name" name="full_name" required value={formData.full_name} onChange={handleChange} />
+                    </div>
+
                     <div className={styles.formGroup}>
                         <label htmlFor="address">Address (Street, Apt)</label>
                         <input type="text" id="address" name="address" required value={formData.address} onChange={handleChange} />
@@ -91,7 +102,7 @@ export default function AddressModal({ onClose, onSuccess }: AddressModalProps) 
                     </div>
 
                     <button type="submit" className={styles.submitBtn} disabled={loading}>
-                        {loading ? 'Saving...' : 'Save Address'}
+                        {loading ? 'Saving...' : (address ? 'Update Address' : 'Save Address')}
                     </button>
                 </form>
             </div>

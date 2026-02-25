@@ -63,6 +63,24 @@
   color: var(--primary);
 }
 
+.loginBtn {
+  font-family: var(--font-nunito);
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.loginBtn:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
 .cartBtn {
   composes: iconBtn;
   position: relative;

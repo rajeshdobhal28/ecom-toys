@@ -15,6 +15,7 @@ interface Address {
     pincode: number;
     phone_number: number;
     is_default: boolean;
+    full_name?: string;
 }
 
 export default function ProfileContent() {
@@ -22,6 +23,7 @@ export default function ProfileContent() {
     const [addresses, setAddresses] = useState<Address[]>([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingAddress, setEditingAddress] = useState<Address | null>(null);
 
     const fetchAddresses = async () => {
         try {
@@ -100,7 +102,7 @@ export default function ProfileContent() {
             <section className={styles.addressesSection}>
                 <div className={styles.addressesHeader}>
                     <h3>My Addresses</h3>
-                    <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
+                    <button className="btn btn-primary" onClick={() => { setEditingAddress(null); setIsModalOpen(true); }}>
                         <Plus size={18} /> Add New Address
                     </button>
                 </div>
@@ -120,6 +122,9 @@ export default function ProfileContent() {
                                 <p>Phone: {addr.phone_number}</p>
 
                                 <div className={styles.addressActions}>
+                                    <button className={styles.actionBtn} onClick={() => { setEditingAddress(addr); setIsModalOpen(true); }}>
+                                        Edit
+                                    </button>
                                     {!addr.is_default && (
                                         <button className={styles.actionBtn} onClick={() => handleSetDefault(addr.id)}>
                                             Set as Default
@@ -137,6 +142,7 @@ export default function ProfileContent() {
 
             {isModalOpen && (
                 <AddressModal
+                    address={editingAddress}
                     onClose={() => setIsModalOpen(false)}
                     onSuccess={() => {
                         setIsModalOpen(false);

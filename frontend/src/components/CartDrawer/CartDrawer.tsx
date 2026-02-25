@@ -36,12 +36,14 @@ export default function CartDrawer() {
   const handleCheckout = () => {
     if (items.length === 0) return;
     if (!user) {
-      alert('Please log in to checkout');
+      closeCart();
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login?redirect=/checkout';
+      }
       return;
     }
     setIsCheckingOut(true);
     closeCart();
-    // Use window.location or next/navigation useRouter to redirect
     if (typeof window !== 'undefined') {
       window.location.href = '/checkout';
     }
@@ -126,9 +128,9 @@ export default function CartDrawer() {
             <button
               className={`${styles.checkoutBtn} btn btn-primary`}
               onClick={handleCheckout}
-              disabled={isCheckingOut || !user}
+              disabled={isCheckingOut}
             >
-              {isCheckingOut ? 'Redirecting...' : 'Proceed to Checkout'}
+              {isCheckingOut ? 'Redirecting...' : user ? 'Proceed to Checkout' : 'Login to Checkout'}
             </button>
           </div>
         )}
