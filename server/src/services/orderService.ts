@@ -2,6 +2,7 @@ import { query } from '../db';
 import * as productService from './productService';
 import logger from '../utils/logger';
 import { clearProductCache } from '../utils/redisClient';
+import * as emailService from './emailService';
 
 interface OrderProduct {
   productId: string;
@@ -97,6 +98,37 @@ export const createOrder = async (params: CreateOrderParams) => {
 
     // Clear product cache to reflect new quantity levels
     await clearProductCache();
+
+    // Send order confirmation email
+    try {
+      const emailItems = orderProducts.map(p => {
+        const qty = products.find(x => x.productId === p.id)?.quantity || 1;
+        const price = p.discounted_price || p.price;
+        return {
+          name: p.name,
+          quantity: qty,
+          price: Number(price),
+          image: p.images && p.images.length > 0 ? p.images[0] : undefined
+        };
+      });
+
+      const orderTotal = emailItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+      // Fetch user name for personalization
+      const userRes = await query('SELECT name FROM users WHERE id = $1', [userId]);
+      const userName = userRes.rows.length > 0 ? userRes.rows[0].name : 'Customer';
+
+      // Fire off email asynchronously (no need to await it to block user response)
+      emailService.sendOrderConfirmationEmail(
+        userEmail,
+        userName,
+        createdOrders.length > 0 ? createdOrders[0].id : 'new-order',
+        emailItems,
+        orderTotal
+      ).catch(e => logger.error('Unhandled email service error', e));
+    } catch (emailErr) {
+      logger.error('Failed to prepare order confirmation email', emailErr);
+    }
 
     logger.info(
       `Orders created for user ${userEmail}, items: ${products.length}`
