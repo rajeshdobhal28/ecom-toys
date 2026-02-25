@@ -9,12 +9,17 @@ export const getProducts = async (filters: {
 }) => {
   try {
     const cacheKey = `products:all:${JSON.stringify(filters)}`;
-    if (redisClient.isOpen) {
-      const cached = await redisClient.get(cacheKey);
-      if (cached) {
-        logger.info(`[Redis] Cache hit for key: ${cacheKey}`);
-        return JSON.parse(cached);
+    try {
+      if (redisClient.isOpen) {
+        const cached = await redisClient.get(cacheKey);
+        if (cached) {
+          logger.info(`[Redis] Cache hit for key: ${cacheKey}`);
+          return JSON.parse(cached);
+        }
       }
+    } catch (redisErr) {
+      logger.error(`[Redis] Error fetching cache for key ${cacheKey}`, redisErr);
+      // Fall through to DB query
     }
 
     console.error('🔍 [DEBUG] getProducts FILTERS:', filters);
@@ -59,10 +64,14 @@ export const getProducts = async (filters: {
       });
     }
 
-    if (redisClient.isOpen) {
-      // Cache products for 1 hour (3600 seconds)
-      await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
-      logger.info(`[Redis] Cached products for key: ${cacheKey}`);
+    try {
+      if (redisClient.isOpen) {
+        // Cache products for 1 hour (3600 seconds)
+        await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
+        logger.info(`[Redis] Cached products for key: ${cacheKey}`);
+      }
+    } catch (redisErr) {
+      logger.error(`[Redis] Error setting cache for key ${cacheKey}`, redisErr);
     }
 
     return products;
@@ -75,12 +84,16 @@ export const getProducts = async (filters: {
 export const getTrendingProducts = async (isAdmin: boolean = false) => {
   try {
     const cacheKey = `products:trending:${isAdmin}`;
-    if (redisClient.isOpen) {
-      const cached = await redisClient.get(cacheKey);
-      if (cached) {
-        logger.info(`[Redis] Cache hit for trending products`);
-        return JSON.parse(cached);
+    try {
+      if (redisClient.isOpen) {
+        const cached = await redisClient.get(cacheKey);
+        if (cached) {
+          logger.info(`[Redis] Cache hit for trending products`);
+          return JSON.parse(cached);
+        }
       }
+    } catch (redisErr) {
+      logger.error(`[Redis] Error fetching cache for trending products`, redisErr);
     }
 
     const queryText = `
@@ -111,9 +124,13 @@ export const getTrendingProducts = async (isAdmin: boolean = false) => {
       });
     }
 
-    if (redisClient.isOpen) {
-      await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
-      logger.info(`[Redis] Cached trending products`);
+    try {
+      if (redisClient.isOpen) {
+        await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
+        logger.info(`[Redis] Cached trending products`);
+      }
+    } catch (redisErr) {
+      logger.error(`[Redis] Error setting cache for trending products`, redisErr);
     }
 
     return products;

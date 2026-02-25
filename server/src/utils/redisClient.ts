@@ -10,15 +10,21 @@ redisClient.on('connect', () => logger.info('Redis Client Connected'));
 
 // Initialize connection (it's safe to call multiple times in development but usually we await it once at startup)
 export const connectRedis = async () => {
-    if (!redisClient.isOpen) {
-        await redisClient.connect();
+    try {
+        if (!redisClient.isOpen) {
+            await redisClient.connect();
+        }
+    } catch (err) {
+        logger.error('Failed to connect to Redis', err);
     }
 };
 
 // Utility to clear all product-related cache keys
 export const clearProductCache = async () => {
+    await connectRedis();
+
     if (!redisClient.isOpen) {
-        await connectRedis();
+        return; // Silently abort cache invalidation if Redis isn't up
     }
 
     try {
