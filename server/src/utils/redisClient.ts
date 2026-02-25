@@ -23,6 +23,7 @@ export const connectRedis = async () => {
 export const clearProductCache = async () => {
     await connectRedis();
 
+    logger.info('Clearing product cache');
     if (!redisClient.isOpen) {
         return; // Silently abort cache invalidation if Redis isn't up
     }
