@@ -1,5 +1,6 @@
 import * as db from '../db';
 import logger from '../utils/logger';
+import { clearProductCache } from '../utils/redisClient';
 
 export const upsertReview = async (userId: number, productId: string, rating: number, comment: string) => {
     try {
@@ -11,6 +12,7 @@ export const upsertReview = async (userId: number, productId: string, rating: nu
       RETURNING *;
     `;
         const res = await db.query(queryText, [userId, productId, rating, comment]);
+        await clearProductCache();
         return res.rows[0];
     } catch (err: any) {
         logger.error(`Error upserting review for user ${userId} and product ${productId}`, err);

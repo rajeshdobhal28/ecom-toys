@@ -1,5 +1,6 @@
 import * as db from '../db';
 import logger from '../utils/logger';
+import { redisClient } from '../utils/redisClient';
 
 export const getProducts = async (filters: {
   category?: string;
@@ -7,6 +8,15 @@ export const getProducts = async (filters: {
   isAdmin?: boolean;
 }) => {
   try {
+    const cacheKey = `products:all:${JSON.stringify(filters)}`;
+    if (redisClient.isOpen) {
+      const cached = await redisClient.get(cacheKey);
+      if (cached) {
+        logger.info(`[Redis] Cache hit for key: ${cacheKey}`);
+        return JSON.parse(cached);
+      }
+    }
+
     console.error('🔍 [DEBUG] getProducts FILTERS:', filters);
     let queryText = `
       SELECT 
@@ -49,6 +59,12 @@ export const getProducts = async (filters: {
       });
     }
 
+    if (redisClient.isOpen) {
+      // Cache products for 1 hour (3600 seconds)
+      await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
+      logger.info(`[Redis] Cached products for key: ${cacheKey}`);
+    }
+
     return products;
   } catch (err: any) {
     logger.error('Error fetching products', err);
@@ -58,6 +74,15 @@ export const getProducts = async (filters: {
 
 export const getTrendingProducts = async (isAdmin: boolean = false) => {
   try {
+    const cacheKey = `products:trending:${isAdmin}`;
+    if (redisClient.isOpen) {
+      const cached = await redisClient.get(cacheKey);
+      if (cached) {
+        logger.info(`[Redis] Cache hit for trending products`);
+        return JSON.parse(cached);
+      }
+    }
+
     const queryText = `
       SELECT 
         p.*,
@@ -84,6 +109,11 @@ export const getTrendingProducts = async (isAdmin: boolean = false) => {
         const { cost_price, ...rest } = p;
         return rest;
       });
+    }
+
+    if (redisClient.isOpen) {
+      await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
+      logger.info(`[Redis] Cached trending products`);
     }
 
     return products;

@@ -1,6 +1,7 @@
 import { query } from '../db';
 import * as productService from './productService';
 import logger from '../utils/logger';
+import { clearProductCache } from '../utils/redisClient';
 
 interface OrderProduct {
   productId: string;
@@ -91,6 +92,9 @@ export const createOrder = async (params: CreateOrderParams) => {
     }
 
     await query('COMMIT'); // Commit transaction
+
+    // Clear product cache to reflect new quantity levels
+    await clearProductCache();
 
     logger.info(
       `Orders created for user ${userEmail}, items: ${products.length}`
