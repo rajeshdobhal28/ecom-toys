@@ -59,6 +59,18 @@
   color: #95a5a6;
   text-transform: uppercase;
   letter-spacing: 1px;
+  display: block;
+}
+
+.brand {
+  font-size: 1.1rem;
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .rating {

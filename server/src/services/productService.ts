@@ -5,6 +5,7 @@ import { redisClient } from '../utils/redisClient';
 export const getProducts = async (filters: {
   category?: string;
   name?: string;
+  slug?: string;
   isAdmin?: boolean;
 }) => {
   try {
@@ -42,6 +43,11 @@ export const getProducts = async (filters: {
     if (filters.name) {
       whereClauses.push(`p.name = $${queryParams.length + 1}`);
       queryParams.push(filters.name);
+    }
+
+    if (filters.slug) {
+      whereClauses.push(`p.slug = $${queryParams.length + 1}`);
+      queryParams.push(filters.slug);
     }
 
     if (whereClauses.length > 0) {

@@ -12,7 +12,7 @@ import { Metadata } from 'next';
 // This is a Server Component
 async function getProduct(slug: string) {
   try {
-    const res = await fetch(`http://localhost:3001/api/products?name=${slug}`, {
+    const res = await fetch(`http://localhost:3001/api/products?slug=${slug}`, {
       cache: 'no-store', // Ensure fresh data
     });
 
@@ -116,7 +116,8 @@ export default async function ProductPage({
 
           <div className={styles.infoSection}>
             <div>
-              <span className={styles.sku}>SKU: TOY-{product.id}</span>
+              <span className={styles.sku}>SKU: {product.sku || `TOY-${product.id}`}</span>
+              {product.brand && <span className={styles.brand}>{product.brand}</span>}
               <h1 className={styles.title}>{product.name}</h1>
             </div>
 

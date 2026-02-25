@@ -114,6 +114,7 @@ const Shop = async ({ params }: { params: Promise<{ slug?: string[] }> }) => {
                       : undefined
                   }
                   category={product.category}
+                  slug={product.slug}
                   quantity={product.quantity}
                 />
               ))}

@@ -10,9 +10,10 @@ export const getProducts = async (
   try {
     const category = req.query.category as string | undefined;
     const name = req.query.name as string | undefined;
+    const slug = req.query.slug as string | undefined;
     const isAdmin = req.user?.isAdmin || false;
 
-    const products = await productService.getProducts({ category, name, isAdmin });
+    const products = await productService.getProducts({ category, name, slug, isAdmin });
 
     res.send({ status: 'success', data: products });
   } catch (err: any) {

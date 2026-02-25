@@ -70,7 +70,7 @@ export default function ProductCard({
   };
 
   return (
-    <Link href={`/product/${title}`} className={styles.cardLink}>
+    <Link href={`/product/${slug || title}`} className={styles.cardLink}>
       <div className={styles.card}>
         <button
           className={styles.wishlistBtn}

@@ -10,6 +10,7 @@ interface Review {
     id: number;
     rating: number;
     comment: string;
+    is_approved: boolean;
     created_at: string;
     name: string;
     picture: string | null;
@@ -110,7 +111,13 @@ export default function ProductReviews({ productId }: { productId: string | numb
                                     </div>
                                 </div>
                                 {review.comment && (
-                                    <p className={styles.reviewComment}>{review.comment}</p>
+                                    <p className={styles.reviewComment}>
+                                        {review.is_approved ? (
+                                            review.comment
+                                        ) : (
+                                            <i style={{ color: 'var(--text-muted)' }}>Comment awaiting approval...</i>
+                                        )}
+                                    </p>
                                 )}
                             </div>
                         ))}
