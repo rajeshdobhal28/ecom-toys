@@ -10,6 +10,8 @@ import reviewRoutes from './routes/reviewRoutes';
 import addressRoutes from './routes/addressRoutes';
 import contactRoutes from './routes/contactRoutes';
 import logger from './utils/logger';
+import { apiRateLimiter } from './middlewares/rateLimiter';
+import { optionalAuthenticate } from './middlewares/auth';
 
 const app = express();
 
@@ -28,6 +30,12 @@ app.use((req, res, next) => {
   logger.info(`${req.method} ${req.url}`);
   next();
 });
+
+// Apply optional authentication globally to populate req.user for rate limiting
+app.use('/api/', optionalAuthenticate);
+
+// Apply rate limiting to all /api/ routes
+app.use('/api/', apiRateLimiter);
 
 // Routes
 app.use('/api/auth', authRoutes);
