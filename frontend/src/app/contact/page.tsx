@@ -1,9 +1,42 @@
+'use client';
+
+import React, { useState } from 'react';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import styles from './page.module.css';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
+import { API, makeApiRequest } from '@/api/api';
 
 export default function Contact() {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+    });
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus('loading');
+        try {
+            const resp = await makeApiRequest(API.SUBMIT_CONTACT, formData);
+            if (resp.status === 'success') {
+                setStatus('success');
+                setFormData({ name: '', email: '', subject: '', message: '' });
+            } else {
+                setStatus('error');
+            }
+        } catch (err) {
+            console.error('Contact submission failed', err);
+            setStatus('error');
+        }
+    };
+
     return (
         <>
             <Header />
@@ -64,33 +97,52 @@ export default function Contact() {
                         <div className={styles.formContainer}>
                             <div className={styles.formCard}>
                                 <h2>Send Us a Message</h2>
-                                <form className={styles.form}>
-                                    <div className={styles.inputGroupRow}>
-                                        <div className={styles.inputGroup}>
-                                            <label htmlFor="name">Your Name</label>
-                                            <input type="text" id="name" placeholder="John Doe" required />
+                                {status === 'success' ? (
+                                    <div className={styles.successMessage} style={{ textAlign: 'center', padding: '40px 20px', backgroundColor: '#f0fff4', borderRadius: '8px', border: '1px solid #c6f6d5' }}>
+                                        <CheckCircle size={48} color="#48bb78" style={{ margin: '0 auto 16px' }} />
+                                        <h3 style={{ color: '#2f855a', marginBottom: '8px' }}>Message Sent Successfully!</h3>
+                                        <p style={{ color: '#276749' }}>Thank you for reaching out. We will get back to you shortly.</p>
+                                        <button
+                                            onClick={() => setStatus('idle')}
+                                            className="btn btn-primary"
+                                            style={{ marginTop: '20px' }}
+                                        >
+                                            Send Another Message
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <form className={styles.form} onSubmit={handleSubmit}>
+                                        <div className={styles.inputGroupRow}>
+                                            <div className={styles.inputGroup}>
+                                                <label htmlFor="name">Your Name</label>
+                                                <input type="text" id="name" placeholder="John Doe" value={formData.name} onChange={handleChange} required disabled={status === 'loading'} />
+                                            </div>
+                                            <div className={styles.inputGroup}>
+                                                <label htmlFor="email">Your Email</label>
+                                                <input type="email" id="email" placeholder="john@example.com" value={formData.email} onChange={handleChange} required disabled={status === 'loading'} />
+                                            </div>
                                         </div>
+
                                         <div className={styles.inputGroup}>
-                                            <label htmlFor="email">Your Email</label>
-                                            <input type="email" id="email" placeholder="john@example.com" required />
+                                            <label htmlFor="subject">Subject</label>
+                                            <input type="text" id="subject" placeholder="How can we help?" value={formData.subject} onChange={handleChange} required disabled={status === 'loading'} />
                                         </div>
-                                    </div>
 
-                                    <div className={styles.inputGroup}>
-                                        <label htmlFor="subject">Subject</label>
-                                        <input type="text" id="subject" placeholder="How can we help?" required />
-                                    </div>
+                                        <div className={styles.inputGroup}>
+                                            <label htmlFor="message">Message</label>
+                                            <textarea id="message" rows={5} placeholder="Write your message here..." value={formData.message} onChange={handleChange} required disabled={status === 'loading'}></textarea>
+                                        </div>
 
-                                    <div className={styles.inputGroup}>
-                                        <label htmlFor="message">Message</label>
-                                        <textarea id="message" rows={5} placeholder="Write your message here..." required></textarea>
-                                    </div>
+                                        {status === 'error' && (
+                                            <p style={{ color: '#e53e3e', fontSize: '14px', marginBottom: '16px' }}>Failed to send message. Please try again later.</p>
+                                        )}
 
-                                    <button type="submit" className={`btn btn-primary ${styles.submitBtn}`}>
-                                        <Send size={18} />
-                                        Send Message
-                                    </button>
-                                </form>
+                                        <button type="submit" className={`btn btn-primary ${styles.submitBtn}`} disabled={status === 'loading'}>
+                                            <Send size={18} />
+                                            {status === 'loading' ? 'Sending...' : 'Send Message'}
+                                        </button>
+                                    </form>
+                                )}
                             </div>
                         </div>
 

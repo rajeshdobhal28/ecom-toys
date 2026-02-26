@@ -102,6 +102,10 @@ const API = {
     SET_DEFAULT_ADDRESS: {
         url: '/api/addresses',
         method: 'PUT'
+    },
+    SUBMIT_CONTACT: {
+        url: '/api/contact',
+        method: 'POST'
     }
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {

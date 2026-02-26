@@ -8,6 +8,7 @@ import orderRoutes from './routes/orderRoutes';
 import cartRoutes from './routes/cartRoutes';
 import reviewRoutes from './routes/reviewRoutes';
 import addressRoutes from './routes/addressRoutes';
+import contactRoutes from './routes/contactRoutes';
 import logger from './utils/logger';
 
 const app = express();
@@ -35,6 +36,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/addresses', addressRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

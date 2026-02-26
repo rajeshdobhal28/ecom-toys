@@ -160,3 +160,63 @@ export const sendOrderConfirmationEmail = async (
         logger.error(`Error sending email to ${toEmail}`, err);
     }
 };
+
+export const sendContactEmail = async (
+    name: string,
+    email: string,
+    subject: string,
+    message: string
+) => {
+    if (!transporter) {
+        await initTransporter();
+    }
+
+    if (!transporter) {
+        logger.error('Cannot send email: Transporter is not initialized.');
+        return;
+    }
+
+    const htmlBody = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>New Contact Form Submission</title>
+    </head>
+    <body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <tr>
+                <td style="background-color: #74B9FF; padding: 20px; text-align: center;">
+                    <h2 style="color: #ffffff; margin: 0;">New Contact Submission</h2>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 30px;">
+                    <p><strong>Name:</strong> ${name}</p>
+                    <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+                    <p><strong>Subject:</strong> ${subject}</p>
+                    <div style="background-color: #f9f9f9; padding: 15px; border-left: 4px solid #74B9FF; margin-top: 20px;">
+                        <p style="margin: 0; white-space: pre-wrap; color: #333;">${message}</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>
+    `;
+
+    try {
+        const info = await transporter.sendMail({
+            from: '"Ecom Toys Contact" <noreply@ecomtoys.com>',
+            to: 'rkdobhal.business@gmail.com',
+            replyTo: email,
+            subject: `Contact Form: ${subject}`,
+            html: htmlBody,
+        });
+
+        logger.info(`Contact email sent. Message ID: ${info.messageId}`);
+    } catch (err) {
+        logger.error('Error sending contact email', err);
+        throw err;
+    }
+};

@@ -56,4 +56,5 @@ export const API: APIConfig = {
   UPDATE_ADDRESS: { url: '/api/addresses', method: 'PUT' },
   DELETE_ADDRESS: { url: '/api/addresses', method: 'DELETE' },
   SET_DEFAULT_ADDRESS: { url: '/api/addresses', method: 'PUT' }, // append id/default
+  SUBMIT_CONTACT: { url: '/api/contact', method: 'POST' },
 };
