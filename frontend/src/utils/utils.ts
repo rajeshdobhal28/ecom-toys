@@ -14,6 +14,11 @@ export interface Product {
 
 export const CATEGORIES = [
   {
+    name: 'Trending Toys',
+    slug: 'trending',
+    description: 'Discover the most popular and highly-rated products loved by kids and parents alike. These bestsellers are guaranteed to bring smiles and endless fun!',
+  },
+  {
     name: 'Educational Toys',
     slug: 'educational',
     description:

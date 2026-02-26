@@ -44,7 +44,7 @@ export default function TrendingNow() {
   useEffect(() => {
     const fetchTrending = async () => {
       try {
-        const response = await makeApiRequest(API.GET_TRENDING_PRODUCTS, {});
+        const response = await makeApiRequest(API.GET_TRENDING_PRODUCTS, { limit: 4 });
         if (response.status === 'success') {
           setTrendingProducts(response.data);
         }
@@ -62,7 +62,7 @@ export default function TrendingNow() {
     <div className="container">
       <div className={styles.sectionHeader}>
         <h2 className={styles.sectionTitle}>Trending Now</h2>
-        <a href="/shop" className="btn btn-secondary">
+        <a href="/shop/trending" className="btn btn-secondary">
           View All
         </a>
       </div>

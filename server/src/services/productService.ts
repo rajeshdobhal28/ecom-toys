@@ -87,9 +87,9 @@ export const getProducts = async (filters: {
   }
 };
 
-export const getTrendingProducts = async (isAdmin: boolean = false) => {
+export const getTrendingProducts = async (isAdmin: boolean = false, limit: number = 10) => {
   try {
-    const cacheKey = `products:trending:${isAdmin}`;
+    const cacheKey = `products:trending:${isAdmin}:${limit}`;
     try {
       if (redisClient.isOpen) {
         const cached = await redisClient.get(cacheKey);
@@ -114,13 +114,13 @@ export const getTrendingProducts = async (isAdmin: boolean = false) => {
           WHERE created_at >= NOW() - INTERVAL '24 HOURS'
           GROUP BY product_id
           ORDER BY total_sold DESC
-          LIMIT 4
+          LIMIT $1
       ) top_selling ON p.id = top_selling.product_id
       LEFT JOIN product_reviews r ON p.id = r.product_id
       GROUP BY p.id, top_selling.total_sold
       ORDER BY top_selling.total_sold DESC;
     `;
-    const res = await db.query(queryText);
+    const res = await db.query(queryText, [limit]);
 
     let products = res.rows;
     if (!isAdmin) {

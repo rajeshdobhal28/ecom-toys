@@ -11,8 +11,12 @@ import {
 
 async function getProducts(category: string = '') {
   try {
+    const endpoint = category === 'trending'
+      ? 'http://localhost:3001/api/products/trending'
+      : `http://localhost:3001/api/products?category=${encodeURIComponent(category)}`;
+
     const res = await fetch(
-      `http://localhost:3001/api/products?category=${encodeURIComponent(category)}`,
+      endpoint,
       {
         cache: 'no-store',
       }

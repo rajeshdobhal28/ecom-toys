@@ -28,7 +28,10 @@ export const getTrendingProducts = async (
 ): Promise<void> => {
   try {
     const isAdmin = req.user?.isAdmin || false;
-    const trendingProducts = await productService.getTrendingProducts(isAdmin);
+    const limitParam = req.query.limit as string | undefined;
+    const limit = limitParam ? parseInt(limitParam, 10) : undefined;
+
+    const trendingProducts = await productService.getTrendingProducts(isAdmin, limit);
     res.send({ status: 'success', data: trendingProducts });
   } catch (err: any) {
     logger.error('Get trending products error', err.message);

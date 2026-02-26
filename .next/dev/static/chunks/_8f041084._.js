@@ -17,10 +17,14 @@ const makeApiRequest = async (api, data)=>{
         },
         credentials: 'include'
     };
+    let url = `${("TURBOPACK compile-time value", "http://localhost:3001")}${api.url}`;
     if (api.method !== 'GET') {
         options.body = JSON.stringify(data);
+    } else if (data && Object.keys(data).length > 0) {
+        const params = new URLSearchParams(data);
+        url += `?${params.toString()}`;
     }
-    const response = await fetch(`${("TURBOPACK compile-time value", "http://localhost:3001")}${api.url}`, options);
+    const response = await fetch(url, options);
     if (response.status === 401) {
         if (("TURBOPACK compile-time value", "object") !== 'undefined' && window.location.pathname !== '/login') {
             window.location.href = '/login';

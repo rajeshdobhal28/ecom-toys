@@ -71,6 +71,9 @@ export default function Header() {
         </div>
 
         <nav className={styles.nav}>
+          <Link href="/shop/trending" className={styles.link}>
+            Trending
+          </Link>
           <Link href="/shop/educational" className={styles.link}>
             Educational
           </Link>

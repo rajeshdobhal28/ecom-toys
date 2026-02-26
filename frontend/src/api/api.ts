@@ -16,14 +16,16 @@ export const makeApiRequest = async (
     credentials: 'include',
   };
 
+  let url = `${process.env.NEXT_PUBLIC_BASE_URL}${api.url}`;
+
   if (api.method !== 'GET') {
     options.body = JSON.stringify(data);
+  } else if (data && Object.keys(data).length > 0) {
+    const params = new URLSearchParams(data as any);
+    url += `?${params.toString()}`;
   }
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}${api.url}`,
-    options
-  );
+  const response = await fetch(url, options);
 
   if (response.status === 401) {
     if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
