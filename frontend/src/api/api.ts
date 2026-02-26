@@ -27,7 +27,9 @@ export const makeApiRequest = async (
 
   const response = await fetch(url, options);
 
-  if (response.status === 401) {
+  // If we receive a 401, globally redirect to login, EXCEPT for the /auth/me check 
+  // which is expected to return 401 when a guest visits public pages.
+  if (response.status === 401 && api.url !== API.ME.url) {
     if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
       window.location.href = '/login';
     }

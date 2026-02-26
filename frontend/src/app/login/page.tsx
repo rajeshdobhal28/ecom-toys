@@ -73,11 +73,11 @@ function LoginContent() {
 
           <p className={styles.terms}>
             By signing in, you agree to our{' '}
-            <a href="#" className={styles.link}>
+            <a href="/terms" className={styles.link}>
               Terms of Service
             </a>{' '}
             and{' '}
-            <a href="#" className={styles.link}>
+            <a href="/privacy" className={styles.link}>
               Privacy Policy
             </a>
             .

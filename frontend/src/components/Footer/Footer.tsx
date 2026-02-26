@@ -42,9 +42,12 @@ export default function Footer() {
           <Link href="/contact" className={styles.link}>
             Contact Us
           </Link>
-          {/* <Link href="/safety" className={styles.link}>
-            Toy Safety
-          </Link> */}
+          <Link href="/privacy" className={styles.link}>
+            Privacy Policy
+          </Link>
+          <Link href="/terms" className={styles.link}>
+            Terms of Service
+          </Link>
         </div>
 
         <div className={styles.column}>
