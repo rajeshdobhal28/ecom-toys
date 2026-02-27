@@ -4,7 +4,7 @@ import { HumanMessage, SystemMessage, AIMessage, BaseMessage } from "@langchain/
 import { query } from "../db";
 import { redisClient, connectRedis } from "../utils/redisClient";
 
-const chatModel = new ChatOpenAI({
+export const chatModel = new ChatOpenAI({
     model: "gpt-3.5-turbo",
     temperature: 0.7,
     maxTokens: 1000,
@@ -14,17 +14,17 @@ const chatModel = new ChatOpenAI({
     // timeout: 10000,
 });
 
-const embeddingModel = new OpenAIEmbeddings({
+export const embeddingModel = new OpenAIEmbeddings({
     modelName: 'text-embedding-3-small'
 });
 
-const getPgVectorString = async (message: string) => {
+export const getPgVectorString = async (message: string) => {
     const embedding = await embeddingModel.embedQuery(message);
     const pgVectorString = `[${embedding.join(',')}]`;
     return pgVectorString;
 }
 
-const getContextString = async (pgVectorString: string) => {
+export const getContextString = async (pgVectorString: string) => {
     const { rows: matchedProducts } = await query(`
             SELECT id, name, description, "category", "brand", price 
             FROM products 
@@ -40,7 +40,7 @@ const getContextString = async (pgVectorString: string) => {
     return contextString;
 }
 
-const getHistory = async (userId: string): Promise<BaseMessage[]> => {
+export const getHistory = async (userId: string): Promise<BaseMessage[]> => {
     try {
         await connectRedis();
         const rawHistory = await redisClient.get(`chat_history:${userId}`);
@@ -56,7 +56,7 @@ const getHistory = async (userId: string): Promise<BaseMessage[]> => {
     }
 }
 
-const saveHistory = async (userId: string, history: BaseMessage[]) => {
+export const saveHistory = async (userId: string, history: BaseMessage[]) => {
     try {
         await connectRedis();
         // Keep only last 10 messages to limit prompt size (5 turns)
@@ -74,7 +74,7 @@ const saveHistory = async (userId: string, history: BaseMessage[]) => {
     }
 }
 
-const getopenAiResponse = async (contextString: string, message: string, history: BaseMessage[]) => {
+export const getopenAiResponse = async (contextString: string, message: string, history: BaseMessage[]) => {
     const systemPrompt = `You are a helpful, enthusiastic customer support assistant for WonderToys. 
         Use the following product information to answer the user's question. 
         If the user asks for a product you don't see in the context below, politely say you don't have it or don't know. 
@@ -94,7 +94,7 @@ const getopenAiResponse = async (contextString: string, message: string, history
     return resp.content as string;
 }
 
-const isDbQueryRequired = async (message: string) => {
+export const isDbQueryRequired = async (message: string) => {
     const classificationPrompt = `You are a router. Analyze the user's message and determine if they are asking about products, toys, prices, or shopping-related topics.
         If they are, respond with ONLY the word "YES".
         If it is just a greeting (like "hi" or "hello"), general chat, or a question completely unrelated to shopping, respond with ONLY the word "NO".
