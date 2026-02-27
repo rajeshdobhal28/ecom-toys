@@ -10,7 +10,7 @@ export const productSearchTool = tool(async ({ searchQuery }) => {
     const pgVectorString = `[${embedding.join(',')}]`;
 
     const { rows: matchedProducts } = await query(`
-        SELECT id, name, description, "category", "brand", price 
+        SELECT id, name, description, "category", "brand", price, images 
         FROM products 
         ORDER BY embedding <=> $1
         LIMIT 3;
@@ -20,9 +20,11 @@ export const productSearchTool = tool(async ({ searchQuery }) => {
         return "No matching products found in the database."
     }
 
-    return matchedProducts.map(p =>
-        `- ${p.name} ($${p.price}) in ${p.category} by ${p.brand}: ${p.description || "No description"}`
-    ).join("\n");
+    return matchedProducts.map(p => {
+        const imageUrl = p.images && p.images.length > 0 ? p.images[0] : '';
+        const imageMarkdown = imageUrl ? `![${p.name}](${imageUrl})` : '';
+        return `- [ID: ${p.id}] ${p.name} ($${p.price}) in ${p.category} by ${p.brand}: ${p.description || "No description"}\n  ${imageMarkdown}`;
+    }).join("\n\n");
 },
     {
         name: "search_product",

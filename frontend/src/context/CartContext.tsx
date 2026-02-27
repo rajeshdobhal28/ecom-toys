@@ -31,6 +31,25 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const { user, loading: authLoading } = useAuth();
   const syncing = useRef(false);
 
+  useEffect(() => {
+    const handleBotAction = async () => {
+      if (user) {
+        try {
+          const response = await makeApiRequest(API.GET_CART, {});
+          if (response.status === 'success') {
+            setItems(response.data);
+          }
+        } catch (err) {
+          console.error('Failed to sync cart after bot action', err);
+        }
+      }
+    };
+    window.addEventListener('chat_bot_action', handleBotAction);
+    return () => {
+      window.removeEventListener('chat_bot_action', handleBotAction);
+    };
+  }, [user]);
+
   // Load Initial Cart Data
   useEffect(() => {
     if (authLoading) return;

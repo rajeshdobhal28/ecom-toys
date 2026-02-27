@@ -670,6 +670,15 @@ button {
   color: #fff;
 }
 
+.ChatWidget-module__JpeSuG__markdownContent img {
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  box-shadow: 0 2px 4px #0000001a;
+}
+
 .ChatWidget-module__JpeSuG__inputArea {
   background-color: #fff;
   border-top: 1px solid #e5e7eb;

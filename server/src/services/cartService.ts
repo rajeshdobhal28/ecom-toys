@@ -57,6 +57,29 @@ export const getCart = async (userId: string) => {
 
 export const updateCart = async (userId: string, items: any[]) => {
     try {
+        if (items && items.length > 0) {
+            // 1. Get all the product IDs they are trying to save
+            const productIds = items.map(item => item.id);
+            const placeholders = productIds.map((_, idx) => `$${idx + 1}`).join(',');
+
+            // 2. Fetch those products from the DB to check stock
+            const { rows: dbProducts } = await db.query(
+                `SELECT id, quantity FROM products WHERE id IN (${placeholders})`,
+                productIds
+            );
+
+            // 3. Verify every requested item
+            for (const item of items) {
+                const dbProduct = dbProducts.find((p: any) => p.id === item.id);
+                if (!dbProduct) {
+                    throw new Error(`Product ID ${item.id} does not exist`);
+                }
+                if (item.quantity > dbProduct.quantity) {
+                    throw new Error(`Insufficient stock for Product. You requested ${item.quantity}, but we only have ${dbProduct.stock}`);
+                }
+            }
+        }
+
         // Basic validation: ensure items only have needed fields to save space
         const compactItems = items.map(item => ({
             id: item.id,

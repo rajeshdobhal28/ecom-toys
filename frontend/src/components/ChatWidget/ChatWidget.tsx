@@ -35,6 +35,12 @@ const ChatWidget: React.FC = () => {
         scrollToBottom();
     }, [messages, isOpen]);
 
+    const updateUIstate = (reply: string) => {
+        if (reply.includes('cart')) {
+            window.dispatchEvent(new CustomEvent('chat_bot_action', { detail: { reply } }));
+        }
+    }
+
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!inputValue.trim() || isLoading) return;
@@ -58,6 +64,7 @@ const ChatWidget: React.FC = () => {
             });
 
             if (response?.status === 'success' && response?.data?.reply) {
+                updateUIstate(response?.data?.reply);
                 const botResponse: Message = {
                     id: (Date.now() + 1).toString(),
                     text: response.data.reply,
