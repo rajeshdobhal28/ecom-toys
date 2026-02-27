@@ -94,12 +94,29 @@ const getopenAiResponse = async (contextString: string, message: string, history
     return resp.content as string;
 }
 
+const isDbQueryRequired = async (message: string) => {
+    const classificationPrompt = `You are a router. Analyze the user's message and determine if they are asking about products, toys, prices, or shopping-related topics.
+        If they are, respond with ONLY the word "YES".
+        If it is just a greeting (like "hi" or "hello"), general chat, or a question completely unrelated to shopping, respond with ONLY the word "NO".
+        User Message: "${message}"`;
+
+    const resp = await chatModel.invoke([new HumanMessage(classificationPrompt)]);
+    return (resp.content as string).trim().toUpperCase() === "YES";
+}
+
 export const getChatResponse = async (userId: string, message: string) => {
     try {
         logger.info("Sending message to AI for user", userId);
 
-        const pgVectorString = await getPgVectorString(message);
-        const contextString = await getContextString(pgVectorString);
+        let contextString = "";
+        let dbQueryRequired = await isDbQueryRequired(message);
+        if (!dbQueryRequired) {
+            logger.info("No DB query required for message", message);
+        } else {
+            logger.info("DB query required for message", message);
+            const pgVectorString = await getPgVectorString(message);
+            contextString = await getContextString(pgVectorString);
+        }
 
         // 1. Retrieve user's previous chat history from Redis
         const history = await getHistory(userId);
