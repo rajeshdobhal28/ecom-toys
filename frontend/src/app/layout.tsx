@@ -5,6 +5,7 @@ import { CartProvider } from '@/context/CartContext';
 import CartDrawer from '@/components/CartDrawer/CartDrawer';
 import GoogleAuthProvider from '@/components/providers/GoogleAuthProvider';
 import { AuthProvider } from '@/context/AuthContext';
+import ChatWidget from '@/components/ChatWidget/ChatWidget';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -39,6 +40,7 @@ export default function RootLayout({
             <CartProvider>
               {children}
               <CartDrawer />
+              <ChatWidget />
             </CartProvider>
           </AuthProvider>
         </GoogleAuthProvider>
