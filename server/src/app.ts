@@ -12,6 +12,7 @@ import contactRoutes from './routes/contactRoutes';
 import logger from './utils/logger';
 import { apiRateLimiter } from './middlewares/rateLimiter';
 import { optionalAuthenticate } from './middlewares/auth';
+import chatRoutes from './routes/chatRoutes';
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/addresses', addressRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

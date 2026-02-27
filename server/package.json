@@ -12,6 +12,9 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@langchain/community": "^1.1.20",
+    "@langchain/core": "^1.1.29",
+    "@langchain/openai": "^1.2.11",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
@@ -21,6 +24,7 @@
     "jsonwebtoken": "^9.0.3",
     "nodemailer": "^8.0.1",
     "pg": "^8.18.0",
+    "pgvector": "^0.2.1",
     "rate-limit-redis": "^4.3.1",
     "redis": "^5.11.0"
   },
