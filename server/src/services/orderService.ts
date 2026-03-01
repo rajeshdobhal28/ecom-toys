@@ -119,13 +119,13 @@ export const createOrder = async (params: CreateOrderParams) => {
       const userName = userRes.rows.length > 0 ? userRes.rows[0].name : 'Customer';
 
       // Fire off email asynchronously (no need to await it to block user response)
-      emailService.sendOrderConfirmationEmail(
-        userEmail,
-        userName,
-        createdOrders.length > 0 ? createdOrders[0].id : 'new-order',
-        emailItems,
-        orderTotal
-      ).catch(e => logger.error('Unhandled email service error', e));
+      // emailService.sendOrderConfirmationEmail(
+      //   userEmail,
+      //   userName,
+      //   createdOrders.length > 0 ? createdOrders[0].id : 'new-order',
+      //   emailItems,
+      //   orderTotal
+      // ).catch(e => logger.error('Unhandled email service error', e));
     } catch (emailErr) {
       logger.error('Failed to prepare order confirmation email', emailErr);
     }

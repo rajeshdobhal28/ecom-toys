@@ -36,7 +36,7 @@ const ChatWidget: React.FC = () => {
     }, [messages, isOpen]);
 
     const updateUIstate = (reply: string) => {
-        if (reply.includes('cart')) {
+        if (reply.includes('[UI_ACTION:CART_UPDATED]')) {
             window.dispatchEvent(new CustomEvent('chat_bot_action', { detail: { reply } }));
         }
     }
@@ -64,10 +64,15 @@ const ChatWidget: React.FC = () => {
             });
 
             if (response?.status === 'success' && response?.data?.reply) {
-                updateUIstate(response?.data?.reply);
+                const rawReply = response.data.reply;
+                updateUIstate(rawReply);
+
+                // Remove the secret UI tag before showing it to the user
+                const cleanReply = rawReply.replace(/\[UI_ACTION:[^\]]+\]/g, '').trim();
+
                 const botResponse: Message = {
                     id: (Date.now() + 1).toString(),
-                    text: response.data.reply,
+                    text: cleanReply,
                     sender: 'bot',
                 };
                 setMessages((prev) => [...prev, botResponse]);
@@ -168,6 +173,16 @@ const ChatWidget: React.FC = () => {
                                 </div>
                             </div>
                         ))}
+
+                        {isLoading && (
+                            <div className={`${styles.messageWrapper} ${styles.botWrapper}`}>
+                                <div className={`${styles.messageBubble} ${styles.botBubble} ${styles.typingIndicator}`}>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        )}
                         <div ref={messagesEndRef} />
                     </div>
 

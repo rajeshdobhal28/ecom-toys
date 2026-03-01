@@ -28,10 +28,11 @@ const callModel = async (state: typeof MessagesAnnotation.State) => {
         CRITICAL RULE: Before placing an order ask for confirmation from the user with details of toys and shipping address.
         CRITICAL RULE: When adding items to the cart, FIRST use search_product to get the exact Product ID. NEVER invent or guess a Product ID.
         CRITICAL RULE: Do not show any kind of uuid / id to user.
+        CRITICAL RULE: If any tool returns a string starting with [UI_ACTION:, you MUST append that EXACT tag string to the very end of your message to the user, word for word.
 
         If a tool returns no info, politely say you don't know based on the current data. 
         Do not make up products, orders, or prices.
-        Please beautifully format your responses using Markdown.Use bolding for product names and bullet points for lists.`;
+        Please beautifully format your responses using Markdown. Use bolding for product names and bullet points for lists.`;
 
     const response = await modelWithTools.invoke([
         { role: "system", content: systemPrompt },

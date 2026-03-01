@@ -197,6 +197,44 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Typing Indicator */
+.typingIndicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1rem 1.25rem;
+    height: 42px;
+}
+
+.typingIndicator span {
+    width: 6px;
+    height: 6px;
+    background-color: #6b7280;
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out both;
+}
+
+.typingIndicator span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typingIndicator span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes typing {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1);
+    }
+}
+
 /* Input Area */
 .inputArea {
     padding: 1rem;

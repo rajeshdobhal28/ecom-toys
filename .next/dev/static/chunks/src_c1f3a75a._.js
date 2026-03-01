@@ -861,6 +861,8 @@ __turbopack_context__.v({
   "onlineIndicator": "ChatWidget-module__JpeSuG__onlineIndicator",
   "sendButton": "ChatWidget-module__JpeSuG__sendButton",
   "slideUp": "ChatWidget-module__JpeSuG__slideUp",
+  "typing": "ChatWidget-module__JpeSuG__typing",
+  "typingIndicator": "ChatWidget-module__JpeSuG__typingIndicator",
   "userBubble": "ChatWidget-module__JpeSuG__userBubble",
   "userWrapper": "ChatWidget-module__JpeSuG__userWrapper",
 });
@@ -914,7 +916,7 @@ const ChatWidget = ()=>{
         isOpen
     ]);
     const updateUIstate = (reply)=>{
-        if (reply.includes('cart')) {
+        if (reply.includes('[UI_ACTION:CART_UPDATED]')) {
             window.dispatchEvent(new CustomEvent('chat_bot_action', {
                 detail: {
                     reply
@@ -943,10 +945,13 @@ const ChatWidget = ()=>{
                 message: userText
             });
             if (response?.status === 'success' && response?.data?.reply) {
-                updateUIstate(response?.data?.reply);
+                const rawReply = response.data.reply;
+                updateUIstate(rawReply);
+                // Remove the secret UI tag before showing it to the user
+                const cleanReply = rawReply.replace(/\[UI_ACTION:[^\]]+\]/g, '').trim();
                 const botResponse = {
                     id: (Date.now() + 1).toString(),
-                    text: response.data.reply,
+                    text: cleanReply,
                     sender: 'bot'
                 };
                 setMessages((prev)=>[
@@ -990,17 +995,17 @@ const ChatWidget = ()=>{
                         d: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
                     }, void 0, false, {
                         fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                        lineNumber: 109,
+                        lineNumber: 114,
                         columnNumber: 25
                     }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                    lineNumber: 98,
+                    lineNumber: 103,
                     columnNumber: 21
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                lineNumber: 93,
+                lineNumber: 98,
                 columnNumber: 17
             }, ("TURBOPACK compile-time value", void 0)),
             isOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1016,14 +1021,14 @@ const ChatWidget = ()=>{
                                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ChatWidget$2f$ChatWidget$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].onlineIndicator
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                        lineNumber: 120,
+                                        lineNumber: 125,
                                         columnNumber: 29
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     "Chat Support"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                lineNumber: 119,
+                                lineNumber: 124,
                                 columnNumber: 25
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1048,7 +1053,7 @@ const ChatWidget = ()=>{
                                             y2: "18"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                            lineNumber: 139,
+                                            lineNumber: 144,
                                             columnNumber: 33
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
@@ -1058,24 +1063,24 @@ const ChatWidget = ()=>{
                                             y2: "18"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                            lineNumber: 140,
+                                            lineNumber: 145,
                                             columnNumber: 33
                                         }, ("TURBOPACK compile-time value", void 0))
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                    lineNumber: 128,
+                                    lineNumber: 133,
                                     columnNumber: 29
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                lineNumber: 123,
+                                lineNumber: 128,
                                 columnNumber: 25
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                        lineNumber: 118,
+                        lineNumber: 123,
                         columnNumber: 21
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1094,35 +1099,66 @@ const ChatWidget = ()=>{
                                                 children: msg.text
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                                lineNumber: 161,
+                                                lineNumber: 166,
                                                 columnNumber: 45
                                             }, ("TURBOPACK compile-time value", void 0))
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                            lineNumber: 160,
+                                            lineNumber: 165,
                                             columnNumber: 41
                                         }, ("TURBOPACK compile-time value", void 0)) : msg.text
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                        lineNumber: 153,
+                                        lineNumber: 158,
                                         columnNumber: 33
                                     }, ("TURBOPACK compile-time value", void 0))
                                 }, msg.id, false, {
                                     fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                    lineNumber: 148,
+                                    lineNumber: 153,
                                     columnNumber: 29
                                 }, ("TURBOPACK compile-time value", void 0))),
+                            isLoading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: `${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ChatWidget$2f$ChatWidget$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].messageWrapper} ${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ChatWidget$2f$ChatWidget$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].botWrapper}`,
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: `${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ChatWidget$2f$ChatWidget$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].messageBubble} ${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ChatWidget$2f$ChatWidget$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].botBubble} ${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ChatWidget$2f$ChatWidget$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].typingIndicator}`,
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {}, void 0, false, {
+                                            fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
+                                            lineNumber: 180,
+                                            columnNumber: 37
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {}, void 0, false, {
+                                            fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
+                                            lineNumber: 181,
+                                            columnNumber: 37
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {}, void 0, false, {
+                                            fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
+                                            lineNumber: 182,
+                                            columnNumber: 37
+                                        }, ("TURBOPACK compile-time value", void 0))
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
+                                    lineNumber: 179,
+                                    columnNumber: 33
+                                }, ("TURBOPACK compile-time value", void 0))
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
+                                lineNumber: 178,
+                                columnNumber: 29
+                            }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 ref: messagesEndRef
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                lineNumber: 171,
+                                lineNumber: 186,
                                 columnNumber: 25
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                        lineNumber: 146,
+                        lineNumber: 151,
                         columnNumber: 21
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -1137,7 +1173,7 @@ const ChatWidget = ()=>{
                                 className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ChatWidget$2f$ChatWidget$2e$module$2e$css__$5b$app$2d$client$5d$__$28$css__module$29$__["default"].input
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                lineNumber: 176,
+                                lineNumber: 191,
                                 columnNumber: 25
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1163,37 +1199,37 @@ const ChatWidget = ()=>{
                                             y2: "13"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                            lineNumber: 200,
+                                            lineNumber: 215,
                                             columnNumber: 33
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("polygon", {
                                             points: "22 2 15 22 11 13 2 9 22 2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                            lineNumber: 201,
+                                            lineNumber: 216,
                                             columnNumber: 33
                                         }, ("TURBOPACK compile-time value", void 0))
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                    lineNumber: 189,
+                                    lineNumber: 204,
                                     columnNumber: 29
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                                lineNumber: 183,
+                                lineNumber: 198,
                                 columnNumber: 25
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                        lineNumber: 175,
+                        lineNumber: 190,
                         columnNumber: 21
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/ChatWidget/ChatWidget.tsx",
-                lineNumber: 116,
+                lineNumber: 121,
                 columnNumber: 17
             }, ("TURBOPACK compile-time value", void 0))
         ]

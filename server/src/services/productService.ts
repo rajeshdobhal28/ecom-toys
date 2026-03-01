@@ -111,7 +111,7 @@ export const getTrendingProducts = async (isAdmin: boolean = false, limit: numbe
       JOIN (
           SELECT product_id, SUM(quantity) as total_sold
           FROM orders
-          WHERE created_at >= NOW() - INTERVAL '24 HOURS'
+          WHERE created_at >= NOW() - INTERVAL '168 HOURS'
           GROUP BY product_id
           ORDER BY total_sold DESC
           LIMIT $1
