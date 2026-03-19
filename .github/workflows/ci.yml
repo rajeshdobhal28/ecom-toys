@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "dev" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "**" ]
 
 jobs:
   test:
@@ -21,7 +21,7 @@ jobs:
         cache-dependency-path: 'frontendV2/package-lock.json'
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
       working-directory: frontendV2
 
     - name: Run tests
