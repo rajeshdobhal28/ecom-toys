@@ -1,0 +1,79 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// --- Sidebar ---
+.sidebar {
+    border: 1px solid $border;
+    padding: 12px;
+    border-radius: 10px;
+    flex-shrink: 0;
+
+    @include tablet-up {
+        width: 260px;
+        position: sticky;
+        top: 5rem;
+        align-self: flex-start;
+    }
+}
+
+.sidebarTitle {
+    font-size: 1.125rem;
+    font-weight: 800;
+    margin-bottom: 1.25rem;
+    color: $text-main;
+    letter-spacing: -0.01em;
+}
+
+.filterGroup {
+    margin-bottom: 1.5rem;
+}
+
+.filterLabel {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $text-muted;
+    margin-bottom: 0.75rem;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+// --- Chip Buttons ---
+.chip {
+    padding: 0.5rem 1.25rem;
+    border-radius: $radius-full;
+    border: 1.5px solid $border;
+    background: $surface;
+    color: $text-main;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all $transition-fast;
+    user-select: none;
+    text-align: left;
+    width: max-content;
+
+    &:hover {
+        border-color: $primary;
+        color: $primary;
+        box-shadow: $shadow-sm;
+    }
+}
+
+.chipActive {
+    background: $primary;
+    color: #fff;
+    border-color: $primary;
+    box-shadow: 0 2px 8px rgba($primary, 0.35);
+
+    &:hover {
+        background: $primary-hover;
+        border-color: $primary-hover;
+        color: #fff;
+    }
+}
