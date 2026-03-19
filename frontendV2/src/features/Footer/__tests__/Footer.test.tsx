@@ -22,7 +22,7 @@ describe("Footer", () => {
 
   it("renders the tagline", () => {
     expect(
-      screen.getByText(/bringing smiles to familiesss/i)
+      screen.getByText(/bringing smiles to families/i)
     ).toBeInTheDocument();
   });
 
