@@ -1,0 +1,185 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.hero {
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 40%, #e0f2fe 100%);
+  position: relative;
+  overflow: hidden;
+  padding-top: 2rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+
+  @include desktop {
+    flex-direction: row;
+    padding-top: 3rem;
+    padding-bottom: 6rem;
+    gap: 3rem;
+  }
+}
+
+.content {
+  flex: 1;
+  text-align: center;
+  max-width: 560px;
+
+  @include desktop {
+    text-align: left;
+  }
+}
+
+.badge {
+  display: inline-block;
+  background: white;
+  color: $primary;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.4rem 1rem;
+  border-radius: $radius-full;
+  margin-bottom: 1.25rem;
+  box-shadow: $shadow-sm;
+}
+
+.title {
+  font-size: 2.25rem;
+  line-height: 1.15;
+  font-weight: 800;
+  color: $text-main;
+  margin-bottom: 1rem;
+
+  @include tablet-up {
+    font-size: 3rem;
+  }
+
+  @include desktop {
+    font-size: 3.5rem;
+  }
+}
+
+.highlight {
+  color: $primary;
+  position: relative;
+}
+
+.description {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: $text-muted;
+  margin-bottom: 2rem;
+  max-width: 440px;
+
+  @include mobile {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+
+  @include desktop {
+    justify-content: flex-start;
+  }
+}
+
+// --- Visual / Floating elements ---
+.visual {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include mobile {
+    max-width: 260px;
+  }
+}
+
+.circle1 {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba($primary, 0.15), rgba($accent, 0.08));
+}
+
+.circle2 {
+  position: absolute;
+  width: 55%;
+  height: 55%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba($secondary, 0.12), rgba($primary, 0.06));
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.heroEmoji {
+  font-size: 5rem;
+  z-index: 1;
+  animation: float 3s ease-in-out infinite;
+
+  @include desktop {
+    font-size: 7rem;
+  }
+}
+
+.floatingToy1,
+.floatingToy2,
+.floatingToy3 {
+  position: absolute;
+  font-size: 2rem;
+  z-index: 1;
+}
+
+.floatingToy1 {
+  top: 15%;
+  right: 10%;
+  animation: float 3.5s ease-in-out infinite 0.5s;
+}
+
+.floatingToy2 {
+  bottom: 25%;
+  left: 5%;
+  animation: float 4s ease-in-out infinite 1s;
+}
+
+.floatingToy3 {
+  top: 60%;
+  right: 5%;
+  animation: float 3s ease-in-out infinite 1.5s;
+}
+
+// --- Wave ---
+.wave {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  line-height: 0;
+
+  svg {
+    width: 100%;
+    height: auto;
+  }
+}
+
+// --- Animations ---
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.7; }
+}

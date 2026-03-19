@@ -1,0 +1,188 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  transition: box-shadow $transition-fast;
+}
+
+.scrolled {
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.logo {
+  a {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $text-main;
+    letter-spacing: -0.02em;
+  }
+}
+
+.logoHighlight {
+  color: $primary;
+}
+
+// --- Nav ---
+.nav {
+  display: none;
+  gap: 2rem;
+
+  @include desktop {
+    display: flex;
+  }
+}
+
+.navLink {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: $text-muted;
+  position: relative;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $primary;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: $primary;
+    border-radius: 1px;
+    transition: width $transition-fast;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+// --- Actions ---
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cartBtn {
+  position: relative;
+  background: none;
+  padding: 0.5rem;
+  border-radius: $radius-md;
+  color: $text-main;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+.cartBadge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: $primary;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menuBtn {
+  display: flex;
+  background: none;
+  padding: 0.5rem;
+  color: $text-main;
+
+  @include desktop {
+    display: none;
+  }
+}
+
+// --- Mobile Menu ---
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  animation: fadeIn 0.2s ease;
+}
+
+.mobileNav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 280px;
+  background: $surface;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  animation: slideIn 0.3s ease;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.mobileHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $border;
+}
+
+.mobileLogo {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.closeBtn {
+  background: none;
+  padding: 0.25rem;
+  color: $text-muted;
+}
+
+.mobileLink {
+  padding: 0.85rem 0.75rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: $radius-sm;
+  color: $text-main;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: $primary-light;
+    color: $primary;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
