@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ "master", "dev" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "master", "dev" ]
+    branches: [ "master" ]
 
 jobs:
   test:
@@ -18,12 +18,12 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
-        cache-dependency-path: 'frontendv2/package-lock.json'
+        cache-dependency-path: 'frontendV2/package-lock.json'
 
     - name: Install dependencies
       run: npm ci
-      working-directory: frontendv2
+      working-directory: frontendV2
 
     - name: Run tests
       run: npm test
-      working-directory: frontendv2
+      working-directory: frontendV2
