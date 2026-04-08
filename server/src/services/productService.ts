@@ -65,7 +65,7 @@ export const getProducts = async (filters: {
     let products = res.rows;
     if (!filters.isAdmin) {
       products = products.map(p => {
-        const { cost_price, ...rest } = p;
+        const { cost_price, embedding, ...rest } = p;
         return rest;
       });
     }
