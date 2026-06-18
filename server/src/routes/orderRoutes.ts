@@ -7,7 +7,6 @@ const router = express.Router();
 // Apply auth middleware to all order routes
 router.use(authenticate);
 
-router.post('/', orderController.createOrder);
 router.get('/', orderController.getOrders);
 router.post('/payment', orderController.createOrderPayment);
 router.post('/razorpay/payment-success', orderController.razorPayPaymentSuccess)
