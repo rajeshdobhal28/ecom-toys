@@ -46,6 +46,8 @@ export const API: APIConfig = {
   GET_TRENDING_PRODUCTS: { url: '/api/products/trending', method: 'GET' },
   GET_ORDERS: { url: '/api/orders', method: 'GET' },
   CREATE_ORDER: { url: '/api/orders', method: 'POST' },
+  CREATE_ORDER_PAYMENT: { url: '/api/orders/payment', method: 'POST' },
+  VERIFY_ORDER_PAYMENT: {url: '/api/orders/razorpay/payment-success', method: 'POST'},
   GET_CART: { url: '/api/cart', method: 'GET' },
   UPDATE_CART: { url: '/api/cart', method: 'PUT' },
   GET_PRODUCT_REVIEWS: { url: '/api/reviews/product', method: 'GET' }, // Append ID manually

@@ -9,5 +9,7 @@ router.use(authenticate);
 
 router.post('/', orderController.createOrder);
 router.get('/', orderController.getOrders);
+router.post('/payment', orderController.createOrderPayment);
+router.post('/razorpay/payment-success', orderController.razorPayPaymentSuccess)
 
 export default router;

@@ -5,7 +5,7 @@ import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 export default {
-  port: process.env.PORT || 3001,
+  port: process.env.NODE_PORT || 3001,
   googleClientId: process.env.GOOGLE_CLIENT_ID || '',
   jwtSecret: process.env.JWT_SECRET || 'secret',
   nodeEnv: process.env.NODE_ENV || 'development',

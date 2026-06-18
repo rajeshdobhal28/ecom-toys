@@ -84,18 +84,33 @@ export default function CheckoutPage() {
                 quantity: item.quantity,
             }));
 
-            const response = await makeApiRequest(API.CREATE_ORDER, {
+            const response = await makeApiRequest(API.CREATE_ORDER_PAYMENT, {
                 products,
                 addressId: selectedAddressId,
             });
 
-            if (response.status === 'success') {
-                clearCart();
-                alert('Order placed successfully!');
-                router.push('/orders');
-            } else {
-                alert(response.message || 'Failed to place order');
-            }
+            console.log("response--->", response);
+
+            //@ts-ignore
+            const rzp = new Razorpay({
+                ...response.data,
+                handler: async function(response: any) {
+                    console.log("Payment handler -->", response);
+                    const resp = await makeApiRequest(API.VERIFY_ORDER_PAYMENT, response)
+                }
+            });
+            rzp.on('payment.failed', function (resp: any) {
+                console.log("Payment FAILED -->", resp.error);
+            });
+            rzp.open();
+
+            // if (response.status === 'success') {
+            //     clearCart();
+            //     alert('Order placed successfully!');
+            //     router.push('/orders');
+            // } else {
+            //     alert(response.message || 'Failed to place order');
+            // }
         } catch (error) {
             console.error('Checkout error:', error);
             alert('An error occurred during checkout');

@@ -3,11 +3,12 @@ import logger from '../utils/logger';
 import { redisClient } from '../utils/redisClient';
 
 export const getProducts = async (filters: {
+  ids?: Array<string>;
   category?: string;
   name?: string;
   slug?: string;
   isAdmin?: boolean;
-}) => {
+}, skipCache = false) => {
   try {
     const cacheKey = `products:all:${JSON.stringify(filters)}`;
     try {
@@ -50,6 +51,11 @@ export const getProducts = async (filters: {
       queryParams.push(filters.slug);
     }
 
+    if(filters.ids) {
+      whereClauses.push(`p.id = ANY($${queryParams.length + 1})`);
+      queryParams.push(filters.ids);
+    }
+
     if (whereClauses.length > 0) {
       queryText += ' WHERE ' + whereClauses.join(' AND ');
     }
@@ -71,7 +77,7 @@ export const getProducts = async (filters: {
     }
 
     try {
-      if (redisClient.isOpen) {
+      if (redisClient.isOpen && !skipCache) {
         // Cache products for 1 hour (3600 seconds)
         await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
         logger.info(`[Redis] Cached products for key: ${cacheKey}`);
