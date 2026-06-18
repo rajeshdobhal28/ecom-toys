@@ -95,22 +95,20 @@ export default function CheckoutPage() {
             const rzp = new Razorpay({
                 ...response.data,
                 handler: async function(response: any) {
-                    console.log("Payment handler -->", response);
-                    const resp = await makeApiRequest(API.VERIFY_ORDER_PAYMENT, response)
+                    const resp = await makeApiRequest(API.VERIFY_ORDER_PAYMENT, response);
+                    if (resp.status === 'success') {
+                        clearCart();
+                        router.push('/orders');
+                    } else {
+                        alert(resp.message || 'Payment verification failed');
+                    }
                 }
             });
             rzp.on('payment.failed', function (resp: any) {
                 console.log("Payment FAILED -->", resp.error);
+                alert('Payment failed. Please try again.');
             });
             rzp.open();
-
-            // if (response.status === 'success') {
-            //     clearCart();
-            //     alert('Order placed successfully!');
-            //     router.push('/orders');
-            // } else {
-            //     alert(response.message || 'Failed to place order');
-            // }
         } catch (error) {
             console.error('Checkout error:', error);
             alert('An error occurred during checkout');
