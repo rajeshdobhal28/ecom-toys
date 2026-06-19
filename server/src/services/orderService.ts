@@ -14,15 +14,22 @@ interface CreateOrderParams {
   userEmail: string;
   addressId: string;
   items: OrderProduct[];
-  total_price: number,
   status: 'Processing' | 'Shipping' | 'Delivered',
   payment_status: 'processing' | 'completed' | 'failed',
   payment_gateway: 'razorpay' | 'COD',
-  payment_order_id: string,
+  // Optional: for razorpay the gateway order id only exists after we know the
+  // total, so it is attached afterwards via setOrderPaymentOrderId.
+  payment_order_id?: string | null,
 }
 
+// Single source of truth for a product's effective unit price (discounted price
+// when present, otherwise list price). Used both when snapshotting order line
+// items and when computing a checkout total up front.
+export const productUnitPrice = (product: any): number =>
+  Number(product.discounted_price || product.price);
+
 export const createOrder = async (params: CreateOrderParams) => {
-  const { userId, userEmail, items, addressId, total_price, status, payment_status, payment_gateway, payment_order_id } = params;
+  const { userId, userEmail, items, addressId, status, payment_status, payment_gateway, payment_order_id } = params;
 
   try {
     // Validate delivery pincode and snapshot address
@@ -41,7 +48,10 @@ export const createOrder = async (params: CreateOrderParams) => {
     // 1. Validate + check stock (lock rows) and snapshot each line item.
     // Price/name/image are captured here so the order reflects what was bought
     // at the time, regardless of later product changes.
+    // total_price is derived from the locked snapshot (not trusted from the
+    // caller), so it always matches the line items actually charged.
     const orderItems = [];
+    let total_price = 0;
     for (const item of items) {
       const { productId, quantity } = item;
 
@@ -58,11 +68,14 @@ export const createOrder = async (params: CreateOrderParams) => {
         throw new Error(`Insufficient stock for product: ${product.name}`);
       }
 
+      const price = productUnitPrice(product);
+      total_price += price * quantity;
+
       orderItems.push({
         productId,
         quantity,
         name: product.name,
-        price: Number(product.discounted_price || product.price),
+        price,
         image: product.images && product.images.length > 0 ? product.images[0] : null,
       });
     }
@@ -82,7 +95,7 @@ export const createOrder = async (params: CreateOrderParams) => {
       total_price,
       status,
       payment_gateway,
-      payment_order_id,
+      payment_order_id ?? null,
       null,
       null,
       payment_status,
@@ -134,6 +147,21 @@ export const updateOrderPaymentStatus = async (
   return res.rows[0] ?? null;
 };
 
+// Attach the payment gateway's order id once it has been created (razorpay
+// flow). The order row is created first so the total can be computed under
+// lock, then the gateway order is opened for that exact amount.
+export const setOrderPaymentOrderId = async (orderId: string, paymentOrderId: string) => {
+  const res = await query(
+    `UPDATE orders
+        SET payment_order_id = $1,
+            updated_at = CURRENT_TIMESTAMP
+      WHERE id = $2
+      RETURNING *;`,
+    [paymentOrderId, orderId]
+  );
+  return res.rows[0] ?? null;
+};
+
 // Build and send the order confirmation email from the snapshotted order items.
 export const sendOrderConfirmation = async (order: any) => {
   try {
@@ -165,8 +193,8 @@ export const sendOrderConfirmation = async (order: any) => {
 export const getOrders = async (userId: string) => {
   try {
     const res = await query(
-      `SELECT * FROM orders WHERE user_id = $1 ORDER BY created_at DESC;`,
-      [userId]
+      `SELECT * FROM orders WHERE user_id = $1 AND payment_status = $2 ORDER BY created_at DESC;`,
+      [userId, 'completed']
     );
     const orders = res.rows;
 
@@ -180,7 +208,6 @@ export const getOrders = async (userId: string) => {
       delete order.payment_id;
       delete order.payment_signature;
       delete order.payment_order_id;
-      delete order.payment_signature;
 
       for (const item of order.items || []) {
         if (item.productId && item.name == null) {

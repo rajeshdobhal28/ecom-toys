@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import * as orderService from '../services/orderService';
-import { getProducts } from '../services/productService';
 import { createRazorPayOrder, verifyRazorPayPaymentSignature } from '../services/razorPayService';
 import logger from '../utils/logger';
 
@@ -65,7 +64,7 @@ export const razorPayPaymentSuccess = async (
   }
 };
 
-const validateOrderPayment = async (products: Array<any>, addressId: string, userId: string) => {
+const validateOrderPayment = (products: Array<any>, addressId: string) => {
   if (!products || !Array.isArray(products) || products.length === 0) {
     return {
       valid: false,
@@ -84,7 +83,7 @@ const validateOrderPayment = async (products: Array<any>, addressId: string, use
   for (const item of products) {
     if (!item.productId || !item.quantity) {
       return {
-        status: 'error',
+        valid: false,
         message: 'Each product must have a productId and quantity',
       }
     }
@@ -107,7 +106,7 @@ const validateOrderPayment = async (products: Array<any>, addressId: string, use
         return;
       }
 
-      const validationResp = await validateOrderPayment(products, addressId, req.user.id);
+      const validationResp = validateOrderPayment(products, addressId);
 
       if (!validationResp.valid) {
         res.status(400).send({
@@ -118,22 +117,10 @@ const validateOrderPayment = async (products: Array<any>, addressId: string, use
       }
 
 
-      // fetch product from database for payment
-      const requestedProducts: any = {};
-      const prodIds = products.map((item: any) => {
-        requestedProducts[item.productId] = item;
-        return item.productId;
-      });
-
-      const dbProducts = await getProducts({ ids: prodIds }, true);
-      let totalAmount: number = 0;
-      dbProducts.forEach((prod: any) => {
-        totalAmount += (prod.discounted_price || prod.price) * requestedProducts[prod.id].quantity;
-      });
-
-      const rzpOrder = await createRazorPayOrder(totalAmount, `reciept111_${Date.now()}`);
-
-      await orderService.createOrder({
+      // 1. Create the order first. createOrder computes the authoritative
+      // total from the locked product rows — the single source of truth for
+      // pricing — so the gateway is charged exactly what the order stores.
+      const order = await orderService.createOrder({
         userId: req.user.id,
         userEmail: req.user.email,
         addressId,
@@ -141,12 +128,19 @@ const validateOrderPayment = async (products: Array<any>, addressId: string, use
           productId: p.productId,
           quantity: Number(p.quantity),
         })),
-        total_price: rzpOrder.amount / 100, // in rs
         status: 'Processing',
         payment_status: 'processing',
         payment_gateway: 'razorpay',
-        payment_order_id: rzpOrder.id,
       });
+
+      // 2. Open the gateway order for exactly that total.
+      const rzpOrder = await createRazorPayOrder(
+        Number(order.total_price),
+        `receipt_${order.id}`
+      );
+
+      // 3. Link the gateway order id back so payment verification can find it.
+      await orderService.setOrderPaymentOrderId(order.id, rzpOrder.id);
 
       res.status(201).send({
         status: 'success', data: {
@@ -157,9 +151,8 @@ const validateOrderPayment = async (products: Array<any>, addressId: string, use
           description: 'Test Transaction',
           order_id: rzpOrder.id, // This is the order_id created in the backend
           prefill: {
-            name: 'Rajesh Kumar',
+            name: req.user.name,
             email: req.user.email,
-            contact: '+917838943334'
           },
           theme: {
             color: '#F37254'
