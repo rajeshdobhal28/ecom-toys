@@ -45,11 +45,6 @@ export const createOrder = async (params: CreateOrderParams) => {
 
     await query('BEGIN'); // Start transaction
 
-    // 1. Validate + check stock (lock rows) and snapshot each line item.
-    // Price/name/image are captured here so the order reflects what was bought
-    // at the time, regardless of later product changes.
-    // total_price is derived from the locked snapshot (not trusted from the
-    // caller), so it always matches the line items actually charged.
     const orderItems = [];
     let total_price = 0;
     for (const item of items) {

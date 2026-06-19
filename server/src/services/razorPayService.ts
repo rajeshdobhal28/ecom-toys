@@ -9,11 +9,19 @@ const razorpay = new Razorpay({
 export const createRazorPayOrder = async (amount: number, receipt: string) => {
     // Let errors propagate so the caller can surface a real failure instead of
     // crashing on a null order (previously swallowed and returned null).
-    return razorpay.orders.create({
+    try {
+const resp = await razorpay.orders.create({
         amount: Math.round(amount * 100), // in paise
         currency: 'INR',
         receipt,
     });
+    console.log("resp---->", resp)
+    return resp;
+    } catch(err) {
+        console.log("ERROR --->", err);
+        return null;
+    }
+    
 }
 
 export const verifyRazorPayPaymentSignature = (orderId: string, paymentId: string, signature: string) => {

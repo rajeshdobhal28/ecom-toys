@@ -136,8 +136,16 @@ const validateOrderPayment = (products: Array<any>, addressId: string) => {
       // 2. Open the gateway order for exactly that total.
       const rzpOrder = await createRazorPayOrder(
         Number(order.total_price),
-        `receipt_${order.id}`
+        `${order.id}`
       );
+      if(rzpOrder.error) {
+        // log error
+        res.status(500).send({
+          status: 'error',
+          message: 'Error occured during payment please try again later.'
+        });
+        return;
+      }
 
       // 3. Link the gateway order id back so payment verification can find it.
       await orderService.setOrderPaymentOrderId(order.id, rzpOrder.id);
@@ -148,15 +156,15 @@ const validateOrderPayment = (products: Array<any>, addressId: string) => {
           amount: rzpOrder.amount, // Amount is in currency subunits.
           currency: rzpOrder.currency,
           name: process.env.COMPANY_NAME,
-          description: 'Test Transaction',
+          description: `Payment for user ${req.user.email}`,
           order_id: rzpOrder.id, // This is the order_id created in the backend
           prefill: {
             name: req.user.name,
             email: req.user.email,
           },
-          theme: {
-            color: '#F37254'
-          },
+          // theme: {
+          //   color: '#F37254'
+          // },
         }
       });
 

@@ -1,2 +1,3 @@
 What if price has been changed during order processing.
 4718 6091 0820 4366
+on checkout page if quantity is not available show message after payment api
