@@ -1,6 +1,7 @@
 import express from 'express';
 import * as orderController from '../controllers/orderController';
 import { authenticate } from '../middlewares/auth';
+import { paymentRateLimiter } from '../middlewares/rateLimiter';
 
 const router = express.Router();
 
@@ -8,7 +9,7 @@ const router = express.Router();
 router.use(authenticate);
 
 router.get('/', orderController.getOrders);
-router.post('/payment', orderController.createOrderPayment);
-router.post('/razorpay/payment-success', orderController.razorPayPaymentSuccess)
+router.post('/payment', paymentRateLimiter, orderController.createOrderPayment);
+router.post('/razorpay/payment-success', paymentRateLimiter, orderController.razorPayPaymentSuccess)
 
 export default router;

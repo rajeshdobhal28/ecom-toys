@@ -111,12 +111,24 @@ export const createOrder = async (params: CreateOrderParams) => {
 
 // Update payment fields after gateway verification. Matched by payment_order_id
 // (the gateway order id), which is unique per checkout.
+//
+// The update never transitions an order that is already 'completed'. A valid
+// gateway signature stays valid forever and clients legitimately retry the
+// success callback, so without this guard a replay would decrement stock and
+// resend the confirmation email on every call. Callers distinguish a real
+// completion from a replay via the `alreadyCompleted` flag.
+//
+// When `userId` is provided the update is also scoped to that owner, so a
+// caller can only change the status of their own orders. The failure path uses
+// this to prevent an authenticated user from flipping another user's in-flight
+// order to 'failed' just by knowing its gateway order id.
 export const updateOrderPaymentStatus = async (
   paymentOrderId: string,
   paymentStatus: 'completed' | 'failed',
   paymentId?: string,
-  paymentSignature?: string
-) => {
+  paymentSignature?: string,
+  userId?: string
+): Promise<{ order: any; alreadyCompleted: boolean }> => {
   const res = await query(
     `UPDATE orders
         SET payment_status = $1,
@@ -124,10 +136,27 @@ export const updateOrderPaymentStatus = async (
             payment_signature = COALESCE($3, payment_signature),
             updated_at = CURRENT_TIMESTAMP
       WHERE payment_order_id = $4
+        AND payment_status <> 'completed'
+        AND ($5::text IS NULL OR user_id = $5)
       RETURNING *;`,
-    [paymentStatus, paymentId ?? null, paymentSignature ?? null, paymentOrderId]
+    [paymentStatus, paymentId ?? null, paymentSignature ?? null, paymentOrderId, userId ?? null]
   );
-  return res.rows[0] ?? null;
+
+  if (res.rows[0]) {
+    return { order: res.rows[0], alreadyCompleted: false };
+  }
+
+  // No row updated: either the order doesn't exist, or it was already
+  // 'completed' (a replay). Read it back so the caller can tell the two apart.
+  const existing = await query(
+    'SELECT * FROM orders WHERE payment_order_id = $1',
+    [paymentOrderId]
+  );
+  const order = existing.rows[0] ?? null;
+  return {
+    order,
+    alreadyCompleted: order?.payment_status === 'completed',
+  };
 };
 
 // Decrement stock for an order's snapshotted items after payment has succeeded.

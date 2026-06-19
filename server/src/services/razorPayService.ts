@@ -1,32 +1,28 @@
 const Razorpay = require("razorpay");
 import crypto from 'crypto';
+import config from '../config';
 
 const razorpay = new Razorpay({
-    key_id: process.env.PAYMENT_API_KEY,
-    key_secret: process.env.PAYMENT_API_SECRET,
+    key_id: config.paymentApiKey,
+    key_secret: config.paymentApiSecret,
 });
 
 export const createRazorPayOrder = async (amount: number, receipt: string) => {
-    // Let errors propagate so the caller can surface a real failure instead of
-    // crashing on a null order (previously swallowed and returned null).
-    try {
-const resp = await razorpay.orders.create({
+    // Errors propagate so the caller can surface a real failure instead of
+    // crashing on a null order (previously swallowed and returned null). The
+    // raw gateway response is not logged here — it is noise at best and can
+    // leak request details into logs.
+    const resp = await razorpay.orders.create({
         amount: Math.round(amount * 100), // in paise
         currency: 'INR',
         receipt,
     });
-    console.log("resp---->", resp)
     return resp;
-    } catch(err) {
-        console.log("ERROR --->", err);
-        return null;
-    }
-    
 }
 
 export const verifyRazorPayPaymentSignature = (orderId: string, paymentId: string, signature: string) => {
     const expected = crypto
-        .createHmac('sha256', process.env.PAYMENT_API_SECRET!)
+        .createHmac('sha256', config.paymentApiSecret)
         .update(`${orderId}|${paymentId}`)
         .digest('hex');
 

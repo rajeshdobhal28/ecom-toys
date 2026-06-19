@@ -3,34 +3,46 @@ import RedisStore from 'rate-limit-redis';
 import { redisClient, connectRedis } from '../utils/redisClient';
 import { AuthRequest } from './auth';
 
-// 100 requests per 15 minutes by default
-export const apiRateLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100, // Limit each IP or User to 100 requests per `window` (here, per 15 minutes)
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-    store: new RedisStore({
-        sendCommand: async (...args: string[]) => {
-            if (!redisClient.isOpen) {
-                await connectRedis();
-            }
-            return redisClient.sendCommand(args);
-        },
-    }),
-    keyGenerator: (req, res) => {
-        const authReq = req as AuthRequest;
-        // Determine the key for rate limiting:
-        // 1. If user is authenticated, use their user ID
-        if (authReq.user && authReq.user.id) {
-            return `user:${authReq.user.id}`;
-        }
-        // 2. Otherwise, fall back to the IP address using express-rate-limit's built-in helper
-        return ipKeyGenerator(req.ip || 'unknown');
-    },
-    handler: (req, res) => {
-        res.status(429).send({
-            status: 'error',
-            message: 'Too many requests, please try again later.',
-        });
-    },
-});
+// Key by authenticated user id when available, otherwise fall back to IP.
+const keyGenerator = (req: any) => {
+    const authReq = req as AuthRequest;
+    if (authReq.user && authReq.user.id) {
+        return `user:${authReq.user.id}`;
+    }
+    return ipKeyGenerator(req.ip || 'unknown');
+};
+
+const handler = (req: any, res: any) => {
+    res.status(429).send({
+        status: 'error',
+        message: 'Too many requests, please try again later.',
+    });
+};
+
+// Each limiter needs a distinct Redis key prefix, otherwise limiters sharing
+// the same key (e.g. the same user id) would increment the same counter.
+const createLimiter = (max: number, prefix: string) =>
+    rateLimit({
+        windowMs: 15 * 60 * 1000,
+        max,
+        standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+        legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+        store: new RedisStore({
+            sendCommand: async (...args: string[]) => {
+                if (!redisClient.isOpen) {
+                    await connectRedis();
+                }
+                return redisClient.sendCommand(args);
+            },
+            prefix,
+        }),
+        keyGenerator,
+        handler,
+    });
+
+// 100 requests per 15 minutes for general API traffic.
+export const apiRateLimiter = createLimiter(100, 'rl:api:');
+
+// Tighter limit for payment endpoints (order creation + signature verification).
+// These are sensitive and abuse-prone, so cap them well below the general API.
+export const paymentRateLimiter = createLimiter(20, 'rl:payment:');

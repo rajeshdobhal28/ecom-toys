@@ -32,15 +32,23 @@ export const razorPayPaymentSuccess = async (
     );
 
     if (!isValid) {
-      // Mark the order as failed so it isn't left dangling in 'processing'
-      await orderService.updateOrderPaymentStatus(razorpay_order_id, 'failed');
+      // Mark the order as failed so it isn't left dangling in 'processing'.
+      // Scoped to the authenticated user so one user can't flip another user's
+      // in-flight order to 'failed' by guessing its gateway order id.
+      await orderService.updateOrderPaymentStatus(
+        razorpay_order_id,
+        'failed',
+        undefined,
+        undefined,
+        req.user!.id // guaranteed by the `authenticate` middleware on this route
+      );
       res
         .status(400)
         .send({ status: 'error', message: 'Payment verification failed' });
       return;
     }
 
-    const order = await orderService.updateOrderPaymentStatus(
+    const { order, alreadyCompleted } = await orderService.updateOrderPaymentStatus(
       razorpay_order_id,
       'completed',
       razorpay_payment_id,
@@ -51,6 +59,15 @@ export const razorPayPaymentSuccess = async (
       res
         .status(404)
         .send({ status: 'error', message: 'Order not found for this payment' });
+      return;
+    }
+
+    // Idempotency: a valid signature stays valid forever and clients retry this
+    // callback, so a replay must not decrement stock or resend the email again.
+    // If the order was already completed, return success without re-running the
+    // side effects below.
+    if (alreadyCompleted) {
+      res.status(200).send({ status: 'success', data: { order_id: razorpay_order_id } });
       return;
     }
 
@@ -142,14 +159,18 @@ const validateOrderPayment = (products: Array<any>, addressId: string) => {
         payment_gateway: 'razorpay',
       });
 
-      // 2. Open the gateway order for exactly that total.
-      const rzpOrder = await createRazorPayOrder(
-        Number(order.total_price),
-        `${order.id}`
-      );
-      if(rzpOrder.error) {
-        // log error
-        res.status(500).send({
+      // 2. Open the gateway order for exactly that total. A gateway failure
+      // throws; surface it as a 502 with a user-friendly message rather than
+      // letting it fall through to a generic 500.
+      let rzpOrder;
+      try {
+        rzpOrder = await createRazorPayOrder(
+          Number(order.total_price),
+          `${order.id}`
+        );
+      } catch (gatewayErr: any) {
+        logger.error('Razorpay order creation failed', gatewayErr?.message || gatewayErr);
+        res.status(502).send({
           status: 'error',
           message: 'Error occured during payment please try again later.'
         });
