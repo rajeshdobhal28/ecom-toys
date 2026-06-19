@@ -201,19 +201,19 @@ export default function CheckoutPage() {
                                 <div className={styles.sectionIcon}><CreditCard size={20} /></div>
                                 <h2>Payment Method</h2>
                             </div>
-                            <div className={styles.paymentMethods}>
-                                <label className={`${styles.paymentCard} ${styles.selectedPayment}`}>
-                                    <input type="radio" name="payment" checked readOnly className={styles.radioInput} />
+                            <div className={`${styles.paymentMethods} `}>
+                                <label className={`${styles.paymentCard} ${styles.disabled}`}>
+                                    <input type="radio" name="payment" readOnly className={styles.radioInput} disabled/>
                                     <div className={styles.paymentContent}>
                                         <strong>Pay at Delivery / Standard Processing</strong>
-                                        <p>We'll handle the payment collection smoothly.</p>
+                                        <p>COMING SOON</p>
                                     </div>
                                 </label>
 
-                                <label className={`${styles.paymentCard} ${styles.disabledPayment}`}>
-                                    <input type="radio" name="payment" disabled className={styles.radioInput} />
+                                <label className={`${styles.paymentCard} ${styles.selectedPayment}`}>
+                                    <input type="radio" name="payment" checked className={styles.radioInput} />
                                     <div className={styles.paymentContent}>
-                                        <strong>Razorpay Integration (Coming Soon)</strong>
+                                        <strong>Online Payment</strong>
                                         <p>Credit/Debit cards, UPI, Netbanking.</p>
                                     </div>
                                 </label>

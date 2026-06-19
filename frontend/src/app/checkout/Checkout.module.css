@@ -420,3 +420,7 @@
     color: #718096;
     font-size: 0.9rem;
 }
+
+.disabled {
+    opacity: .5;
+}
