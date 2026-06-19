@@ -87,6 +87,62 @@
   flex-direction: column;
 }
 
+.orderSummaryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 12px ;
+  background: #f8f9fb;
+  border-bottom: 1px solid #ececec;
+}
+
+.orderMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.orderIdText {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #2d3436;
+  letter-spacing: 0.4px;
+  font-family: var(--font-nunito);
+}
+
+.orderDate {
+  font-size: 0.8rem;
+  color: #98a2b3;
+}
+
+.statusBadge {
+  align-self: flex-start;
+  margin-top: 0.15rem;
+}
+
+.orderTotalBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+}
+
+.orderTotalLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #98a2b3;
+}
+
+.itemPrice {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #555;
+}
+
 .orderItem {
   padding: 1.5rem;
   display: flex;
@@ -163,6 +219,9 @@
 
 .productDetails {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .productName {

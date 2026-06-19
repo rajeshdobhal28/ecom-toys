@@ -38,7 +38,10 @@ export const createOrder = async (params: CreateOrderParams) => {
 
     await query('BEGIN'); // Start transaction
 
-    // 1. Validate each product and check stock (lock the rows)
+    // 1. Validate + check stock (lock rows) and snapshot each line item.
+    // Price/name/image are captured here so the order reflects what was bought
+    // at the time, regardless of later product changes.
+    const orderItems = [];
     for (const item of items) {
       const { productId, quantity } = item;
 
@@ -54,6 +57,14 @@ export const createOrder = async (params: CreateOrderParams) => {
       if (product.quantity < quantity) {
         throw new Error(`Insufficient stock for product: ${product.name}`);
       }
+
+      orderItems.push({
+        productId,
+        quantity,
+        name: product.name,
+        price: Number(product.discounted_price || product.price),
+        image: product.images && product.images.length > 0 ? product.images[0] : null,
+      });
     }
 
     // 2. Create a single order row holding all items
@@ -67,7 +78,7 @@ export const createOrder = async (params: CreateOrderParams) => {
       userEmail,
       addressId,
       deliveryAddress,
-      JSON.stringify(items),
+      JSON.stringify(orderItems),
       total_price,
       status,
       payment_gateway,
@@ -123,28 +134,15 @@ export const updateOrderPaymentStatus = async (
   return res.rows[0] ?? null;
 };
 
-// Build and send the order confirmation email. order.items only stores
-// { productId, quantity }, so product details are fetched here for the email.
+// Build and send the order confirmation email from the snapshotted order items.
 export const sendOrderConfirmation = async (order: any) => {
   try {
-    const itemIds = (order.items || []).map((i: any) => i.productId);
-    const dbProducts = itemIds.length
-      ? await productService.getProducts({ ids: itemIds }, true)
-      : [];
-    const productMap: Record<string, any> = {};
-    dbProducts.forEach((p: any) => {
-      productMap[p.id] = p;
-    });
-
-    const emailItems = (order.items || []).map((i: any) => {
-      const p = productMap[i.productId];
-      return {
-        name: p?.name ?? 'Product',
-        quantity: i.quantity,
-        price: Number(p?.discounted_price || p?.price || 0),
-        image: p?.images && p.images.length > 0 ? p.images[0] : undefined,
-      };
-    });
+    const emailItems = (order.items || []).map((i: any) => ({
+      name: i.name ?? 'Product',
+      quantity: i.quantity,
+      price: Number(i.price || 0),
+      image: i.image ?? undefined,
+    }));
 
     const userRes = await query('SELECT name FROM users WHERE id = $1', [order.user_id]);
     const userName = userRes.rows.length > 0 ? userRes.rows[0].name : 'Customer';
@@ -170,7 +168,52 @@ export const getOrders = async (userId: string) => {
       `SELECT * FROM orders WHERE user_id = $1 ORDER BY created_at DESC;`,
       [userId]
     );
-    return res.rows;
+    const orders = res.rows;
+
+    // New orders snapshot name/price/image at creation time. Legacy orders only
+    // stored { productId, quantity }, so backfill their details from the products
+    // table to ensure the orders page can always render product info.
+    const idsNeedingEnrichment = new Set<string>();
+    for (const order of orders) {
+      delete order.address_id;
+      delete order.payment_gateway;
+      delete order.payment_id;
+      delete order.payment_signature;
+      delete order.payment_order_id;
+      delete order.payment_signature;
+
+      for (const item of order.items || []) {
+        if (item.productId && item.name == null) {
+          idsNeedingEnrichment.add(item.productId);
+        }
+      }
+    }
+
+    if (idsNeedingEnrichment.size > 0) {
+      const dbProducts = await productService.getProducts(
+        { ids: Array.from(idsNeedingEnrichment) },
+        true
+      );
+      const productMap: Record<string, any> = {};
+      dbProducts.forEach((p: any) => {
+        productMap[p.id] = p;
+      });
+
+      for (const order of orders) {
+        order.items = (order.items || []).map((item: any) => {
+          if (item.name != null) return item;
+          const p = productMap[item.productId];
+          return {
+            ...item,
+            name: p?.name ?? 'Product',
+            price: Number(item.price ?? p?.discounted_price ?? p?.price ?? 0),
+            image: p?.images && p.images.length > 0 ? p.images[0] : null,
+          };
+        });
+      }
+    }
+
+    return orders;
   } catch (err) {
     logger.error('Error fetching orders', err);
     throw err;

@@ -13,9 +13,12 @@ export const checkOrderStatusTool = tool(async ({ userId }) => {
             return "You do not have any recent orders.";
         }
 
-        return orders.map((o: any) =>
-            `- Order ID: ${o.id}, Status: ${o.status}, Product: ${o.product_name} (Qty: ${o.quantity}), Total: $${o.total_price}, Date: ${new Date(o.created_at).toLocaleDateString()}`
-        ).join("\n");
+        return orders.map((o: any) => {
+            const products = (o.items || [])
+                .map((i: any) => `${i.name ?? 'Product'} (Qty: ${i.quantity})`)
+                .join(", ");
+            return `- Order ID: ${o.id}, Status: ${o.status}, Products: ${products}, Total: $${o.total_price}, Date: ${new Date(o.created_at).toLocaleDateString()}`;
+        }).join("\n");
 
     } catch (err) {
         logger.error("Error checking order status", err);

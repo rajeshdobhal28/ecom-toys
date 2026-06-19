@@ -89,10 +89,8 @@ export default function CheckoutPage() {
                 addressId: selectedAddressId,
             });
 
-            console.log("response--->", response);
-
             //@ts-ignore
-            const rzp = new Razorpay({
+            const rzp = new window.Razorpay({
                 ...response.data,
                 handler: async function(response: any) {
                     const resp = await makeApiRequest(API.VERIFY_ORDER_PAYMENT, response);

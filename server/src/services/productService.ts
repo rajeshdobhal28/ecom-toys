@@ -115,10 +115,12 @@ export const getTrendingProducts = async (isAdmin: boolean = false, limit: numbe
         COUNT(r.id) as review_count
       FROM products p
       JOIN (
-          SELECT product_id, SUM(quantity) as total_sold
-          FROM orders
-          WHERE created_at >= NOW() - INTERVAL '168 HOURS'
-          GROUP BY product_id
+          SELECT (item->>'productId')::uuid AS product_id,
+                 SUM((item->>'quantity')::int) AS total_sold
+          FROM orders o,
+               jsonb_array_elements(o.items) AS item
+          WHERE o.created_at >= NOW() - INTERVAL '168 HOURS'
+          GROUP BY (item->>'productId')::uuid
           ORDER BY total_sold DESC
           LIMIT $1
       ) top_selling ON p.id = top_selling.product_id

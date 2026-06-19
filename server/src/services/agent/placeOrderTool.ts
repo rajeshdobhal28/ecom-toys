@@ -3,6 +3,7 @@ import z from "zod";
 import { query } from "../../db";
 import { getCart, updateCart } from "../cartService";
 import { createOrder } from "../orderService";
+import { getProducts } from "../productService";
 
 export const placeOrderTool = tool(async ({ userId, addressId }) => {
     console.log("[Tool] Place Order Tool called with Address ID:", addressId);
@@ -16,9 +17,9 @@ export const placeOrderTool = tool(async ({ userId, addressId }) => {
         }
 
         // Format cart items for the createOrder service
-        const productsParams = cartItems.map((item: any) => ({
+        const items = cartItems.map((item: any) => ({
             productId: item.id,
-            quantity: item.quantity
+            quantity: Number(item.quantity),
         }));
 
         // 2. Get the user's email
@@ -28,18 +29,35 @@ export const placeOrderTool = tool(async ({ userId, addressId }) => {
         }
         const userEmail = userRes.rows[0].email;
 
-        // 3. Place the order
-        const createdOrders = await createOrder({
+        // 3. Compute the total the same way createOrder snapshots line items
+        // (discounted_price falling back to price) so the total matches.
+        const dbProducts = await getProducts({ ids: items.map((i: any) => i.productId) }, true);
+        const priceMap: Record<string, number> = {};
+        dbProducts.forEach((p: any) => {
+            priceMap[p.id] = Number(p.discounted_price || p.price);
+        });
+        const total_price = items.reduce(
+            (sum: number, i: any) => sum + (priceMap[i.productId] || 0) * i.quantity,
+            0
+        );
+
+        // 4. Place the order as Cash on Delivery
+        const createdOrder = await createOrder({
             userId,
             userEmail,
             addressId,
-            products: productsParams
+            items,
+            total_price,
+            status: "Processing",
+            payment_status: "processing",
+            payment_gateway: "COD",
+            payment_order_id: `cod_${Date.now()}`,
         });
 
-        // 4. Clear the cart after successful order placement
+        // 5. Clear the cart after successful order placement
         await updateCart(userId, []);
 
-        return `Successfully placed the order! Order ID(s): ${createdOrders.map(o => o.id).join(', ')}. The user's cart has been cleared.`;
+        return `Successfully placed the order (Cash on Delivery)! Order ID: ${createdOrder.id}. Total: ₹${total_price.toFixed(2)}. The user's cart has been cleared.`;
     } catch (error: any) {
         console.error("[Tool Error] Failed to place order:", error);
         return `Failed to place order: ${error.message}`;

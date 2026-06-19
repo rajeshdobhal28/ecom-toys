@@ -9,13 +9,17 @@ import styles from './page.module.css';
 import Header from '@/components/Header/Header';
 import ReviewModal from '@/components/ReviewModal/ReviewModal';
 
+interface OrderItem {
+  productId: string;
+  quantity: number;
+  name: string;
+  price: number;
+  image: string | null;
+}
+
 interface Order {
   id: string;
-  product_id: string;
-  product_name: string;
-  product_images: string[];
-  quantity: number;
-  price_at_purchase: string;
+  items: OrderItem[];
   total_price: string;
   status: string;
   created_at: string;
@@ -94,16 +98,10 @@ export default function MyOrdersPage() {
     return null; // Will redirect in useEffect
   }
 
-  const groupedOrders: Record<string, Order[]> = {};
-  orders.forEach((order) => {
-    const dateStr = new Date(order.created_at).toLocaleDateString(undefined, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    if (!groupedOrders[dateStr]) groupedOrders[dateStr] = [];
-    groupedOrders[dateStr].push(order);
-  });
+  // Newest-first flat list of orders.
+  // const sortedOrders = [...orders].sort(
+  //   (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  // );
 
   return (
     <>
@@ -116,22 +114,41 @@ export default function MyOrdersPage() {
             </div>
           ) : (
             <div className={styles.ordersList}>
-              {Object.entries(groupedOrders).map(([date, dateOrders]) => (
-                <div key={date} className={styles.dateGroupCard}>
-                  <div className={styles.dateHeader}>
-                    <h2>{date}</h2>
+              {orders.map((order) => (
+                <div key={order.id} className={styles.dateGroupCard}>
+                  <div className={styles.orderSummaryHeader}>
+                    <div className={styles.orderMeta}>
+                      <span className={styles.orderIdText}>
+                        Order #{order.id.slice(0, 8).toUpperCase()}
+                      </span>
+                      <span className={styles.orderDate}>
+                        {new Date(order.created_at).toLocaleDateString(undefined, {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}
+                      </span>
+                      
+                    </div>
+                    <div className={styles.orderTotalBox}>
+                      <span className={styles.orderTotalLabel}>Total Paid</span>
+                      <span className={styles.totalPrice}>
+                        ₹{Number(order.total_price).toFixed(2)}
+                      </span>
+                    </div>
                   </div>
+
                   <div className={styles.dateOrdersList}>
-                    {dateOrders.map((order) => {
-                      const existingReview = reviews[order.product_id];
+                    {order.items.map((item) => {
+                      const existingReview = reviews[item.productId];
 
                       return (
-                        <div key={order.id} className={styles.orderItem}>
+                        <div key={item.productId} className={styles.orderItem}>
                           <div className={styles.imageContainer}>
-                            {order.product_images && order.product_images[0] ? (
+                            {item.image ? (
                               <Image
-                                src={order.product_images[0]}
-                                alt={order.product_name}
+                                src={item.image}
+                                alt={item.name}
                                 fill
                                 style={{ objectFit: 'cover' }}
                                 className={styles.productImage}
@@ -142,27 +159,19 @@ export default function MyOrdersPage() {
                           </div>
 
                           <div className={styles.productDetails}>
-                            <h3 className={styles.productName}>
-                              {order.product_name}
-                            </h3>
-                            <p className={styles.quantity}>Qty: {order.quantity}</p>
-                            <p className={styles.orderId}>Order ID: {order.id}</p>
-                            <div style={{ marginTop: '0.5rem' }}>
-                              <span
-                                className={`${styles.status} ${styles[order.status.toLowerCase()]}`}
-                              >
-                                {order.status}
-                              </span>
-                            </div>
+                            <h3 className={styles.productName}>{item.name}</h3>
+                            <p className={styles.quantity}>Qty: {item.quantity}</p>
+                            <span
+                        className={`${styles.status} ${styles[order.status?.toLowerCase()]} ${styles.statusBadge}`}
+                      >
+                        {order.status}
+                      </span>
                           </div>
 
                           <div className={styles.priceDetails}>
-                            <p className={styles.totalPrice}>
-                              ₹{Number(order.total_price).toFixed(2)}
-                            </p>
                             <button
                               className={styles.reviewBtn}
-                              onClick={() => openReviewModal(order.product_id, order.product_name)}
+                              onClick={() => openReviewModal(item.productId, item.name)}
                             >
                               {existingReview ? 'Update Review' : 'Leave a Review'}
                             </button>
