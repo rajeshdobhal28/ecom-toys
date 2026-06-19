@@ -43,15 +43,17 @@ export const createOrder = async (params: CreateOrderParams) => {
       throw new Error('Sorry, we currently only deliver to pincodes between 110001 and 110096.');
     }
 
-    await query('BEGIN'); // Start transaction
-
+    // Snapshot each line item and validate availability. This is a best-effort
+    // check for fast feedback; the authoritative stock decrement happens on
+    // payment success. No transaction/row lock is needed here because the only
+    // write below is a single INSERT (atomic on its own).
     const orderItems = [];
     let total_price = 0;
     for (const item of items) {
       const { productId, quantity } = item;
 
       const productRes = await query(
-        'SELECT * FROM products WHERE id = $1 FOR UPDATE',
+        'SELECT * FROM products WHERE id = $1',
         [productId]
       );
       if (productRes.rows.length === 0) {
@@ -97,25 +99,11 @@ export const createOrder = async (params: CreateOrderParams) => {
     ]);
     const createdOrder = orderRes.rows[0];
 
-    // 3. Decrement stock for each product
-    for (const item of items) {
-      await query(
-        'UPDATE products SET quantity = quantity - $1 WHERE id = $2',
-        [item.quantity, item.productId]
-      );
-    }
-
-    await query('COMMIT'); // Commit transaction
-
-    // Clear product cache to reflect new quantity levels
-    await clearProductCache();
-
     logger.info(
       `Order created for user ${userEmail}, items: ${items.length}`
     );
     return createdOrder;
   } catch (err) {
-    await query('ROLLBACK'); // Rollback transaction on error
     logger.error('Error creating orders', err);
     throw err;
   }
@@ -140,6 +128,19 @@ export const updateOrderPaymentStatus = async (
     [paymentStatus, paymentId ?? null, paymentSignature ?? null, paymentOrderId]
   );
   return res.rows[0] ?? null;
+};
+
+// Decrement stock for an order's snapshotted items after payment has succeeded.
+// The customer has already paid, so this never rejects on insufficient stock —
+// quantity is floored at 0 and any oversell is left for fulfilment to reconcile.
+export const decrementStockForOrder = async (order: any) => {
+  for (const item of order.items || []) {
+    await query(
+      'UPDATE products SET quantity = GREATEST(quantity - $1, 0) WHERE id = $2',
+      [item.quantity, item.productId]
+    );
+  }
+  await clearProductCache();
 };
 
 // Attach the payment gateway's order id once it has been created (razorpay

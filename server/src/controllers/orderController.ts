@@ -54,6 +54,15 @@ export const razorPayPaymentSuccess = async (
       return;
     }
 
+    // Stock is reserved at payment success (not at order creation). The customer
+    // has already paid, so a stock shortfall must not fail this request — log and
+    // continue rather than surfacing an error.
+    try {
+      await orderService.decrementStockForOrder(order);
+    } catch (stockErr) {
+      logger.error('Failed to decrement stock after successful payment', stockErr);
+    }
+
     // Send order confirmation email after successful payment
     orderService.sendOrderConfirmation(order);
 
